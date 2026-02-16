@@ -59,11 +59,21 @@
       "designation": "DEVALOPER",
       "status": "Inactive",
       "dateOfJoining": "2026-02-12"
+    },
+    {
+      "id": "4567",
+      "name": "dhanush",
+      "email": "dhanushkumar703dev@gmail.com",
+      "phone": "56789098",
+      "department": "hr",
+      "designation": "dfghjk",
+      "status": "Inactive",
+      "dateOfJoining": "2026-02-17"
     }
   ],
   "attendance": [
     {
-       "id": "ATT002",
+      "id": "ATT002",
       "employee_id": "EMP002",
       "employee_name": "Priya Sharma",
       "attendance_date": "2026-02-10",
@@ -81,7 +91,7 @@
       "status": "Late"
     },
     {
-       "id": "ATT002",
+      "id": "ATT002",
       "employee_id": "EMP002",
       "employee_name": "Priya Sharma",
       "attendance_date": "2026-02-10",
@@ -108,136 +118,141 @@
       "status": "Half Day"
     }
   ],
-
   "Total_leaves": [
-  {
-    "empid": "EMP001",
-    "name": "John Doe",
-    "total_leave": 20,
-    "used_leave": 8,
-    "available_leaves": 12,
-    "leave_history": [
-      {
-        "apply_date": "2026-01-05",
-        "from_date": "2026-01-10",
-        "to_date": "2026-01-12",
-        "number_of_days": 3,
-        "approve_status": "Approved",
-        "reason": "Family Function"
-      },
-      {
-        "apply_date": "2026-02-01",
-        "from_date": "2026-02-05",
-        "to_date": "2026-02-06",
-        "number_of_days": 2,
-        "approve_status": "Pending",
-        "reason": "Medical"
-      }
-    ]
-  },
-  {
-    "empid": "EMP002",
-    "name": "Priya Sharma",
-    "total_leave": 18,
-    "used_leave": 5,
-    "available_leaves": 13,
-    "leave_history": [
-      {
-        "apply_date": "2026-01-15",
-        "from_date": "2026-01-20",
-        "to_date": "2026-01-22",
-        "number_of_days": 3,
-        "approve_status": "Approved",
-        "reason": "Vacation"
-      }
-    ]
-  },
-  {
-    "empid": "EMP003",
-    "name": "Rahul Kumar",
-    "total_leave": 15,
-    "used_leave": 10,
-    "available_leaves": 5,
-    "leave_history": [
-      {
-        "apply_date": "2026-02-03",
-        "from_date": "2026-02-07",
-        "to_date": "2026-02-10",
-        "number_of_days": 4,
-        "approve_status": "Rejected",
-        "reason": "Personal Work"
-      },
-      {
-        "apply_date": "2026-01-25",
-        "from_date": "2026-01-27",
-        "to_date": "2026-01-28",
-        "number_of_days": 2,
-        "approve_status": "Approved",
-        "reason": "Medical"
-      }
-    ]
-  },
-  {
-    "empid": "EMP004",
-    "name": "Anita Singh",
-    "total_leave": 20,
-    "used_leave": 3,
-    "available_leaves": 17,
-    "leave_history": [
-      {
-        "apply_date": "2026-01-10",
-        "from_date": "2026-01-12",
-        "to_date": "2026-01-13",
-        "number_of_days": 2,
-        "approve_status": "Approved",
-        "reason": "Family Function"
-      }
-    ]
-  },
-  {
-    "empid": "EMP005",
-    "name": "Vikram Patel",
-    "total_leave": 15,
-    "used_leave": 7,
-    "available_leaves": 8,
-    "leave_history": [
-      {
-        "apply_date": "2026-02-05",
-        "from_date": "2026-02-07",
-        "to_date": "2026-02-09",
-        "number_of_days": 3,
-        "approve_status": "Pending",
-        "reason": "Vacation"
-      }
-    ]
-  },
-  {
-    "empid": "EMP006",
-    "name": "Sara Ali",
-    "total_leave": 18,
-    "used_leave": 4,
-    "available_leaves": 14,
-    "leave_history": [
-      {
-        "apply_date": "2026-01-20",
-        "from_date": "2026-01-25",
-        "to_date": "2026-01-26",
-        "number_of_days": 2,
-        "approve_status": "Approved",
-        "reason": "Medical"
-      },
-       {
-        "apply_date": "2026-02-28",
-        "from_date": "2026-03-5",
-        "to_date": "2026-03-6",
-        "number_of_days": 2,
-        "approve_status": "Approved",
-        "reason": "Medical"
-      }
-    ]
-  }
-],
- "Events": [
+    {
+      "empid": "EMP001",
+      "name": "John Doe",
+      "total_leave": 20,
+      "used_leave": 8,
+      "available_leaves": 12,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-05",
+          "from_date": "2026-01-10",
+          "to_date": "2026-01-12",
+          "number_of_days": 3,
+          "approve_status": "Approved",
+          "reason": "Family Function"
+        },
+        {
+          "apply_date": "2026-02-01",
+          "from_date": "2026-02-05",
+          "to_date": "2026-02-06",
+          "number_of_days": 2,
+          "approve_status": "Pending",
+          "reason": "Medical"
+        }
+      ],
+      "id": "8c75"
+    },
+    {
+      "empid": "EMP002",
+      "name": "Priya Sharma",
+      "total_leave": 18,
+      "used_leave": 5,
+      "available_leaves": 13,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-15",
+          "from_date": "2026-01-20",
+          "to_date": "2026-01-22",
+          "number_of_days": 3,
+          "approve_status": "Approved",
+          "reason": "Vacation"
+        }
+      ],
+      "id": "c1c8"
+    },
+    {
+      "empid": "EMP003",
+      "name": "Rahul Kumar",
+      "total_leave": 15,
+      "used_leave": 10,
+      "available_leaves": 5,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-03",
+          "from_date": "2026-02-07",
+          "to_date": "2026-02-10",
+          "number_of_days": 4,
+          "approve_status": "Rejected",
+          "reason": "Personal Work"
+        },
+        {
+          "apply_date": "2026-01-25",
+          "from_date": "2026-01-27",
+          "to_date": "2026-01-28",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Medical"
+        }
+      ],
+      "id": "2d44"
+    },
+    {
+      "empid": "EMP004",
+      "name": "Anita Singh",
+      "total_leave": 20,
+      "used_leave": 3,
+      "available_leaves": 17,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-10",
+          "from_date": "2026-01-12",
+          "to_date": "2026-01-13",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Family Function"
+        }
+      ],
+      "id": "9c2e"
+    },
+    {
+      "empid": "EMP005",
+      "name": "Vikram Patel",
+      "total_leave": 15,
+      "used_leave": 7,
+      "available_leaves": 8,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-05",
+          "from_date": "2026-02-07",
+          "to_date": "2026-02-09",
+          "number_of_days": 3,
+          "approve_status": "Pending",
+          "reason": "Vacation"
+        }
+      ],
+      "id": "7fd6"
+    },
+    {
+      "empid": "EMP006",
+      "name": "Sara Ali",
+      "total_leave": 18,
+      "used_leave": 4,
+      "available_leaves": 14,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-20",
+          "from_date": "2026-01-25",
+          "to_date": "2026-01-26",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Medical"
+        },
+        {
+          "apply_date": "2026-02-28",
+          "from_date": "2026-03-5",
+          "to_date": "2026-03-6",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Medical"
+        }
+      ],
+      "id": "1db0"
+    }
+  ],
+  "Events": [
     {
       "event_id": "EVT201",
       "category": "holidays",
@@ -248,7 +263,8 @@
         "plan_type": "no_work",
         "details": "Office Closed - New Year Holiday"
       },
-      "description": "New Year's Day observed. Office will remain closed."
+      "description": "New Year's Day observed. Office will remain closed.",
+      "id": "6808"
     },
     {
       "event_id": "EVT202",
@@ -268,7 +284,8 @@
         "scope": "all",
         "target_departments": [],
         "target_teams": []
-      }
+      },
+      "id": "5151"
     },
     {
       "event_id": "EVT203",
@@ -280,7 +297,8 @@
         "plan_type": "celebration",
         "details": "Traditional lunch and cultural activities"
       },
-      "description": "Celebrate Pongal with traditional food, decorations, and team bonding activities."
+      "description": "Celebrate Pongal with traditional food, decorations, and team bonding activities.",
+      "id": "75c0"
     },
     {
       "event_id": "EVT204",
@@ -298,9 +316,13 @@
       "description": "Workshop focused on practical AI use cases, automation, and emerging technologies.",
       "audience": {
         "scope": "department",
-        "target_departments": ["Engineering", "Data Science"],
+        "target_departments": [
+          "Engineering",
+          "Data Science"
+        ],
         "target_teams": []
-      }
+      },
+      "id": "3a23"
     },
     {
       "event_id": "EVT205",
@@ -312,7 +334,8 @@
         "plan_type": "no_work",
         "details": "Office Closed"
       },
-      "description": "Republic Day holiday. Office will be closed."
+      "description": "Republic Day holiday. Office will be closed.",
+      "id": "eb51"
     },
     {
       "event_id": "EVT206",
@@ -332,7 +355,8 @@
         "scope": "all",
         "target_departments": [],
         "target_teams": []
-      }
+      },
+      "id": "4e92"
     },
     {
       "event_id": "EVT207",
@@ -344,7 +368,8 @@
         "plan_type": "celebration",
         "details": "Festive lunch and cultural programs"
       },
-      "description": "Diwali celebration with traditional decorations, sweets, and cultural performances."
+      "description": "Diwali celebration with traditional decorations, sweets, and cultural performances.",
+      "id": "00c5"
     },
     {
       "event_id": "EVT208",
@@ -364,7 +389,8 @@
         "scope": "individual",
         "target_departments": [],
         "target_teams": []
-      }
+      },
+      "id": "892f"
     },
     {
       "event_id": "EVT209",
@@ -376,11 +402,8 @@
         "plan_type": "no_work",
         "details": "Office Closed"
       },
-      "description": "Christmas Day holiday. Office will be closed."
+      "description": "Christmas Day holiday. Office will be closed.",
+      "id": "f650"
     }
   ]
-
-  
-
-
 }
