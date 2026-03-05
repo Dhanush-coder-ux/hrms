@@ -1,15 +1,15 @@
 
-import {Sidebar} from "./Sidebar";
+import {OnboardSidebar} from "./Sidebar";
 
 import { Outlet } from "react-router-dom";
 
-const MainLayout = () => {
+const OnbordMainLayout = () => {
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
       
 
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <OnboardSidebar />
     
       
     
@@ -24,4 +24,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default OnbordMainLayout;

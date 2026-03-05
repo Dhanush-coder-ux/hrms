@@ -1,34 +1,33 @@
-import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Users, 
-  CalendarCheck, 
-  FileSpreadsheet, 
-  Building2,
+import { useState } from "react";
+import {
+  LayoutDashboard,
+  UserPlus,
+  FileCheck,
+  ClipboardList,
+  FileText,
+  Users,
+  BarChart3,
   ChevronLeft,
   ChevronRight,
-  CalendarDays,
+  PersonStanding
+} from "lucide-react";
 
-  ReceiptIndianRupee
-} from "lucide-react"
-
-export const Sidebar = () => {
+export const OnboardSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
-  const navigation = [
-    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { label: "Employees", path: "/employee", icon: Users },
-    { label: "Attendance", path: "/attendance", icon: CalendarCheck },
-    { label: "Leaves", path: "/leaves", icon: FileSpreadsheet },
-    {label:"Event" , path:"/Events", icon: CalendarDays},
-    {label:"Payroll" , path:"/payroll", icon:ReceiptIndianRupee},
-    { label: "Department", path: "/department", icon: Building2 }
+  const onboardNavigation = [
+    { label: "Dashboard", path: "/onboard", icon: LayoutDashboard },
+    { label: "Candidates", path: "/onboard/candidates", icon: UserPlus },
+    { label: "Interviews", path: "/onboard/interviews", icon: Users },
+    { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
+    { label: "Document Verification", path: "/onboard/documents", icon: FileCheck },
+    { label: "Add Employee", path: "/onboard/employee", icon: PersonStanding },
   ];
 
   return (
-    <aside 
+ <aside 
       className={`h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
         ${isCollapsed ? "w-16" : "w-56"}`} 
     >
@@ -54,7 +53,7 @@ export const Sidebar = () => {
 
       {/* Slim Navigation */}
       <nav className="flex-1 px-2 space-y-0.5">
-        {navigation.map((item) => {
+        {onboardNavigation.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <NavLink
