@@ -1,4 +1,5 @@
-import { Bell, Search, Settings, HelpCircle, UserCircle } from "lucide-react";
+import { Bell, Settings, HelpCircle, UserCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
@@ -7,7 +8,7 @@ export const Navbar = () => {
       {/* Left Section: Contextual Title */}
       <div className="flex items-center gap-4">
         <h1 className="text-sm font-semibold text-gray-700 tracking-tight">
-          HRMS <span className="text-gray-400 font-normal mx-2">/</span> Admin Panel
+         <Link to="/"> HRMS </Link> <span className="text-gray-400 font-normal mx-2">/</span> Admin Panel
         </h1>
       </div>
 
