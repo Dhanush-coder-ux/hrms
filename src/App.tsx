@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import { Navbar } from "./Components/Layout/Navbar";
+import { Navbar } from "./Root/Navbar";
 
 function App() {
   return (

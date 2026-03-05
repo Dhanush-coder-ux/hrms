@@ -2,27 +2,13 @@ import { Bell, Search, Settings, HelpCircle, UserCircle } from "lucide-react";
 
 export const Navbar = () => {
   return (
-    <nav className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-6 sticky top-0 z-30">
+    <nav className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-6 sticky mt-1 top-0 z-30">
       
       {/* Left Section: Contextual Title */}
       <div className="flex items-center gap-4">
         <h1 className="text-sm font-semibold text-gray-700 tracking-tight">
           HRMS <span className="text-gray-400 font-normal mx-2">/</span> Admin Panel
         </h1>
-      </div>
-
-      {/* Center Section: Search Bar (Google Style) */}
-      <div className="hidden md:flex flex-1 max-w-md mx-8">
-        <div className="relative w-full group">
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <Search size={16} className="text-gray-400 group-focus-within:text-blue-500 transition-colors" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search employees or reports..."
-            className="w-full bg-gray-100 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-400 text-xs rounded-lg py-2 pl-10 pr-4 transition-all outline-none"
-          />
-        </div>
       </div>
 
       {/* Right Section: Actions & Profile */}
