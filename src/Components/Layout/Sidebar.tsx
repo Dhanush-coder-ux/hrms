@@ -7,7 +7,10 @@ import {
   FileSpreadsheet, 
   Building2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  CalendarDays,
+
+  ReceiptIndianRupee
 } from "lucide-react"
 
 export const Sidebar = () => {
@@ -19,6 +22,8 @@ export const Sidebar = () => {
     { label: "Employees", path: "/employee", icon: Users },
     { label: "Attendance", path: "/attendance", icon: CalendarCheck },
     { label: "Leaves", path: "/leaves", icon: FileSpreadsheet },
+    {label:"Event" , path:"/Events", icon: CalendarDays},
+    {label:"Payroll" , path:"/payroll", icon:ReceiptIndianRupee},
     { label: "Department", path: "/department", icon: Building2 }
   ];
 

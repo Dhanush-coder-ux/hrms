@@ -404,6 +404,19 @@
       },
       "description": "Christmas Day holiday. Office will be closed.",
       "id": "f650"
+    },
+    {
+      "id": "88a8",
+      "event_id": "2a91b745-4bc1-48e2-b096-bef766f654d6",
+      "category": "Party",
+      "event_title": "birthday",
+      "date": "2026-01-05",
+      "time": null,
+      "plan": {
+        "plan_type": "",
+        "details": ""
+      },
+      "description": ""
     }
   ]
-} 
+}

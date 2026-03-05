@@ -11,7 +11,7 @@ import { EMPleaves } from "./Features/Dashbord/Leaves/EMPleaves";
 import { LeaveRequest } from "./Features/Dashbord/Leaves/LeaveRequest";
 
 import { LeaveBalance } from "./Features/Dashbord/Leaves/LeaveBalance";
-import { Events } from "./Features/Dashbord/Leaves/Events";
+import { Events } from "./Features/Dashbord/Events";
 
 
 export const router = createBrowserRouter([

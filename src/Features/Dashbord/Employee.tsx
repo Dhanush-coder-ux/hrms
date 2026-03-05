@@ -5,8 +5,20 @@ import { FormFiled } from '../../Components/Common/FormFiled';
 import { Selection } from "../../Components/Common/Selection";
 import { CustomDatePicker } from '../../Components/Common/CustomDatePicker.tsx';
 import { Table } from '../../Components/table/EmployeeTable.tsx';
+import PageLoading from '../../Components/Common/PageLoading.tsx';
 
 const API_URL = "http://localhost:3001/employees";
+
+interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  department: string;
+  designation: string;
+  status: string;
+  dateOfJoining: string;
+}
 
 export const Employee = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +70,7 @@ export const Employee = () => {
 
   const onChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev: Employee) => ({ ...prev, [name]: value }));
   };
 
   const onSubmit = async () => {
@@ -78,10 +90,7 @@ export const Employee = () => {
   };
 
   if (loading) return (
-    <div className="h-96 flex flex-col items-center justify-center text-gray-400 gap-3">
-      <Loader2 className="animate-spin text-blue-600" size={32} />
-      <p className="text-sm font-medium">Syncing directory...</p>
-    </div>
+    <PageLoading />
   );
 
   if (error) return (
