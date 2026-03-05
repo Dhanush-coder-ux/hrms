@@ -69,6 +69,16 @@
       "designation": "dfghjk",
       "status": "Inactive",
       "dateOfJoining": "2026-02-17"
+    },
+    {
+      "id": "EM11002",
+      "name": "MCA",
+      "email": "MCA@gmail.com",
+      "phone": "+917540099101",
+      "department": "hr",
+      "designation": "DEVALOPER",
+      "status": "Active",
+      "dateOfJoining": "2026-03-17"
     }
   ],
   "attendance": [
@@ -250,6 +260,184 @@
         }
       ],
       "id": "1db0"
+    },
+    {
+      "empid": "EMP007",
+      "name": "Arjun Mehta",
+      "total_leave": 20,
+      "used_leave": 6,
+      "available_leaves": 14,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-10",
+          "from_date": "2026-02-15",
+          "to_date": "2026-02-17",
+          "number_of_days": 3,
+          "approve_status": "Approved",
+          "reason": "Vacation"
+        }
+      ],
+      "id": "a101"
+    },
+    {
+      "empid": "EMP008",
+      "name": "Kavya Nair",
+      "total_leave": 18,
+      "used_leave": 9,
+      "available_leaves": 9,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-08",
+          "from_date": "2026-01-10",
+          "to_date": "2026-01-12",
+          "number_of_days": 3,
+          "approve_status": "Approved",
+          "reason": "Family Function"
+        },
+        {
+          "apply_date": "2026-02-20",
+          "from_date": "2026-02-22",
+          "to_date": "2026-02-23",
+          "number_of_days": 2,
+          "approve_status": "Pending",
+          "reason": "Personal Work"
+        }
+      ],
+      "id": "a102"
+    },
+    {
+      "empid": "EMP009",
+      "name": "Rohit Verma",
+      "total_leave": 15,
+      "used_leave": 4,
+      "available_leaves": 11,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-18",
+          "from_date": "2026-01-21",
+          "to_date": "2026-01-22",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Medical"
+        }
+      ],
+      "id": "a103"
+    },
+    {
+      "empid": "EMP010",
+      "name": "Sneha Kapoor",
+      "total_leave": 20,
+      "used_leave": 11,
+      "available_leaves": 9,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-01",
+          "from_date": "2026-02-04",
+          "to_date": "2026-02-08",
+          "number_of_days": 5,
+          "approve_status": "Approved",
+          "reason": "Vacation"
+        }
+      ],
+      "id": "a104"
+    },
+    {
+      "empid": "EMP011",
+      "name": "Manoj Reddy",
+      "total_leave": 18,
+      "used_leave": 7,
+      "available_leaves": 11,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-12",
+          "from_date": "2026-02-15",
+          "to_date": "2026-02-16",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Medical"
+        },
+        {
+          "apply_date": "2026-03-01",
+          "from_date": "2026-03-04",
+          "to_date": "2026-03-05",
+          "number_of_days": 2,
+          "approve_status": "Pending",
+          "reason": "Family Function"
+        }
+      ],
+      "id": "a105"
+    },
+    {
+      "empid": "EMP012",
+      "name": "Neha Gupta",
+      "total_leave": 20,
+      "used_leave": 3,
+      "available_leaves": 17,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-14",
+          "from_date": "2026-02-18",
+          "to_date": "2026-02-19",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Vacation"
+        }
+      ],
+      "id": "a106"
+    },
+    {
+      "empid": "EMP013",
+      "name": "Aditya Joshi",
+      "total_leave": 15,
+      "used_leave": 12,
+      "available_leaves": 3,
+      "leave_history": [
+        {
+          "apply_date": "2026-01-30",
+          "from_date": "2026-02-02",
+          "to_date": "2026-02-05",
+          "number_of_days": 4,
+          "approve_status": "Approved",
+          "reason": "Personal Work"
+        }
+      ],
+      "id": "a107"
+    },
+    {
+      "empid": "EMP014",
+      "name": "Divya Iyer",
+      "total_leave": 18,
+      "used_leave": 6,
+      "available_leaves": 12,
+      "leave_history": [
+        {
+          "apply_date": "2026-02-10",
+          "from_date": "2026-02-12",
+          "to_date": "2026-02-13",
+          "number_of_days": 2,
+          "approve_status": "Approved",
+          "reason": "Medical"
+        }
+      ],
+      "id": "a108"
+    },
+    {
+      "empid": "EMP015",
+      "name": "Karan Malhotra",
+      "total_leave": 20,
+      "used_leave": 5,
+      "available_leaves": 15,
+      "leave_history": [
+        {
+          "apply_date": "2026-03-01",
+          "from_date": "2026-03-03",
+          "to_date": "2026-03-05",
+          "number_of_days": 3,
+          "approve_status": "Pending",
+          "reason": "Vacation"
+        }
+      ],
+      "id": "a109"
     }
   ],
   "Events": [
@@ -411,6 +599,19 @@
       "category": "Party",
       "event_title": "birthday",
       "date": "2026-01-05",
+      "time": null,
+      "plan": {
+        "plan_type": "",
+        "details": ""
+      },
+      "description": ""
+    },
+    {
+      "id": "cfdb",
+      "event_id": "916d52f3-e350-4433-883b-afb9a896d171",
+      "category": "Festival",
+      "event_title": "Meating",
+      "date": "2026-03-05",
       "time": null,
       "plan": {
         "plan_type": "",

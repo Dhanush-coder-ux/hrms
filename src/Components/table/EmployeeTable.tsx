@@ -66,13 +66,6 @@ export const Table = ({ columns, data }: TableProps) => {
                     )}
                   </td>
                 ))}
-                
-                {/* Modern "Action" cell that stays clean */}
-                <td className="px-6 py-3.5 text-right">
-                  <button className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-all opacity-0 group-hover:opacity-100">
-                    <MoreVertical size={16} />
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>

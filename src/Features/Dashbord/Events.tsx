@@ -23,6 +23,8 @@ const API_URL = "http://localhost:3001/Events";
 export const Events = () => {
   const [EventDatas, setEventDatas] = useState<EventFormData[]>([]);
   const [ShowEdit, setShowEdit] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventFormData | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>("");
 
   const initialFormState: EventFormData = {
     event_id: "",
@@ -86,11 +88,23 @@ export const Events = () => {
     }));
   };
 
-  const handleDateClick = (arg: any) => {
-    // Automatically set the date in form when clicking the calendar
-    setformData((prev) => ({ ...prev, date: arg.dateStr }));
-    setShowEdit(true);
-  };
+ const handleDateClick = (arg: any) => {
+  const clickedDate = arg.dateStr;
+
+  setSelectedDate(clickedDate);
+
+  const eventsOnDate = EventDatas.filter(
+    (event) => event.date === clickedDate
+  );
+
+  if (eventsOnDate.length > 0) {
+    setSelectedEvent(eventsOnDate[0]); // show first event
+  } else {
+    setSelectedEvent(null);
+  }
+
+  setShowEdit(false);
+};
 
   const getEventColor = (category: string) => {
     switch (category) {
@@ -190,6 +204,64 @@ export const Events = () => {
           </div>
         </div>
       )}
+      {selectedDate && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Events on {selectedDate}
+      </h3>
+
+      {EventDatas.filter(ev => ev.date === selectedDate).length > 0 ? (
+
+        <ul className="space-y-2">
+          {EventDatas
+            .filter(ev => ev.date === selectedDate)
+            .map(ev => (
+              <li
+                key={ev.event_id}
+                className="p-3 border rounded-lg"
+              >
+                <p className="font-semibold">{ev.event_title}</p>
+                <p className="text-sm text-gray-500">{ev.category}</p>
+              </li>
+            ))}
+        </ul>
+
+      ) : (
+
+        <p className="text-gray-500 text-sm">
+          No events for this date
+        </p>
+
+      )}
+
+      <div className="flex justify-between mt-6">
+
+        <button
+          onClick={() => {
+            setSelectedDate(null);
+            setShowEdit(true);
+            setformData(p => ({ ...p, date: selectedDate }));
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          Add Event
+        </button>
+
+        <button
+          onClick={() => setSelectedDate(null)}
+          className="px-4 py-2 bg-gray-200 rounded-lg"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

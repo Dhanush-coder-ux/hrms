@@ -8,11 +8,8 @@ import { Department } from "./Features/Dashbord/Department";
 import Payroll from "./Features/Dashbord/Payroll";
 import { Employee } from "./Features/Dashbord/Employee";
 import { EMPleaves } from "./Features/Dashbord/Leaves/EMPleaves";
-import { LeaveRequest } from "./Features/Dashbord/Leaves/LeaveRequest";
-
-import { LeaveBalance } from "./Features/Dashbord/Leaves/LeaveBalance";
 import { Events } from "./Features/Dashbord/Events";
-
+import { EmployeeLeaveDetails } from "./Features/Dashbord/Leaves/EmployeeLeaveDetails";
 
 export const router = createBrowserRouter([
   {
@@ -48,19 +45,14 @@ export const router = createBrowserRouter([
         path:"/employeeleave",
         element:<EMPleaves/>
       },
-
-      {
-        path:"/leaverequests",
-        element:<LeaveRequest/>
-      },
       {
         path:"/Events",
         element:<Events/>
       },
       {
-        path:"/leavebalance",
-        element:<LeaveBalance/>
-      }
+    path: "/employee-leave/:empid",
+    element: <EmployeeLeaveDetails />
+  }
     ],
   },
 ]);

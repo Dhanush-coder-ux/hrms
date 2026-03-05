@@ -81,7 +81,7 @@ export const Dashboard = () => {
               {/* Progress bar */}
               <div className="mt-4 h-2 w-full rounded-full bg-gray-200">
                 <div
-                  className={`h-2 rounded-full bg-gradient-to-r ${stat.color}`}
+                  className={`h-2 rounded-full bg-linear-to-r ${stat.color}`}
                   style={{ width: `${stat.progress}%` }}
                 />
               </div>
