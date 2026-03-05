@@ -58,12 +58,12 @@ export const Dashboard = () => {
             >
               {/* Gradient strip */}
               <div
-                className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${stat.color}`}
+                className={`absolute inset-x-0 top-0 h-1 bg-linear-to-r ${stat.color}`}
               />
 
               {/* Icon */}
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r ${stat.color} text-white`}
+                className={`flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-r ${stat.color} text-white`}
               >
                 <Icon size={22} />
               </div>

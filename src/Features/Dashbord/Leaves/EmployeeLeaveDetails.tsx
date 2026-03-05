@@ -27,7 +27,7 @@ export const EmployeeLeaveDetails = () => {
 
   if (!employee) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] p-6 text-center">
+      <div className="flex flex-col items-center justify-center min-h-100 p-6 text-center">
         <p className="text-xl text-gray-600 mb-4">No data found for Employee ID: <span className="font-mono text-red-500">{empid}</span></p>
         <Button B_name="Return to Dashboard" ClickToAction={() => navigate(-1)}/>
       </div>

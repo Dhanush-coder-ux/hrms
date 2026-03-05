@@ -10,8 +10,13 @@ import { Employee } from "./Features/Dashbord/Employee";
 import { EMPleaves } from "./Features/Dashbord/Leaves/EMPleaves";
 import { Events } from "./Features/Dashbord/Events";
 import { EmployeeLeaveDetails } from "./Features/Dashbord/Leaves/EmployeeLeaveDetails";
+import { ModuleSelect } from "./ModuleSelect";
 
 export const router = createBrowserRouter([
+   {
+    path: "/",
+    element: <ModuleSelect />,   // 👈 first page
+  },
   {
     path: "/",
     element: <MainLayout />,
@@ -26,33 +31,33 @@ export const router = createBrowserRouter([
         element: <Attendance />,
       },
       {
-        path: "/leaves",
+        path: "leaves",
         element: <Leaves />,
       },
       {
-        path: "/department",
+        path: "department",
         element: <Department />,
       },
       {
-        path: "/payroll",
+        path: "payroll",
         element: <Payroll />,
       },
       {
-        path: "/employee",
+        path: "employee",
         element: <Employee />,
       },
       {
-        path:"/employeeleave",
-        element:<EMPleaves/>
+        path: "employeeleave",
+        element: <EMPleaves />,
       },
       {
-        path:"/Events",
-        element:<Events/>
+        path: "events",
+        element: <Events />,
       },
       {
-    path: "/employee-leave/:empid",
-    element: <EmployeeLeaveDetails />
-  }
+        path: "employee-leave/:empid",
+        element: <EmployeeLeaveDetails />,
+      },
     ],
   },
 ]);

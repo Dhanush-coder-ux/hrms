@@ -42,7 +42,7 @@ export const Sidebar = () => {
 
       {/* Compact Logo Section */}
       <div className="h-14 flex items-center px-4 mb-2">
-        <div className="w-7 h-7 bg-blue-600 rounded flex-shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+        <div className="w-7 h-7 bg-blue-600 rounded shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm">
           G
         </div>
         {!isCollapsed && (
@@ -91,7 +91,7 @@ export const Sidebar = () => {
       {/* Compact User Section */}
       <div className="p-3 border-t border-gray-50 bg-gray-50/50">
         <div className={`flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
-          <div className="w-6 h-6 rounded-full bg-blue-100 border border-blue-200 flex-shrink-0 flex items-center justify-center text-[10px] text-blue-700 font-bold">
+          <div className="w-6 h-6 rounded-full bg-blue-100 border border-blue-200 shrink-0 flex items-center justify-center text-[10px] text-blue-700 font-bold">
             AR
           </div>
           {!isCollapsed && (
