@@ -1,66 +1,69 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import MainLayout from "./Components/Layout/MainLayout";
-import { Dashboard } from "./Features/Dashbord/Dashboard";
-import { Attendance } from "./Features/Dashbord/Attendance";
-import Leaves from "./Features/Dashbord/Leaves";
-import { Department } from "./Features/Dashbord/Department";
-import Payroll from "./Features/Dashbord/Payroll";
-import { Employee } from "./Features/Dashbord/Employee";
-import { EMPleaves } from "./Features/Dashbord/Leaves/EMPleaves";
-import { LeaveRequest } from "./Features/Dashbord/Leaves/LeaveRequest";
+import { RootLayout } from "./Root/RootLayout";
+import { ModuleSelect } from "./Root/ModuleSelect";
 
-import { LeaveBalance } from "./Features/Dashbord/Leaves/LeaveBalance";
-import { Events } from "./Features/Dashbord/Leaves/Events";
+import MainLayout from "./OffBoard/Components/Layout/MainLayout";
+import { Dashboard } from "./OffBoard/Features/Dashbord/Dashboard";
+import { Attendance } from "./OffBoard/Features/Dashbord/Attendance";
+import Leaves from "./OffBoard/Features/Dashbord/Leaves";
+import { Department } from "./OffBoard/Features/Dashbord/Department";
+import Payroll from "./OffBoard/Features/Dashbord/Payroll";
+import { Employee } from "./OffBoard/Features/Dashbord/Employee";
+import { EMPleaves } from "./OffBoard/Features/Dashbord/Leaves/EMPleaves";
+import { Events } from "./OffBoard/Features/Dashbord/Events";
+import { EmployeeLeaveDetails } from "./OffBoard/Features/Dashbord/Leaves/EmployeeLeaveDetails";
 
+import OnbordMainLayout from "./OnBoard/Components/Layout/OnboardMainLayout";
+import AddEmployee from "./OnBoard/Features/AddEmployee";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
-
+    element: <RootLayout />, // Navbar always visible
     children: [
+      
+      // MODULE SELECT PAGE
       {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "attendance",
-        element: <Attendance />,
-      },
-      {
-        path: "/leaves",
-        element: <Leaves />,
-      },
-      {
-        path: "/department",
-        element: <Department />,
-      },
-      {
-        path: "/payroll",
-        element: <Payroll />,
-      },
-      {
-        path: "/employee",
-        element: <Employee />,
-      },
-      {
-        path:"/employeeleave",
-        element:<EMPleaves/>
+        index: true,
+        element: <ModuleSelect />,
       },
 
+      // OFFBOARD MODULE
       {
-        path:"/leaverequests",
-        element:<LeaveRequest/>
+        path: "offboard",
+        element: <MainLayout />,
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: "attendance", element: <Attendance /> },
+          { path: "leaves", element: <Leaves /> },
+          { path: "department", element: <Department /> },
+          { path: "payroll", element: <Payroll /> },
+          { path: "employee", element: <Employee /> },
+          { path: "employeeleave", element: <EMPleaves /> },
+          { path: "events", element: <Events /> },
+          { path: "employee-leave/:empid", element: <EmployeeLeaveDetails /> },
+        ],
       },
+
+      // ONBOARD MODULE
       {
-        path:"/Events",
-        element:<Events/>
+        path: "onboard",
+        element: <OnbordMainLayout />,
+        children: [
+          {
+            index: true,
+            element: <h1 className="p-6 text-xl">Onboard Dashboard</h1>,
+
+          },
+          {
+            path: "add-employee",
+            element: <AddEmployee />,
+          }
+        ],
       },
-      {
-        path:"/leavebalance",
-        element:<LeaveBalance/>
-      }
+
     ],
   },
 ]);
+

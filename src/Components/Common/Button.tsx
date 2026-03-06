@@ -12,7 +12,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <div>
       <button
-        className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
+        className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all"
         onClick={ClickToAction}
       >
         {B_name}

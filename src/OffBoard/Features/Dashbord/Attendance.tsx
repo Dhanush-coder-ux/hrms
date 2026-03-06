@@ -5,7 +5,7 @@ import { Calendar, UserCheck, UserMinus, Clock, Filter, Download } from 'lucide-
 export const Attendance = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [selection, setSelection] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [data, setData] = useState([]);
 
   const fetchAttendance = async () => {
@@ -37,7 +37,7 @@ export const Attendance = () => {
     }
   };
 
-  const onEdit = (row) => {
+  const onEdit = (row: { id: number; status: string }) => {
     setSelectedId(row.id);
     setSelection(row.status);
     setShowEdit(true);
@@ -52,7 +52,7 @@ export const Attendance = () => {
     { header: "Action", type: "action" }
   ];
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     const s = status.toLowerCase();
     if (s === "present") return "text-emerald-700 bg-emerald-50 border border-emerald-100";
     if (s === "pending") return "text-amber-700 bg-amber-50 border border-amber-100";

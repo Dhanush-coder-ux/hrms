@@ -1,4 +1,4 @@
-import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { ChevronRight} from "lucide-react";
 
 type Column =
   | { header: string; accessor: string; type?: "text" | "badge" | "date" }

@@ -7,7 +7,10 @@ import {
   FileSpreadsheet, 
   Building2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  CalendarDays,
+
+  ReceiptIndianRupee
 } from "lucide-react"
 
 export const Sidebar = () => {
@@ -15,16 +18,18 @@ export const Sidebar = () => {
   const location = useLocation();
 
   const navigation = [
-    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { label: "Employees", path: "/employee", icon: Users },
-    { label: "Attendance", path: "/attendance", icon: CalendarCheck },
-    { label: "Leaves", path: "/leaves", icon: FileSpreadsheet },
-    { label: "Department", path: "/department", icon: Building2 }
-  ];
+  { label: "Dashboard", path: "/offboard", icon: LayoutDashboard },
+  { label: "Employees", path: "/offboard/employee", icon: Users },
+  { label: "Attendance", path: "/offboard/attendance", icon: CalendarCheck },
+  { label: "Leaves", path: "/offboard/leaves", icon: FileSpreadsheet },
+  { label: "Event", path: "/offboard/events", icon: CalendarDays },
+  { label: "Payroll", path: "/offboard/payroll", icon: ReceiptIndianRupee },
+  { label: "Department", path: "/offboard/department", icon: Building2 }
+];
 
   return (
     <aside 
-      className={`h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
+      className={` h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
         ${isCollapsed ? "w-16" : "w-56"}`} 
     >
       {/* Mini Toggle Button */}
@@ -37,7 +42,7 @@ export const Sidebar = () => {
 
       {/* Compact Logo Section */}
       <div className="h-14 flex items-center px-4 mb-2">
-        <div className="w-7 h-7 bg-blue-600 rounded flex-shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+        <div className="w-7 h-7 bg-blue-600 rounded shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm">
           G
         </div>
         {!isCollapsed && (
@@ -86,7 +91,7 @@ export const Sidebar = () => {
       {/* Compact User Section */}
       <div className="p-3 border-t border-gray-50 bg-gray-50/50">
         <div className={`flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
-          <div className="w-6 h-6 rounded-full bg-blue-100 border border-blue-200 flex-shrink-0 flex items-center justify-center text-[10px] text-blue-700 font-bold">
+          <div className="w-6 h-6 rounded-full bg-blue-100 border border-blue-200 shrink-0 flex items-center justify-center text-[10px] text-blue-700 font-bold">
             AR
           </div>
           {!isCollapsed && (
