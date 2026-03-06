@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Plus, Users, Search, X, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '../../Components/Common/Button';
 import { FormFiled } from '../../Components/Common/FormFiled';
-import { Selection } from "../../Components/Common/Selection";
+import { Selection } from "./Selection.tsx";
 import { CustomDatePicker } from '../../Components/Common/CustomDatePicker.tsx';
-import { Table } from '../../Components/table/EmployeeTable.tsx';
+import { Table } from '../../OffBoard/Components/table/EmployeeTable.tsx';
 import PageLoading from '../../Components/Common/PageLoading.tsx';
 
 const API_URL = "http://localhost:3001/employees";

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Button } from "../../../Components/Common/Button";
+import { Button } from "../../../../Components/Common/Button";
 
 interface LeaveHistory {
   apply_date: string;

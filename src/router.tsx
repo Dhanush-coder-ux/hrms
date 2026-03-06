@@ -9,7 +9,7 @@ import { Attendance } from "./OffBoard/Features/Dashbord/Attendance";
 import Leaves from "./OffBoard/Features/Dashbord/Leaves";
 import { Department } from "./OffBoard/Features/Dashbord/Department";
 import Payroll from "./OffBoard/Features/Dashbord/Payroll";
-import { Employee } from "./OffBoard/Features/Dashbord/Employee";
+import { Employee } from "./Components/Common/Employee";
 import { EMPleaves } from "./OffBoard/Features/Dashbord/Leaves/EMPleaves";
 import { Events } from "./OffBoard/Features/Dashbord/Events";
 import { EmployeeLeaveDetails } from "./OffBoard/Features/Dashbord/Leaves/EmployeeLeaveDetails";
