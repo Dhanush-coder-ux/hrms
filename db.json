@@ -73,13 +73,8 @@
   ],
   "attendance": [
     {
-      "id": "ATT002",
-      "employee_id": "EMP002",
-      "employee_name": "Priya Sharma",
-      "attendance_date": "2026-02-10",
-      "check_in": "09:30",
-      "check_out": "18:00",
-      "status": "Late"
+      "status": "Present",
+      "id": "ATT002"
     },
     {
       "id": "ATT002",
