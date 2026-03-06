@@ -38,7 +38,7 @@ export const ModuleSelect = () => {
 
         {/* OFFBOARD CARD */}
         <div
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/offboard")}
           className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
           hover:shadow-xl hover:-translate-y-1 transition duration-300"
         >

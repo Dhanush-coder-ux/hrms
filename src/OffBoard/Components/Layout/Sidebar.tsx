@@ -17,15 +17,15 @@ export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
-  const navigation = [
-    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { label: "Employees", path: "/employee", icon: Users },
-    { label: "Attendance", path: "/attendance", icon: CalendarCheck },
-    { label: "Leaves", path: "/leaves", icon: FileSpreadsheet },
-    {label:"Event" , path:"/Events", icon: CalendarDays},
-    {label:"Payroll" , path:"/payroll", icon:ReceiptIndianRupee},
-    { label: "Department", path: "/department", icon: Building2 }
-  ];
+const navigation = [
+  { label: "Dashboard", path: "/offboard", icon: LayoutDashboard },
+  { label: "Employees", path: "/offboard/employee", icon: Users },
+  { label: "Attendance", path: "/offboard/attendance", icon: CalendarCheck },
+  { label: "Leaves", path: "/offboard/leaves", icon: FileSpreadsheet },
+  { label: "Event", path: "/offboard/events", icon: CalendarDays },
+  { label: "Payroll", path: "/offboard/payroll", icon: ReceiptIndianRupee },
+  { label: "Department", path: "/offboard/department", icon: Building2 }
+];
 
   return (
     <aside 

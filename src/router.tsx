@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
 
       // OFFBOARD MODULE
       {
-        path: "dashboard",
+        path: "offboard",
         element: <MainLayout />,
         children: [
           { index: true, element: <Dashboard /> },
