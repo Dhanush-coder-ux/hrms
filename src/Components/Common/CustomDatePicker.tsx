@@ -31,6 +31,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       <DatePicker
         selected={value ? new Date(value) : null}
         dateFormat="yyyy-MM-dd"
+        placeholderText="Select a date yyyy-MM-dd"
         onChange={(date: Date | null) => {
           // ✅ adapt Date → event
           onChange({

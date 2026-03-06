@@ -23,12 +23,12 @@ export const OnboardSidebar = () => {
     { label: "Interviews", path: "/onboard/interviews", icon: Users },
     { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
     { label: "Document Verification", path: "/onboard/documents", icon: FileCheck },
-    { label: "Add Employee", path: "/onboard/employee", icon: PersonStanding },
+    { label: "Add Employee", path: "/onboard/add-employee", icon: PersonStanding },
   ];
 
   return (
  <aside 
-      className={`h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
+      className={`h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
         ${isCollapsed ? "w-16" : "w-56"}`} 
     >
       {/* Mini Toggle Button */}

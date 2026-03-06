@@ -5,7 +5,7 @@ export const ModuleSelect = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+    <div className="h-full bg-gray-100 flex flex-col items-center justify-center">
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-gray-800 mb-12">

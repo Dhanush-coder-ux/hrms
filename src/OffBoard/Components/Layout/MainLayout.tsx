@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   return (
-    <div className="h-screen w-full flex flex-col overflow-hidden">
+    <div className="h-full w-full flex overflow-hidden">
       
 
       <div className="flex flex-1 overflow-hidden">
@@ -15,7 +15,7 @@ const MainLayout = () => {
     
       <main className="flex-1 h-full overflow-y-auto custom-scrollbar">
       
-        <div className="mx-2 p-3 lg:p-3">
+        <div className="p-4 lg:p-6 min-h-full">
             <Outlet/>
           </div>
       </main>

@@ -17,7 +17,7 @@ export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
-const navigation = [
+  const navigation = [
   { label: "Dashboard", path: "/offboard", icon: LayoutDashboard },
   { label: "Employees", path: "/offboard/employee", icon: Users },
   { label: "Attendance", path: "/offboard/attendance", icon: CalendarCheck },
@@ -29,7 +29,7 @@ const navigation = [
 
   return (
     <aside 
-      className={`h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
+      className={` h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col relative
         ${isCollapsed ? "w-16" : "w-56"}`} 
     >
       {/* Mini Toggle Button */}

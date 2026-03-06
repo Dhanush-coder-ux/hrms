@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
-    <nav className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-6 sticky mt-1 top-0 z-30">
+    <nav className="border-b border-gray-200 bg-white flex items-center justify-between px-6 mt-1">
       
       {/* Left Section: Contextual Title */}
       <div className="flex items-center gap-4">

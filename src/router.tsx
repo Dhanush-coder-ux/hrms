@@ -9,12 +9,13 @@ import { Attendance } from "./OffBoard/Features/Dashbord/Attendance";
 import Leaves from "./OffBoard/Features/Dashbord/Leaves";
 import { Department } from "./OffBoard/Features/Dashbord/Department";
 import Payroll from "./OffBoard/Features/Dashbord/Payroll";
-import { Employee } from "./Components/Common/Employee";
+import { Employee } from "./OffBoard/Features/Dashbord/Employee";
 import { EMPleaves } from "./OffBoard/Features/Dashbord/Leaves/EMPleaves";
 import { Events } from "./OffBoard/Features/Dashbord/Events";
 import { EmployeeLeaveDetails } from "./OffBoard/Features/Dashbord/Leaves/EmployeeLeaveDetails";
 
 import OnbordMainLayout from "./OnBoard/Components/Layout/OnboardMainLayout";
+import AddEmployee from "./OnBoard/Features/AddEmployee";
 
 export const router = createBrowserRouter([
   {
@@ -53,10 +54,16 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <h1 className="p-6 text-xl">Onboard Dashboard</h1>,
+
           },
+          {
+            path: "add-employee",
+            element: <AddEmployee />,
+          }
         ],
       },
 
     ],
   },
 ]);
+
