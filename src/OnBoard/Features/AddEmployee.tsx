@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import StepButton from "./AddEmployee/ActiveTab" // Path to your component
 import EmployeeRegister from "./AddEmployee/EmployeeRegistor";
 
@@ -18,7 +18,7 @@ const App = () => {
     setCurrentStep(label);
     console.log("Navigated to:", label);
   };
-  
+
 
   return (
     <div >

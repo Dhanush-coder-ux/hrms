@@ -4,7 +4,7 @@ import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
 
 import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
-import { TableOfContentsIcon } from "lucide-react";
+
 
 
 const API_URL = "http://localhost:3001/NewEmployees";
