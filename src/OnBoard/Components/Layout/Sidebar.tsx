@@ -4,10 +4,8 @@ import {
   LayoutDashboard,
   UserPlus,
   FileCheck,
-  ClipboardList,
   FileText,
   Users,
-  BarChart3,
   ChevronLeft,
   ChevronRight,
   PersonStanding
