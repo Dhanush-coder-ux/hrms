@@ -25,7 +25,8 @@ export const Events = () => {
   const [ShowEdit, setShowEdit] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventFormData | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>("");
-
+  console.log(selectedEvent);
+  
   const initialFormState: EventFormData = {
     event_id: "",
     category: "",

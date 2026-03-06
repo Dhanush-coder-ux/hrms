@@ -13,7 +13,7 @@ export default function Signup() {
         const [error, setError] = useState("");
         const [success, setSuccess] = useState("");
 
-        const onChange = (e) =>
+        const onChange = (e:any) =>
             setForm((s) => ({ ...s, [e.target.name]: e.target.value }));
 
         const validate = () => {
@@ -25,7 +25,7 @@ export default function Signup() {
             return null;
         };
 
-        const onSubmit = async (e) => {
+        const onSubmit = async (e:any) => {
             e.preventDefault();
             const v = validate();
             if (v) {
@@ -41,7 +41,8 @@ export default function Signup() {
                 setForm({ name: "", email: "", password: "", confirmPassword: "" });
                 navigate("/login");
             } catch (err) {
-                setError(err.message || "Something went wrong");
+                if (err instanceof Error) {
+                setError(err.message || "Something went wrong");}
             } finally {
                 setLoading(false);
             }
