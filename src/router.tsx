@@ -16,6 +16,7 @@ import { EmployeeLeaveDetails } from "./OffBoard/Features/Dashbord/Leaves/Employ
 
 import OnbordMainLayout from "./OnBoard/Components/Layout/OnboardMainLayout";
 import AddEmployee from "./OnBoard/Features/AddEmployee";
+import EmployeeRegister from "./OnBoard/Features/AddEmployee/EmployeeRegistor";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
           {
             path: "add-employee",
             element: <AddEmployee />,
+          },
+          {
+            path: "employeeregistration",
+            element: <EmployeeRegister />,
           }
         ],
       },
