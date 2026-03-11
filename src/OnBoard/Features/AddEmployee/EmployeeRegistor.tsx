@@ -7,7 +7,7 @@ import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
 
 
 
-const API_URL = "http://localhost:3001/NewEmployees";
+const API_URL = "http://127.0.0.1:8000/employee";
 
 // --- Interfaces ---
 interface Education {
@@ -17,32 +17,29 @@ interface Education {
 }
 
 interface Dependent {
-  name: string;
-  relationship: string;
+ person_name: string;
+  relationship_type: string;
   contact: string;
-  DOB: string;
+  person_dob: string;
 }
 
 interface Employee {
-  id: string;
-  firstName: string;
-  lastName: string;
+  Emp_id: string;
+  f_name: string;
+  l_name: string;
   name: string;
   gender?: string;
   dob?: string;
   email: string;
   phone: string;
 // Job Info
-  department: string;
-  designation: string;
-  manager: string;
-  employmentType: string;
-  salary: string;
-  address: string;
-  status: string;
-  dateOfJoining: string;
+  Department: string;
+   designation: string;
+   emp_type: string;
+  DateOfJoining: string;
     // New fields for dynamic education
   education: Education[];
+
   company_name: string;
   position: string;
   FromDate: string;
@@ -58,23 +55,19 @@ type EmployeeRegisterProps = {
 const EmployeeRegister = ( {ClicktoAction}: EmployeeRegisterProps) => {
   // --- 1. State Initialization ---
   const [formData, setFormData] = useState<Employee>({
-    id: "",
-    firstName: "",
-    lastName: "",
+    Emp_id: "",
+    f_name: "",
+    l_name: "",
     name: "",
     gender: "",
     dob: "",
     email: "",
     phone: "",
     // Job Info
-    department: "",
-    designation: "",
-    manager: "",
-    employmentType: "",
-    salary: "",
-    address: "",
-    status: "Active",
-    dateOfJoining: "",
+    Department:"",
+    designation:"",
+    emp_type:"",
+    DateOfJoining:"",
     // Education starts with one empty section
     education: [{ degree: "", institution: "", graduationYear: "" }],
     company_name: "",
@@ -82,7 +75,7 @@ const EmployeeRegister = ( {ClicktoAction}: EmployeeRegisterProps) => {
     FromDate: "",
     ToDate:"",
     // dependents: []
-    dependents: [{ name: "", relationship: "", contact: "", DOB: "" }],
+    dependents: [{ person_name: "", relationship_type: "", contact: "", person_dob: "" }],
   });
 
   // --- 2. Change Handlers ---
@@ -92,8 +85,8 @@ const EmployeeRegister = ( {ClicktoAction}: EmployeeRegisterProps) => {
     const { name, value } = e.target;
     setFormData((prev) => {
       const newState = { ...prev, [name]: value };
-      if (name === "firstName" || name === "lastName") {
-        newState.name = `${newState.firstName} ${newState.lastName}`.trim();
+      if (name === "f_name" || name === "l_name") {
+        newState.name = `${newState.f_name} ${newState.l_name}`.trim();
       }
       return newState;
     });
@@ -122,7 +115,7 @@ const addDependentSection = (e?: any) => {
   if (e?.preventDefault) e.preventDefault();      
   setFormData({
       ...formData,    
-      dependents: [...formData.dependents, { name: "", relationship: "", contact: "", DOB: "" }],
+      dependents: [...formData.dependents, { person_name: "", relationship_type: "", contact: "", person_dob: "" }],
   });
 };
 
@@ -190,9 +183,9 @@ const removeEducationSection = (index: number) => {
           <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Employee Basic Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FormFiled name="id" value={formData.id} Lable="Employee Code" in_PlaceHolder="EMP-001" onChange={onChange} />
-              <FormFiled name="firstName" value={formData.firstName} Lable="First Name" in_PlaceHolder="John" onChange={onChange} />
-              <FormFiled name="lastName" value={formData.lastName} Lable="Last Name" in_PlaceHolder="Doe" onChange={onChange} />
+              <FormFiled name="Emp_id" value={formData.Emp_id} Lable="Employee Code" in_PlaceHolder="EMP-001" onChange={onChange} />
+              <FormFiled name="f_name" value={formData.f_name} Lable="First Name" in_PlaceHolder="John" onChange={onChange} />
+              <FormFiled name="l_name" value={formData.l_name} Lable="Last Name" in_PlaceHolder="Doe" onChange={onChange} />
               <FormFiled name="name" value={formData.name} Lable="Full Name (Auto)" in_PlaceHolder="John Doe" onChange={onChange} />
               <Selection label="Gender" name="gender" options={genderOptions} value={formData.gender || ""} onChange={onChange} />
               <CustomDatePicker name="dob" value={formData.dob || ""} Lable="Date of Birth" onChange={onChange} />
@@ -205,10 +198,10 @@ const removeEducationSection = (index: number) => {
           <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Job Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Selection label="Department" name="department" options={departmentOptions} value={formData.department || ""} onChange={onChange} />
+              <Selection label="Department" name="department" options={departmentOptions} value={formData.Department || ""} onChange={onChange} />
               <FormFiled name="designation" value={formData.designation} Lable="Designation" in_PlaceHolder="Software Engineer" onChange={onChange} />
-              <CustomDatePicker name="dateOfJoining" value={formData.dateOfJoining || ""} Lable="Date of Joining" onChange={onChange} />
-              <Selection label="Employment Type" name="employmentType" options={empTypeOptions} value={formData.employmentType || ""} onChange={onChange} />
+              <CustomDatePicker name="DateOfJoining" value={formData.DateOfJoining || ""} Lable="Date of Joining" onChange={onChange} />
+              <Selection label="Employment Type" name="employmentType" options={empTypeOptions} value={formData.emp_type || ""} onChange={onChange} />
             </div>
           </section>
 
@@ -290,20 +283,50 @@ const removeEducationSection = (index: number) => {
 
 
 {/* Work Information */}
-        <section >
-            <div className="">
-                <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Work Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <FormFiled name="Company_name" Lable="Company name" in_PlaceHolder="Company Name" value={formData.company_name} onChange={onChange} />
-                    <FormFiled name="Position" Lable="Position" in_PlaceHolder="Position" value={formData.position} onChange={onChange} />
-                    <CustomDatePicker name="FromDate" value={formData.FromDate || ""} Lable="From" onChange={onChange} />
-                    <CustomDatePicker name="ToDate" value={formData.ToDate || ""} Lable="To" onChange={onChange} />
-                </div>
+<section>
+  <div>
+    <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">
+      Work Information
+    </h3>
 
-            </div>
-        </section>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-{/*  */}
+      <FormFiled
+        name="company_name"
+        Lable="Company Name"
+        in_PlaceHolder="Company Name"
+        value={formData.company_name}
+        onChange={onChange}
+      />
+
+      <FormFiled
+        name="position"
+        Lable="Position"
+        in_PlaceHolder="Position"
+        value={formData.position}
+        onChange={onChange}
+      />
+
+      <CustomDatePicker
+        name="FromDate"
+        value={formData.FromDate || ""}
+        Lable="From"
+        onChange={onChange}
+      />
+
+      <CustomDatePicker
+        name="ToDate"
+        value={formData.ToDate || ""}
+        Lable="To"
+        onChange={onChange}
+      />
+
+    </div>
+  </div>
+</section>
+
+
+{/* Dependent Details */}
         <section>
             <div className="text-lg font-medium text-blue-600 mb-4 border-b pb-2 flex items-center justify-between">
             <h3 className="text-lg font-medium text-blue-600">Dependent Details</h3>
@@ -322,12 +345,12 @@ const removeEducationSection = (index: number) => {
                 <div className="md:col-span-3">
                     <FormFiled
                     name="name"
-                    value={Depen.name}
+                    value={Depen.person_name}
                     Lable="Name"
                     in_PlaceHolder="Dependent Name"
                     onChange={(e) => {
                         const updatedDependents = [...formData.dependents];
-                        updatedDependents[index] = { ...updatedDependents[index], name: e.target.value };
+                        updatedDependents[index] = { ...updatedDependents[index], person_name: e.target.value };
                         setFormData({ ...formData, dependents: updatedDependents });
                     }}
                     />
@@ -338,10 +361,10 @@ const removeEducationSection = (index: number) => {
                     label="Relationship"
                     name="relationship"
                     options={relationshipOptions}
-                    value={Depen.relationship}
+                    value={Depen.relationship_type}
                     onChange={(e) => {
                         const updatedDependents = [...formData.dependents];
-                        updatedDependents[index] = { ...updatedDependents[index], relationship: e.target.value };
+                        updatedDependents[index] = { ...updatedDependents[index], relationship_type: e.target.value };
                         setFormData({ ...formData, dependents: updatedDependents });
                     }}
                     />
@@ -364,12 +387,12 @@ const removeEducationSection = (index: number) => {
                 <div className="md:col-span-2">
                     <CustomDatePicker
                     name="DOB"
-                    value={Depen.DOB}
+                    value={Depen.person_dob}
                     Lable="Date of Birth"
                     onChange={(val) => {
                         const valueToUse = typeof val === "string" ? val : (val.target?.value || "");
                         const updatedDependents = [...formData.dependents];
-                        updatedDependents[index] = { ...updatedDependents[index], DOB: valueToUse };
+                        updatedDependents[index] = { ...updatedDependents[index], person_dob: valueToUse };
                         setFormData({ ...formData, dependents: updatedDependents });
                     }}
                     />
