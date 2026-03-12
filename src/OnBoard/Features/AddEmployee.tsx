@@ -1,37 +1,39 @@
-import  { useState } from "react";
-import StepButton from "./AddEmployee/ActiveTab" // Path to your component
+import { useState } from "react";
+import StepButton from "./AddEmployee/ActiveTab";
 import EmployeeRegister from "./AddEmployee/EmployeeRegistor";
+import { Salary } from "./AddEmployee/Salary";
 
 const App = () => {
-  // 1. Define your menu items
   const steps = [
     { label: "Step 1" },
     { label: "Step 2" },
     { label: "Step 3" }
   ];
 
-  // 2. Manage the active state
   const [currentStep, setCurrentStep] = useState("Step 1");
 
-  // 3. Handle the click event
   const handleStepClick = (label: string) => {
     setCurrentStep(label);
-    console.log("Navigated to:", label);
   };
 
-
   return (
-    <div >
-      <StepButton 
-        menus={steps} 
-        active={currentStep} 
-        onClick={handleStepClick} 
+    <div className="">
+      <StepButton
+        menus={steps}
+        active={currentStep}
+        onClick={handleStepClick}
       />
 
-      <div className="mt-5">
-        {currentStep === "Step 1" && <EmployeeRegister ClicktoAction={() => console.log("Action triggered")} />  }
-        {currentStep === "Step 2" && <div className="p-4 bg-white mt-4">Content for Step 2</div>  }
-        {currentStep === "Step 3" && <div className="p-4 bg-white mt-4">Content for Step 3</div>  }
+      <div className="bg-white shadow mt-10 rounded-xl p-6 max-w-6xl mx-auto">
+        {currentStep === "Step 1" && (
+          <EmployeeRegister ClicktoAction={() => setCurrentStep("Step 2")} />
+        )}
+
+        {currentStep === "Step 2" && <Salary />}
+
+        {currentStep === "Step 3" && (
+          <div className="p-4 bg-white mt-4">Content for Step 3</div>
+        )}
       </div>
     </div>
   );

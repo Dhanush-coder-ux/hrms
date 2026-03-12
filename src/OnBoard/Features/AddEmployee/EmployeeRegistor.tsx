@@ -1,7 +1,8 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent,} from "react";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
+
 
 import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
 
@@ -46,6 +47,20 @@ interface Employee {
   ToDate: string;
 //   dependents?: { name: string; relationship: string; contact: string }[]; // Optional dependents array
   dependents: Dependent[];
+
+    // current Adderss
+
+    Street:string;
+    City : string;
+    State : string;
+    Pin_Code : number;
+
+    // P address
+    p_Street:string;
+    p_City : string;
+    p_State : string;
+    p_Pin_Code : number;
+
 }
 type EmployeeRegisterProps = {
     ClicktoAction?: () => void;
@@ -53,6 +68,10 @@ type EmployeeRegisterProps = {
 
 
 const EmployeeRegister = ( {ClicktoAction}: EmployeeRegisterProps) => {
+
+  const [isChecked, setIsChecked] = useState(false);
+
+
   // --- 1. State Initialization ---
   const [formData, setFormData] = useState<Employee>({
     Emp_id: "",
@@ -74,6 +93,20 @@ const EmployeeRegister = ( {ClicktoAction}: EmployeeRegisterProps) => {
     position: "",
     FromDate: "",
     ToDate:"",
+
+    // c address
+    Street:"",
+    City : "",
+    State : "",
+    Pin_Code : 0,
+
+    // P address
+    p_Street : "",
+    p_City : "",
+    p_State : "",
+    p_Pin_Code :  0,
+
+
     // dependents: []
     dependents: [{ person_name: "", relationship_type: "", contact: "", person_dob: "" }],
   });
@@ -132,10 +165,26 @@ const removeEducationSection = (index: number) => {
     setFormData({ ...formData, education: updatedEdu });
   }
 };
+ 
+const True = (e: ChangeEvent<HTMLInputElement>) => {
+  const checked = e.target.checked;
+  setIsChecked(checked);
 
+  if (checked) {
+    setFormData((prev) => ({
+      ...prev,
+      p_Street: prev.Street,
+      p_City: prev.City,
+      p_State: prev.State,
+      p_Pin_Code: prev.Pin_Code,
+    }));
+  }
+};
+
+  
   // --- 4. Submit ---
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  e.preventDefault();
     try {
       const res = await fetch(API_URL, {
         method: "POST",
@@ -145,6 +194,11 @@ const removeEducationSection = (index: number) => {
 
       if (res.ok) {
         alert("Employee Added Successfully");
+        
+        if(ClicktoAction){
+          ClicktoAction()
+        }
+
       } else {
         throw new Error("Failed to save");
       }
@@ -170,7 +224,7 @@ const removeEducationSection = (index: number) => {
 
     
 
-    <div className="bg-white shadow rounded-xl p-6 max-w-6xl mx-auto">
+    <div>
   
       <div className="flex items-center space-x-3 mb-8">
         <FaUser className="text-3xl font-bold text-blue-600" />
@@ -416,6 +470,42 @@ const removeEducationSection = (index: number) => {
             </div>
             ))}
         </section>
+
+
+        {/* ADDresss line */}
+          <section>
+            <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Current Address Details </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormFiled name="Street" value={formData.Street} Lable="Street Address" in_PlaceHolder="Street Address" onChange={onChange} />
+              <FormFiled name="City" value={formData.City} Lable="City" in_PlaceHolder="City" onChange={onChange} />
+              <FormFiled name="State" value={formData.State} Lable="State" in_PlaceHolder="State" onChange={onChange} />
+              <FormFiled name="Pin_Code" value={formData.Pin_Code} Lable="Pin Code" in_PlaceHolder="Pin Code" onChange={onChange} />
+            </div>
+          </section>
+
+          <section>
+                <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Permanen Address Details </h3>
+                 <label className="flex items-center gap-3 mb-4 cursor-pointer">
+                     <input
+                      type="checkbox"
+                      className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                      onChange={True}
+                      />
+                     <span className="text-sm font-medium text-gray-700">
+                       Same as Current Address
+                      </span>
+                      </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <FormFiled name="p_Street" value={formData.p_Street} Lable="Street Address" in_PlaceHolder="Street Address" onChange={onChange}  />
+
+                  <FormFiled name="p_City" value={formData.p_City} Lable="City" in_PlaceHolder="City" onChange={onChange} />
+
+                  <FormFiled name="p_State" value={formData.p_State} Lable="State" in_PlaceHolder="State" onChange={onChange} />
+
+                  <FormFiled name="p_Pin_Code" value={formData.p_Pin_Code} Lable="Pin Code" in_PlaceHolder="Pin Code" onChange={onChange} />
+                </div>
+              </section>
+              
 
 
         </div>

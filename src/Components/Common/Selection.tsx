@@ -21,8 +21,8 @@ export const Selection = ({
   placeholder,
 }: SelectionProps) => {
   return (
-    <div className="block mb-1 text-sm font-medium text-gray-700">
-      <label className="block mb-1 font-medium">{label}</label>
+    <div >
+      <label className="block mb-0.5 font-medium">{label}</label>
 
       <select
         name={name}
