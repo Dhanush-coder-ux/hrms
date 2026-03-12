@@ -170,6 +170,7 @@ const removeEducationSection = (index: number) => {
 const True = (e: ChangeEvent<HTMLInputElement>) => {
   const checked = e.target.checked;
   setIsChecked(checked);
+  console.log({isChecked})
 
   if (checked) {
     setFormData((prev) => ({
