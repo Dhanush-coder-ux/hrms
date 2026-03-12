@@ -54,7 +54,8 @@ export const EMPleaves = () => {
         columns={columns}
         data={data}
         onRowClick={(row) =>
-          navigate(`/employee-leave/${row.empid}`, { state: row })
+          navigate(`/offboard/employee-leave/${row.empid}`, { state: row })
+
         }
       />
     </section>

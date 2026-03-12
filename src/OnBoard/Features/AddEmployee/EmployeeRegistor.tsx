@@ -8,7 +8,6 @@ import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
 
 
 
-const API_URL = "http://127.0.0.1:8000/employee";
 
 // --- Interfaces ---
 interface Education {
@@ -59,15 +58,17 @@ interface Employee {
     p_Street:string;
     p_City : string;
     p_State : string;
-    p_Pin_Code : number;
+    p_Pin_Code : number ;
 
 }
 type EmployeeRegisterProps = {
-    ClicktoAction?: () => void;
-}
+  ClicktoAction?: () => void;
+  setEmployeeData?: (data: any) => void;
+};
 
 
-const EmployeeRegister = ( {ClicktoAction}: EmployeeRegisterProps) => {
+
+const EmployeeRegister = ( {ClicktoAction,setEmployeeData}: EmployeeRegisterProps) => {
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -182,30 +183,14 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
 };
 
   
-  // --- 4. Submit ---
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
 
-      if (res.ok) {
-        alert("Employee Added Successfully");
-        
-        if(ClicktoAction){
-          ClicktoAction()
-        }
+  setEmployeeData?.(formData);
 
-      } else {
-        throw new Error("Failed to save");
-      }
-    } catch (error) {
-      alert("Error saving employee. Please check if the server is running.");
-    }
-  };
+  ClicktoAction?.();
+};
+
 
   // --- Options ---
   const genderOptions = [{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }];
@@ -231,10 +216,11 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
         <h1 className="text-3xl font-bold">Add New Employee</h1>
       </div>
 
-      <form onSubmit={onSubmit}>
+      <form className="space-y-6" onSubmit={onSubmit}>
         <div className="space-y-8">
           {/* Section 1: Basic Details */}
-          <section>
+ 
+                  <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Employee Basic Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormFiled name="Emp_id" value={formData.Emp_id} Lable="Employee Code" in_PlaceHolder="EMP-001" onChange={onChange} />
@@ -252,10 +238,10 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
           <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Job Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Selection label="Department" name="department" options={departmentOptions} value={formData.Department || ""} onChange={onChange} />
+              <Selection label="Department" name="Department" options={departmentOptions} value={formData.Department || ""} onChange={onChange} />
               <FormFiled name="designation" value={formData.designation} Lable="Designation" in_PlaceHolder="Software Engineer" onChange={onChange} />
               <CustomDatePicker name="DateOfJoining" value={formData.DateOfJoining || ""} Lable="Date of Joining" onChange={onChange} />
-              <Selection label="Employment Type" name="employmentType" options={empTypeOptions} value={formData.emp_type || ""} onChange={onChange} />
+              <Selection label="Employment Type" name="emp_type" options={empTypeOptions} value={formData.emp_type || ""} onChange={onChange} />
             </div>
           </section>
 
@@ -502,7 +488,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
 
                   <FormFiled name="p_State" value={formData.p_State} Lable="State" in_PlaceHolder="State" onChange={onChange} />
 
-                  <FormFiled name="p_Pin_Code" value={formData.p_Pin_Code} Lable="Pin Code" in_PlaceHolder="Pin Code" onChange={onChange} />
+                  <FormFiled name="p_Pin_Code" value={formData.p_Pin_Code } Lable="Pin Code" in_PlaceHolder="Pin Code" onChange={onChange} />
                 </div>
               </section>
               
@@ -511,15 +497,12 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
         </div>
 
         {/* Footer Actions */}
-        <div className="mt-12 flex justify-end pt-8">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-10 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95"
-            onClick={ClicktoAction}
-          >
-            Save Employee Record
-          </button>
-        </div>
+         <button
+          type="submit"
+          className="bg-blue-600 text-white px-10 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
