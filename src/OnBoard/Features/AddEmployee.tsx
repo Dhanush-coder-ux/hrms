@@ -2,6 +2,8 @@ import { useState } from "react";
 import StepButton from "./AddEmployee/ActiveTab";
 import EmployeeRegister from "./AddEmployee/EmployeeRegistor";
 import { Salary } from "./AddEmployee/Salary";
+import { BankDetails } from "./AddEmployee/BankDetails";
+import { Verify } from "./AddEmployee/Veryfy";
 
 
 
@@ -13,11 +15,13 @@ const App = () => {
 
   const [employeeData, setEmployeeData] = useState<any>(null);
   const [salaryData, setSalaryData] = useState<any>(null);
+  const [BankData,setBankdata] = useState<any>(null);
 
   const steps = [
     { label: "Step 1" },
     { label: "Step 2" },
-    { label: "Step 3" }
+    { label: "Step 3" },
+    {label: "Step 4"}
   ];
 
   const handleStepClick = (label: string) => {
@@ -27,7 +31,8 @@ const App = () => {
   const finalSubmit = async () => {
     const finalData = {
       employee: employeeData,
-      salary: salaryData
+      salary: salaryData,
+      BankDetails:BankData
     };
 
     try {
@@ -70,25 +75,24 @@ const App = () => {
             ClicktoAction={() => setCurrentStep("Step 3")}
           />
         )}
-
         {currentStep === "Step 3" && (
-          <div className="text-center">
-
-            <h2 className="text-2xl font-bold mb-6">
-              Review & Submit
-            </h2>
-
-            <button
-              onClick={finalSubmit}
-              className="bg-green-600 text-white px-10 py-3 rounded-lg"
-            >
-              Final Submit
-            </button>
-
-          </div>
+          <BankDetails
+            setBankDetails={setBankdata}
+            ClicktoAction={() => setCurrentStep("Step 4")}
+          />
         )}
 
-      </div>
+        {currentStep === "Step 4" && (
+  <Verify 
+    employeeData={employeeData}
+    salaryData={salaryData}
+    bankData={BankData}
+    onFinalSubmit={finalSubmit}
+    
+  />
+)}
+
+ </div>
     </div>
   );
 };

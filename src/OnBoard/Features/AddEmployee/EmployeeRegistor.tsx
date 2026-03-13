@@ -210,20 +210,20 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
 
     
 
-    <div>
+    <div className="p-4">
   
-      <div className="flex items-center space-x-3 mb-8">
-        <FaUser className="text-3xl font-bold text-blue-600" />
-        <h1 className="text-3xl font-bold">Add New Employee</h1>
-      </div>
+      <div className="flex items-center gap-3 mb-8">
+  <FaUser className="text-[28px] text-blue-600 shrink-0" />
+  <h1 className="text-3xl font-bold">Add New Employee</h1>
+</div>
 
       <form className="space-y-6" onSubmit={onSubmit}>
-        <div className="space-y-8">
+
           {/* Section 1: Basic Details */}
  
                   <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Employee Basic Details</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormFiled name="Emp_id" value={formData.Emp_id} Lable="Employee Code" in_PlaceHolder="EMP-001" onChange={onChange} />
               <FormFiled name="f_name" value={formData.f_name} Lable="First Name" in_PlaceHolder="John" onChange={onChange} />
               <FormFiled name="l_name" value={formData.l_name} Lable="Last Name" in_PlaceHolder="Doe" onChange={onChange} />
@@ -238,7 +238,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
           {/* Section 2: Job Information */}
           <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Job Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Selection label="Department" name="Department" options={departmentOptions} value={formData.Department || ""} onChange={onChange} />
               <FormFiled name="designation" value={formData.designation} Lable="Designation" in_PlaceHolder="Software Engineer" onChange={onChange} />
               <CustomDatePicker name="DateOfJoining" value={formData.DateOfJoining || ""} Lable="Date of Joining" onChange={onChange} />
@@ -264,7 +264,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
 
   {formData.education.map((edu, index) => (
     <div key={index} className="relative mb-6 p-4 border border-gray-300 rounded-lg bg-blue-50/50">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         
         {/* Degree  */}
         <div className="md:col-span-4">
@@ -330,7 +330,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
       Work Information
     </h3>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
       <FormFiled
         name="company_name"
@@ -382,7 +382,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
 
             {formData.dependents.map((Depen, index) => (
             <div key={index} className="relative mb-6 p-4 border border-gray-300 rounded-lg bg-blue-50/50">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <div className="md:col-span-3">
                     <FormFiled
                     name="name"
@@ -462,7 +462,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
         {/* ADDresss line */}
           <section>
             <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">Current Address Details </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormFiled name="Street" value={formData.Street} Lable="Street Address" in_PlaceHolder="Street Address" onChange={onChange} />
               <FormFiled name="City" value={formData.City} Lable="City" in_PlaceHolder="City" onChange={onChange} />
               <FormFiled name="State" value={formData.State} Lable="State" in_PlaceHolder="State" onChange={onChange} />
@@ -482,7 +482,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
                        Same as Current Address
                       </span>
                       </label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <FormFiled name="p_Street" value={formData.p_Street} Lable="Street Address" in_PlaceHolder="Street Address" onChange={onChange}  />
 
                   <FormFiled name="p_City" value={formData.p_City} Lable="City" in_PlaceHolder="City" onChange={onChange} />
@@ -495,7 +495,7 @@ const True = (e: ChangeEvent<HTMLInputElement>) => {
               
 
 
-        </div>
+
 
         {/* Footer Actions */}
          <button
