@@ -1,152 +1,137 @@
 import { FaPiggyBank, FaUniversity, FaIdCard, FaHashtag, FaCode } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 
-interface BaankData {
-  bankName: string;
-  accountNumber: string;
-  ifscCode: string;
-  panNumber: string;
-}
+interface BaankData { bankName: string; accountNumber: string; ifscCode: string; panNumber: string; }
+type BankProps = { empId?: string; setBankDetails?: (data: any) => void; ClicktoAction?: () => void; };
 
-type BankProps = {
-  empId?: string;
-  setBankDetails?: (data: any) => void;
-  ClicktoAction?: () => void;
+const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+  const [v, setV] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setV(true), delay); return () => clearTimeout(t); }, [delay]);
+  return (
+    <div style={{
+      opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(18px)",
+      transition: "opacity 0.45s ease, transform 0.45s cubic-bezier(0.4,0,0.2,1)",
+    }}>{children}</div>
+  );
 };
 
 export const BankDetails = ({ setBankDetails, ClicktoAction }: BankProps) => {
   const [localBankDetails, setLocalBankDetails] = useState<BaankData>({
-    bankName: "",
-    accountNumber: "",
-    ifscCode: "",
-    panNumber: "",
+    bankName: "", accountNumber: "", ifscCode: "", panNumber: "",
   });
-
-  // 1. New state for the verification field
   const [confirmAccountNumber, setConfirmAccountNumber] = useState("");
   const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
-    // Handle verification field separately
-    if (name === "confirmAccount") {
-      setConfirmAccountNumber(value);
-      return;
-    }
-
+    if (name === "confirmAccount") { setConfirmAccountNumber(value); return; }
     const finalValue = name === "panNumber" ? value.toUpperCase() : value;
-
-    setLocalBankDetails((prev) => ({
-      ...prev,
-      [name]: finalValue,
-    }));
+    setLocalBankDetails((prev) => ({ ...prev, [name]: finalValue }));
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // 2. Validation Logic
     if (localBankDetails.accountNumber !== confirmAccountNumber) {
-      setError("Account numbers do not match!");
-      return;
+      setError("Account numbers do not match!"); return;
     }
-
-    setError(""); // Clear error on success
-    setBankDetails?.(localBankDetails);
-    ClicktoAction?.();
+    setError(""); setBankDetails?.(localBankDetails); ClicktoAction?.();
   };
 
+  const isMatch = !!confirmAccountNumber && localBankDetails.accountNumber === confirmAccountNumber;
+  const isMismatch = !!confirmAccountNumber && localBankDetails.accountNumber !== confirmAccountNumber;
+
   return (
-    <div className="p-4">
-      <div className="flex items-center gap-3 mb-8">
-        <FaPiggyBank className="text-[28px] text-blue-600 shrink-0" />
-        <h1 className="text-3xl font-bold">Bank Details</h1>
-      </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+        .bank-page { font-family: 'DM Sans', sans-serif; padding: 24px; }
+        .bank-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .bank-section-head {
+          font-size: 15px; font-weight: 600; color: #4f46e5;
+          margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1.5px solid #e2e8f0;
+        }
+        .bank-submit-btn {
+          background: #6366f1; color: #fff; padding: 12px 40px;
+          border-radius: 10px; font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+          box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+          transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+        .bank-submit-btn:hover { background: #4f46e5; box-shadow: 0 6px 20px rgba(99,102,241,0.45); }
+        .bank-submit-btn:active { transform: scale(0.97); }
+        .bank-match-msg {
+          font-size: 12px; font-weight: 500; margin-top: 5px;
+          transition: all 0.25s ease;
+          animation: fadeIn 0.2s ease;
+        }
+        .bank-match-msg.match   { color: #16a34a; }
+        .bank-match-msg.mismatch { color: #dc2626; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+        .bank-error {
+          padding: 10px 16px; background: #fef2f2; border: 1px solid #fecaca;
+          border-radius: 8px; color: #dc2626; font-size: 14px; font-weight: 500;
+          animation: shake 0.35s cubic-bezier(0.36,0.07,0.19,0.97);
+        }
+        @keyframes shake {
+          0%,100% { transform: translateX(0); }
+          20%,60%  { transform: translateX(-5px); }
+          40%,80%  { transform: translateX(5px); }
+        }
+      `}</style>
 
-      <form className="space-y-6" onSubmit={onSubmit}>
-        <section>
-          <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">
-            Bank Account Information
-          </h3>
+      <div className="bank-page">
+        <AnimSection delay={0}>
+          <div className="flex items-center gap-3 mb-8">
+            <FaPiggyBank className="text-[26px] text-indigo-500 shrink-0" />
+            <h1 className="bank-heading">Bank Details</h1>
+          </div>
+        </AnimSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormFiled
-              Lable="Bank Name"
-              name="bankName"
-              value={localBankDetails.bankName}
-              in_PlaceHolder="HDFC Bank"
-              onChange={handleChange}
-              icon={<FaUniversity size={14} />}
-            />
-            <FormFiled
-              Lable="IFSC Code"
-              name="ifscCode"
-              value={localBankDetails.ifscCode}
-              in_PlaceHolder="HDFC0001234"
-              onChange={handleChange}
-              icon={<FaCode size={14} />}
-            />
-            
-            {/* Primary Account Number */}
-            <FormFiled
-              Lable="Account Number"
-              name="accountNumber"
-              value={localBankDetails.accountNumber}
-              in_PlaceHolder="Enter Account Number"
-              onChange={handleChange}
-              icon={<FaHashtag size={14} />}
-              PrivacyInput={true}
-            />
+        <form className="space-y-8" onSubmit={onSubmit}>
+          <AnimSection delay={60}>
+            <section>
+              <div className="bank-section-head">Bank Account Information</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <FormFiled Lable="Bank Name" name="bankName" value={localBankDetails.bankName}
+                  in_PlaceHolder="HDFC Bank" onChange={handleChange} icon={<FaUniversity size={14} />} />
+                <FormFiled Lable="IFSC Code" name="ifscCode" value={localBankDetails.ifscCode}
+                  in_PlaceHolder="HDFC0001234" onChange={handleChange} icon={<FaCode size={14} />} />
+                <FormFiled Lable="Account Number" name="accountNumber" value={localBankDetails.accountNumber}
+                  in_PlaceHolder="Enter Account Number" onChange={handleChange}
+                  icon={<FaHashtag size={14} />} PrivacyInput={true} />
+                <div>
+                  <FormFiled Lable="Verify Account Number" name="confirmAccount" value={confirmAccountNumber}
+                    in_PlaceHolder="Re-enter Account Number" onChange={handleChange}
+                    icon={<FaHashtag size={14} />} PrivacyInput={true} />
+                  {confirmAccountNumber && (
+                    <p className={`bank-match-msg ${isMatch ? "match" : "mismatch"}`}>
+                      {isMatch ? "✓ Account numbers match" : "✗ Numbers do not match"}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
+          </AnimSection>
 
-            {/* 3. Verification Field Logic */}
-            <div className="relative">
-                <FormFiled
-                Lable="Verify Account Number"
-                name="confirmAccount" // Unique name
-                value={confirmAccountNumber}
-                in_PlaceHolder="Re-enter Account Number"
-                onChange={handleChange}
-                icon={<FaHashtag size={14} />}
-                PrivacyInput={true}
-                />
-                {/* Visual mismatch indicator */}
-                {confirmAccountNumber && localBankDetails.accountNumber !== confirmAccountNumber && (
-                    <span className="text-xs text-red-500 absolute -bottom-5">Numbers do not match</span>
-                )}
+          <AnimSection delay={120}>
+            <section>
+              <div className="bank-section-head">Tax Identification</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <FormFiled Lable="PAN Card Number" name="panNumber" value={localBankDetails.panNumber}
+                  in_PlaceHolder="ABCDE1234F" onChange={handleChange}
+                  icon={<FaIdCard size={14} />} PrivacyInput={true} />
+              </div>
+            </section>
+          </AnimSection>
+
+          <AnimSection delay={180}>
+            <div className="flex flex-col gap-3">
+              {error && <div className="bank-error">{error}</div>}
+              <button type="submit" className="bank-submit-btn" style={{ width: "fit-content" }}>Next</button>
             </div>
-          </div>
-        </section>
-
-        <section>
-          <h3 className="text-lg font-medium text-blue-600 mb-4 border-b pb-2">
-            Tax Identification
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormFiled
-              Lable="PAN Card Number"
-              name="panNumber"
-              value={localBankDetails.panNumber}
-              in_PlaceHolder="ABCDE1234F"
-              onChange={handleChange}
-              icon={<FaIdCard size={14} />}
-              PrivacyInput={true}
-            />
-          </div>
-        </section>
-
-        <div className="flex flex-col gap-2">
-            {error && <p className="text-red-600 font-medium">{error}</p>}
-            <button
-            type="submit"
-            className="bg-blue-600 text-white w-fit px-10 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95"
-            >
-            Next
-            </button>
-        </div>
-      </form>
-    </div>
+          </AnimSection>
+        </form>
+      </div>
+    </>
   );
 };
