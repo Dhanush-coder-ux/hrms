@@ -3,49 +3,49 @@ import { createBrowserRouter } from "react-router-dom";
 import { RootLayout } from "./Root/RootLayout";
 import { ModuleSelect } from "./Root/ModuleSelect";
 
-import MainLayout from "./OffBoard/Components/Layout/MainLayout";
-import { Dashboard } from "./OffBoard/Features/Dashbord/Dashboard";
-import { Attendance } from "./OffBoard/Features/Dashbord/Attendance";
-import Leaves from "./OffBoard/Features/Dashbord/Leaves";
-import { Department } from "./OffBoard/Features/Dashbord/Department";
-import Payroll from "./OffBoard/Features/Dashbord/Payroll";
-import { Employee } from "./OffBoard/Features/Dashbord/Employee";
-import { EMPleaves } from "./OffBoard/Features/Dashbord/Leaves/EMPleaves";
-import { Events } from "./OffBoard/Features/Dashbord/Events";
-import { EmployeeLeaveDetails } from "./OffBoard/Features/Dashbord/Leaves/EmployeeLeaveDetails";
+// ── Employee Management (was "OnBoard") ─────────────────────────────────────
+import MainLayout from "./OnBoard/EmployeeManagement/Components/Layout/MainLayout";
+import { Dashboard as EmpDashboard } from "./OnBoard/EmployeeManagement/Dashboard";
+import { Attendance } from "./OnBoard/EmployeeManagement/Attendance";
+import Leaves from "./OnBoard/EmployeeManagement/Leaves";
+import { Department } from "./OnBoard/EmployeeManagement/Department";
+import Payroll from "./OnBoard/EmployeeManagement/Payroll";
+import  Employee  from "./OnBoard/EmployeeManagement/Employee";
+import { EMPleaves } from "./OnBoard/EmployeeManagement/Leaves/EMPleaves";
+import { Events } from "./OnBoard/EmployeeManagement/Events";
+import { EmployeeLeaveDetails } from "./OnBoard/EmployeeManagement/Leaves/EmployeeLeaveDetails";
 
+// ── Onboard Module ───────────────────────────────────────────────────────────
 import OnbordMainLayout from "./OnBoard/Components/Layout/OnboardMainLayout";
 import AddEmployee from "./OnBoard/Features/AddEmployee";
 import EmployeeRegister from "./OnBoard/Features/AddEmployee/EmployeeRegistor";
-import {Salary} from "./OnBoard/Features/AddEmployee/Salary"
-
+import { Salary } from "./OnBoard/Features/AddEmployee/Salary";
+import EmployeeProfile from "./OnBoard/EmployeeManagement/Employee/EmployeePfrofile";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />, // Navbar always visible
+    element: <RootLayout />,
     children: [
-      
-      // MODULE SELECT PAGE
-      {
-        index: true,
-        element: <ModuleSelect />,
-      },
 
-      // OFFBOARD MODULE
+      // MODULE SELECT
+      { index: true, element: <ModuleSelect /> },
+
+      // OnBOARD MODULE (Employee Management)
       {
-        path: "offboard",
+        path: "EmployeeManagement",
         element: <MainLayout />,
         children: [
-          { index: true, element: <Dashboard /> },
-          { path: "attendance", element: <Attendance /> },
-          { path: "leaves", element: <Leaves /> },
-          { path: "department", element: <Department /> },
-          { path: "payroll", element: <Payroll /> },
-          { path: "employee", element: <Employee /> },
-          { path: "employeeleave", element: <EMPleaves /> },
-          { path: "events", element: <Events /> },
-          { path: "employee-leave/:empid", element: <EmployeeLeaveDetails /> },
+          { index: true,                          element: <EmpDashboard /> },
+          { path: "attendance",                   element: <Attendance /> },
+          { path: "leaves",                       element: <Leaves /> },
+          { path: "department",                   element: <Department /> },
+          { path: "payroll",                      element: <Payroll /> },
+          { path: "employee",                     element: <Employee /> },
+          { path: "employee/:id",                 element: <EmployeeProfile /> },
+          { path: "employeeleave",                element: <EMPleaves /> },
+          { path: "events",                       element: <Events /> },
+          { path: "employee-leave/:empid",        element: <EmployeeLeaveDetails /> },
         ],
       },
 
@@ -57,24 +57,13 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <h1 className="p-6 text-xl">Onboard Dashboard</h1>,
-
           },
-          {
-            path: "add-employee",
-            element: <AddEmployee />,
-          },
-          {
-            path: "employeeregistration",
-            element: <EmployeeRegister />,
-          },
-          {
-            path : "Salary",
-            element:<Salary/>
-          }
+          { path: "add-employee",         element: <AddEmployee /> },
+          { path: "employeeregistration", element: <EmployeeRegister /> },
+          { path: "Salary",               element: <Salary /> },
         ],
       },
 
     ],
   },
 ]);
-

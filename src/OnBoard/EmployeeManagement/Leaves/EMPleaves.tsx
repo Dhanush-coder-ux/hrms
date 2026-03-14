@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { EmpLeaveTable } from "../../../Components/table/EmpLeaveTable";
+import { EmpLeaveTable } from "../../Components/table/EmpLeaveTable";
 import { useNavigate } from "react-router-dom";
 
 interface LeaveHistory {
@@ -49,13 +49,11 @@ export const EMPleaves = () => {
   return (
     <section className="p-4">
       <h2 className="text-2xl font-bold mb-4">Leave Management</h2>
-
       <EmpLeaveTable
         columns={columns}
         data={data}
         onRowClick={(row) =>
-          navigate(`/offboard/employee-leave/${row.empid}`, { state: row })
-
+          navigate(`/EmployeeManagement/employee-leave/${row.empid}`, { state: row })
         }
       />
     </section>

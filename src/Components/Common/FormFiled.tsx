@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 type Form = {
-  Lable: string;
+  Lable?: string;
   in_PlaceHolder: string;
   value: string | number;
   name: string;

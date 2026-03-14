@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { UserPlus, UserMinus } from "lucide-react";
+import { UserPlus, UserMinus, UserCheck } from "lucide-react";
 
 export const ModuleSelect = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export const ModuleSelect = () => {
       </h1>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
         {/* ONBOARD CARD */}
         <div
@@ -36,15 +36,36 @@ export const ModuleSelect = () => {
           </p>
         </div>
 
-        {/* OFFBOARD CARD */}
+        {/* Employee management */}
         <div
-          onClick={() => navigate("/offboard")}
+          onClick={() => navigate("/EmployeeManagement")}
           className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
           hover:shadow-xl hover:-translate-y-1 transition duration-300"
         >
           <div className="flex justify-center mb-4">
             <div className="p-4 bg-blue-100 rounded-full">
-              <UserMinus size={36} className="text-blue-600" />
+              <UserCheck size={36} className="text-blue-600" />
+            </div>
+          </div>
+
+          <h2 className="text-lg font-semibold text-gray-800">
+            Employee Management
+          </h2>
+
+          <p className="text-gray-500 text-sm mt-2">
+            HR management dashboard
+          </p>
+        </div>
+
+        {/* Offboard CARD */}
+                <div
+          onClick={() => navigate("/Offboard")}
+          className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
+          hover:shadow-xl hover:-translate-y-1 transition duration-300"
+        >
+          <div className="flex justify-center mb-4">
+            <div className="p-4 bg-blue-100 rounded-full">
+              <UserMinus size={36} className="text-red-600" />
             </div>
           </div>
 
@@ -53,7 +74,7 @@ export const ModuleSelect = () => {
           </h2>
 
           <p className="text-gray-500 text-sm mt-2">
-            HR management dashboard
+            Employee offboarding process
           </p>
         </div>
 
