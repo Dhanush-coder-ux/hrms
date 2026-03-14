@@ -9,9 +9,9 @@ const API_URL = "http://127.0.0.1:8000/employee";
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState("Step 1");
-  const [employeeData, setEmployeeData] = useState<any>({});
-  const [salaryData, setSalaryData] = useState<any>({});
-  const [bankData, setBankData] = useState<any>({});
+  const [employeeData, setEmployeeData] = useState<any>(null); // null = not yet submitted
+  const [salaryData, setSalaryData] = useState<any>(null);
+  const [bankData, setBankData] = useState<any>(null);
 
   const steps = [
     { label: "Step 1" },
@@ -29,34 +29,20 @@ const App = () => {
   };
 
   const finalSubmit = async () => {
-    // ── Combine all steps into one flat payload ──────────────────────────────
-    const raw = {
-      ...employeeData,
-      ...salaryData,
-      ...bankData,
-    };
+    const raw = { ...employeeData, ...salaryData, ...bankData };
 
-    // ── Coerce types so Pydantic never gets an unexpected string ─────────────
     const finalData = {
       ...raw,
-
-      // Top-level dates
       dob: normaliseDate(raw.dob),
       DateOfJoining: normaliseDate(raw.DateOfJoining),
-
-      // Numeric fields — DOM inputs always return strings; cast explicitly
       annualSalary: parseFloat(raw.annualSalary) || 0,
       bonus_Value: parseFloat(raw.bonus_Value) || 0,
       Pin_Code: parseInt(raw.Pin_Code) || 0,
       p_Pin_Code: parseInt(raw.p_Pin_Code) || 0,
-
-      // Nested education — normalise graduationYear dates
       education: (raw.education || []).map((edu: any) => ({
         ...edu,
         graduationYear: normaliseDate(edu.graduationYear),
       })),
-
-      // Nested dependents — normalise person_dob dates
       dependents: (raw.dependents || []).map((dep: any) => ({
         ...dep,
         person_dob: normaliseDate(dep.person_dob),
@@ -74,13 +60,8 @@ const App = () => {
 
       if (res.ok) {
         alert("Employee created successfully!");
-        // Optionally reset all steps:
-        // setCurrentStep("Step 1");
-        // setEmployeeData({}); setSalaryData({}); setBankData({});
       } else {
         const errorDetail = await res.json();
-        // Log the full Pydantic error detail so you can see exactly which
-        // field failed and why (loc + msg).
         console.error("422 / Error Details:", JSON.stringify(errorDetail, null, 2));
         alert(`Failed: ${JSON.stringify(errorDetail.detail, null, 2)}`);
       }
@@ -101,18 +82,21 @@ const App = () => {
       <div className="bg-white shadow mt-10 rounded-xl p-6 max-w-6xl mx-auto">
         {currentStep === "Step 1" && (
           <EmployeeRegister
+            initialData={employeeData}          
             setEmployeeData={setEmployeeData}
             ClicktoAction={() => setCurrentStep("Step 2")}
           />
         )}
         {currentStep === "Step 2" && (
           <Salary
+            initialData={salaryData}            
             setSalaryData={setSalaryData}
             ClicktoAction={() => setCurrentStep("Step 3")}
           />
         )}
         {currentStep === "Step 3" && (
           <BankDetails
+            initialData={bankData}               
             setBankDetails={setBankData}
             ClicktoAction={() => setCurrentStep("Step 4")}
           />

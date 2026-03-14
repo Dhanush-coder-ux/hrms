@@ -5,15 +5,20 @@ interface VerifyProps {
   employeeData: any; salaryData: any; bankData: any; onFinalSubmit: () => void;
 }
 
-const AnimCard = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+const AnimCard = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => {
   const [v, setV] = useState(false);
   useEffect(() => { const t = setTimeout(() => setV(true), delay); return () => clearTimeout(t); }, [delay]);
   return (
-    <div style={{
-      opacity: v ? 1 : 0,
-      transform: v ? "translateY(0) scale(1)" : "translateY(20px) scale(0.98)",
-      transition: "opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1)",
-    }}>{children}</div>
+    <div
+      className={className}
+      style={{
+        opacity: v ? 1 : 0,
+        transform: v ? "translateY(0) scale(1)" : "translateY(20px) scale(0.98)",
+        transition: "opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1)",
+      }}
+    >
+      {children}
+    </div>
   );
 };
 
@@ -47,6 +52,7 @@ export const Verify = ({ employeeData, salaryData, bankData, onFinalSubmit }: Ve
         .vfy-card {
           border-radius: 16px; padding: 24px; border: 1.5px solid;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
+          height: 100%;
         }
         .vfy-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.08); transform: translateY(-2px); }
 
@@ -74,17 +80,31 @@ export const Verify = ({ employeeData, salaryData, bankData, onFinalSubmit }: Ve
           margin-top: 40px; padding-top: 32px; border-top: 1.5px solid #e2e8f0;
         }
         .vfy-confirm-note { font-size: 13px; color: #94a3b8; font-style: italic; text-align: center; }
+
+        .vfy-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        @media (min-width: 1024px) {
+          .vfy-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+          .vfy-col-span-2 {
+            grid-column: span 2;
+          }
+        }
       `}</style>
 
       <div className="vfy-page">
         <AnimCard delay={0}>
-          <div className="flex items-center gap-3 mb-8">
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px" }}>
             <FaCheckCircle style={{ fontSize: "26px", color: "#16a34a", flexShrink: 0 }} />
             <h1 className="vfy-heading">Review Information</h1>
           </div>
         </AnimCard>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="vfy-grid">
           {/* Employee */}
           <AnimCard delay={80}>
             <div className="vfy-card vfy-card-emp">
@@ -117,13 +137,13 @@ export const Verify = ({ employeeData, salaryData, bankData, onFinalSubmit }: Ve
             </div>
           </AnimCard>
 
-          {/* Bank — full width */}
-          <AnimCard delay={240}>
-            <div className="vfy-card vfy-card-bank lg:col-span-2">
+          {/* Bank — full width via className on AnimCard */}
+          <AnimCard delay={240} className="vfy-col-span-2">
+            <div className="vfy-card vfy-card-bank">
               <div className="vfy-card-head" style={{ color: "#7c3aed" }}>
-                <FaPiggyBank /> Banking & Tax
+                <FaPiggyBank /> Banking &amp; Tax
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0 40px" }}>
                 <InfoRow label="Bank Name"       value={bankData.bankName} />
                 <InfoRow label="IFSC Code"        value={bankData.ifscCode} />
                 <InfoRow label="Account Number"   value="**** **** ****" />
@@ -139,7 +159,7 @@ export const Verify = ({ employeeData, salaryData, bankData, onFinalSubmit }: Ve
               By clicking submit, you confirm that all the information provided above is accurate.
             </p>
             <button className="vfy-submit-btn" onClick={onFinalSubmit}>
-              ✓ Confirm & Submit Employee Profile
+              ✓ Confirm &amp; Submit Employee Profile
             </button>
           </div>
         </AnimCard>

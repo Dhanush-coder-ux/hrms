@@ -124,7 +124,7 @@ export const Selection = ({ label, name, value, options, onChange, placeholder }
           width: 100%; display: flex; align-items: center; justify-content: space-between;
           gap: 8px; padding: 11px 14px;
           font-family: 'DM Sans', sans-serif; font-size: 14px;
-          background: #fff; border: 1.5px solid #cbd5e1; border-radius: 10px;
+          background: #fff; border: 1.5px solid #868687; border-radius: 10px;
           /* FIX: always keep both shadow layers — only their alpha changes, never the layer count */
           box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3.5px transparent;
           cursor: pointer;

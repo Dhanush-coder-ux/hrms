@@ -59,7 +59,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ name, value,
           width: 100%; padding: 11px 14px 11px 42px;
           font-family: 'DM Sans', sans-serif;
           font-size: 14px; font-weight: 400; color: #0f172a;
-          background: #fff; border: 1.5px solid #cbd5e1; border-radius: 10px;
+          background: #fff; border: 1.5px solid #868687; border-radius: 10px;
           outline: none; transition: border-color 0.2s cubic-bezier(0.4,0,0.2,1),
                                      box-shadow 0.2s cubic-bezier(0.4,0,0.2,1);
           /* FIX: always reserve shadow space with a transparent shadow — prevents layout shift */

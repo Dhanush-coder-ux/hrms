@@ -17,9 +17,23 @@ interface Employee {
   p_Street: string; p_City: string; p_State: string; p_Pin_Code: number;
 }
 
-type EmployeeRegisterProps = { ClicktoAction?: () => void; setEmployeeData?: (data: any) => void; };
+const DEFAULT_FORM: Employee = {
+  Emp_id: "", f_name: "", l_name: "", name: "", gender: "", dob: "", email: "", phone: "",
+  Department: "", designation: "", emp_type: "", DateOfJoining: "",
+  education: [{ degree: "", institution: "", graduationYear: "" }],
+  company_name: "", position: "", FromDate: "", ToDate: "",
+  Street: "", City: "", State: "", Pin_Code: 0,
+  p_Street: "", p_City: "", p_State: "", p_Pin_Code: 0,
+  dependents: [{ person_name: "", relationship_type: "", contact: "", person_dob: "" }],
+};
 
-// ── Animated section wrapper ──────────────────────────────────────────────────
+// ── NEW: accepts initialData so the form re-hydrates on back-navigation ───────
+type EmployeeRegisterProps = {
+  initialData?: Employee | null;
+  ClicktoAction?: () => void;
+  setEmployeeData?: (data: any) => void;
+};
+
 const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const [visible, setVisible] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVisible(true), delay); return () => clearTimeout(t); }, [delay]);
@@ -34,7 +48,6 @@ const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay
   );
 };
 
-// ── Animated dynamic row (for education/dependents added at runtime) ──────────
 const AnimRow = ({ children }: { children: React.ReactNode }) => {
   const [visible, setVisible] = useState(false);
   useEffect(() => { requestAnimationFrame(() => setVisible(true)); }, []);
@@ -50,17 +63,15 @@ const AnimRow = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterProps) => {
+const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: EmployeeRegisterProps) => {
+  // ── Seed from initialData if coming back to this step ─────────────────────
   const [isChecked, setIsChecked] = useState(false);
-  const [formData, setFormData] = useState<Employee>({
-    Emp_id: "", f_name: "", l_name: "", name: "", gender: "", dob: "", email: "", phone: "",
-    Department: "", designation: "", emp_type: "", DateOfJoining: "",
-    education: [{ degree: "", institution: "", graduationYear: "" }],
-    company_name: "", position: "", FromDate: "", ToDate: "",
-    Street: "", City: "", State: "", Pin_Code: 0,
-    p_Street: "", p_City: "", p_State: "", p_Pin_Code: 0,
-    dependents: [{ person_name: "", relationship_type: "", contact: "", person_dob: "" }],
-  });
+  const [formData, setFormData] = useState<Employee>(() => initialData ?? DEFAULT_FORM);
+
+  // If parent re-passes initialData (e.g. hot-reload), stay in sync
+  useEffect(() => {
+    if (initialData) setFormData(initialData);
+  }, [initialData]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement> | { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
@@ -123,16 +134,12 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
         .emp-page { font-family: 'DM Sans', sans-serif; padding: 24px; }
-
-        /* Section headings */
         .emp-section-head {
           font-size: 15px; font-weight: 600; color: #4f46e5;
           margin-bottom: 18px; padding-bottom: 10px;
           border-bottom: 1.5px solid #e2e8f0;
           display: flex; align-items: center; justify-content: space-between;
         }
-
-        /* Dynamic row card */
         .emp-row-card {
           position: relative; margin-bottom: 16px; padding: 18px;
           border: 1.5px solid #e2e8f0; border-radius: 12px;
@@ -140,8 +147,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
           transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
         .emp-row-card:hover { border-color: #c7d2fe; box-shadow: 0 4px 16px rgba(99,102,241,0.08); }
-
-        /* Add / Remove buttons */
         .emp-add-btn {
           display: flex; align-items: center; gap: 6px;
           font-size: 13px; font-weight: 600; color: #6366f1;
@@ -150,7 +155,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
           transition: background 0.15s, color 0.15s;
         }
         .emp-add-btn:hover { background: #eef2ff; color: #4338ca; }
-
         .emp-remove-btn {
           display: flex; align-items: center; justify-content: center;
           width: 34px; height: 34px; border-radius: 8px;
@@ -159,8 +163,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
           margin-bottom: 18px;
         }
         .emp-remove-btn:hover { background: #fee2e2; color: #ef4444; }
-
-        /* Submit button */
         .emp-submit-btn {
           background: #6366f1; color: #fff;
           padding: 12px 40px; border-radius: 10px;
@@ -170,8 +172,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
         }
         .emp-submit-btn:hover { background: #4f46e5; box-shadow: 0 6px 20px rgba(99,102,241,0.45); }
         .emp-submit-btn:active { transform: scale(0.97); }
-
-        /* Page heading */
         .emp-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
       `}</style>
 
@@ -184,8 +184,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
         </AnimSection>
 
         <form className="space-y-8" onSubmit={onSubmit}>
-
-          {/* Section 1 */}
           <AnimSection delay={60}>
             <section>
               <div className="emp-section-head">Employee Basic Details</div>
@@ -202,7 +200,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
             </section>
           </AnimSection>
 
-          {/* Section 2 */}
           <AnimSection delay={120}>
             <section>
               <div className="emp-section-head">Job Information</div>
@@ -215,7 +212,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
             </section>
           </AnimSection>
 
-          {/* Section 3: Education */}
           <AnimSection delay={180}>
             <section>
               <div className="emp-section-head">
@@ -257,7 +253,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
             </section>
           </AnimSection>
 
-          {/* Section 4: Work */}
           <AnimSection delay={240}>
             <section>
               <div className="emp-section-head">Work Information</div>
@@ -270,7 +265,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
             </section>
           </AnimSection>
 
-          {/* Section 5: Dependents */}
           <AnimSection delay={300}>
             <section>
               <div className="emp-section-head">
@@ -317,7 +311,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
             </section>
           </AnimSection>
 
-          {/* Section 6: Current Address */}
           <AnimSection delay={360}>
             <section>
               <div className="emp-section-head">Current Address Details</div>
@@ -330,7 +323,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
             </section>
           </AnimSection>
 
-          {/* Section 7: Permanent Address */}
           <AnimSection delay={420}>
             <section>
               <div className="emp-section-head">Permanent Address Details</div>
@@ -352,9 +344,8 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData }: EmployeeRegisterPr
           </AnimSection>
 
           <AnimSection delay={480}>
-            <button type="submit" className="emp-submit-btn">Submit</button>
+            <button type="submit" className="emp-submit-btn">Next</button>
           </AnimSection>
-
         </form>
       </div>
     </>

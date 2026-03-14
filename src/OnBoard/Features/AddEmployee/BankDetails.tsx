@@ -2,8 +2,17 @@ import { FaPiggyBank, FaUniversity, FaIdCard, FaHashtag, FaCode } from "react-ic
 import { useState, useEffect } from "react";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 
-interface BaankData { bankName: string; accountNumber: string; ifscCode: string; panNumber: string; }
-type BankProps = { empId?: string; setBankDetails?: (data: any) => void; ClicktoAction?: () => void; };
+interface BankData { bankName: string; accountNumber: string; ifscCode: string; panNumber: string; }
+
+// ── NEW: accepts initialData ──────────────────────────────────────────────────
+type BankProps = {
+  empId?: string;
+  initialData?: BankData | null;
+  setBankDetails?: (data: any) => void;
+  ClicktoAction?: () => void;
+};
+
+const DEFAULT_BANK: BankData = { bankName: "", accountNumber: "", ifscCode: "", panNumber: "" };
 
 const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const [v, setV] = useState(false);
@@ -16,12 +25,20 @@ const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay
   );
 };
 
-export const BankDetails = ({ setBankDetails, ClicktoAction }: BankProps) => {
-  const [localBankDetails, setLocalBankDetails] = useState<BaankData>({
-    bankName: "", accountNumber: "", ifscCode: "", panNumber: "",
-  });
-  const [confirmAccountNumber, setConfirmAccountNumber] = useState("");
+export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: BankProps) => {
+  // ── Seed from initialData on mount / back-navigation ─────────────────────
+  const [localBankDetails, setLocalBankDetails] = useState<BankData>(() => initialData ?? DEFAULT_BANK);
+  const [confirmAccountNumber, setConfirmAccountNumber] = useState(
+    () => initialData?.accountNumber ?? ""
+  );
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setLocalBankDetails(initialData);
+      setConfirmAccountNumber(initialData.accountNumber ?? "");
+    }
+  }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,7 +56,6 @@ export const BankDetails = ({ setBankDetails, ClicktoAction }: BankProps) => {
   };
 
   const isMatch = !!confirmAccountNumber && localBankDetails.accountNumber === confirmAccountNumber;
-  const isMismatch = !!confirmAccountNumber && localBankDetails.accountNumber !== confirmAccountNumber;
 
   return (
     <>
@@ -61,8 +77,7 @@ export const BankDetails = ({ setBankDetails, ClicktoAction }: BankProps) => {
         .bank-submit-btn:active { transform: scale(0.97); }
         .bank-match-msg {
           font-size: 12px; font-weight: 500; margin-top: 5px;
-          transition: all 0.25s ease;
-          animation: fadeIn 0.2s ease;
+          transition: all 0.25s ease; animation: fadeIn 0.2s ease;
         }
         .bank-match-msg.match   { color: #16a34a; }
         .bank-match-msg.mismatch { color: #dc2626; }
