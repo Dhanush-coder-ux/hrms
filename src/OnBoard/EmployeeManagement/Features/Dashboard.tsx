@@ -1,9 +1,9 @@
-import { Header } from "./Dashboard/Header";
-import { StatCards } from "./Dashboard/StatCards";
-import { AttendanceChart } from "./Dashboard/Charts/AttendanceChart";
-import { DepartmentChart } from "./Dashboard/Charts/DepartmentChart";
-import { RecentActivity } from "./Dashboard/RecentActivity";
-import { WorkforceSummary } from "./Dashboard/WorkforceSummary";
+import { Header } from "../Dashboard/Header";
+import { StatCards } from "../Dashboard/StatCards";
+import { AttendanceChart } from "../Dashboard/Charts/AttendanceChart";
+import { DepartmentChart } from "../Dashboard/Charts/DepartmentChart";
+import { RecentActivity } from "../Dashboard/RecentActivity";
+import { WorkforceSummary } from "../Dashboard/WorkforceSummary";
 
 export const Dashboard = () => {
   return (

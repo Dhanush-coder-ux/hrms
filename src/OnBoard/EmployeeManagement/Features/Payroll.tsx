@@ -1,8 +1,8 @@
 import { useState } from "react";
-import PayrollComponents from "./Payroll/PayrollPage";
-import MenuButtons from "./Payroll/MenuButtons";
-import PayRollCalculate from "./Payroll/PayRollCalculate";
-import PayrollReport from "./Payroll/PayrollReport";
+import PayrollComponents from "../Payroll/PayrollPage";
+import MenuButtons from "../Payroll/MenuButtons";
+import PayRollCalculate from "../Payroll/PayRollCalculate";
+import PayrollReport from "../Payroll/PayrollReport";
 
 const Payroll = () => {
   const [activeMenu, setActiveMenu] = useState("Employees");

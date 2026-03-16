@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import {Table} from "./Components/table/AttendanceTable";
-import { Button } from "../../Components/Common/Button";
-import { Selection } from "../../Components/Common/Selection";
+import {Table} from "../Components/table/AttendanceTable";
+import { Button } from "../../../Components/Common/Button";
+import { Selection } from "../../../Components/Common/Selection";
+import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
 import {
   Calendar,
   UserCheck,
@@ -10,9 +11,9 @@ import {
   Download,
   ChevronLeft,
   ChevronRight,
-  CalendarDays,
   ClipboardX,
 } from "lucide-react";
+
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -41,6 +42,11 @@ interface AttendanceRecord {
   status: string;
 }
 
+
+//Api 
+
+const API_URL = "http://localhost:3001/attendance";
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export const Attendance = () => {
@@ -61,7 +67,7 @@ export const Attendance = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3001/attendance?attendance_date=${date}`
+        `${API_URL}?attendance_date=${date}`
       );
       if (!response.ok) throw new Error("Failed to fetch");
 
@@ -69,11 +75,12 @@ export const Attendance = () => {
       setData(result);
 
       // Update Stats
-      setStats({
-        present: result.filter(r => ["present", "late"].includes(r.status.toLowerCase())).length,
-        onLeave: result.filter(r => ["absent", "leave", "holiday"].includes(r.status.toLowerCase())).length,
-        late: result.filter(r => r.status.toLowerCase() === "late").length,
-      });
+setStats({
+  present: result.filter(r => r.status.toLowerCase() === "present").length,
+  onLeave: result.filter(r => ["absent","leave"].includes(r.status.toLowerCase())).length,
+  late: result.filter(r => r.status.toLowerCase() === "late").length,
+});
+
     } catch (error) {
       console.error("Error fetching attendance:", error);
       setData([]);
@@ -86,44 +93,56 @@ export const Attendance = () => {
     fetchAttendance(selectedDate);
   }, [selectedDate, fetchAttendance]);
 
-  // ── Actions ────────────────────────────────────────────────────────────────
-  const shiftDate = (days: number) => {
-    const d = new Date(selectedDate + "T00:00:00");
-    d.setDate(d.getDate() + days);
-    setSelectedDate(toDateString(d));
-  };
+  // ── Date Navigation ────────────────────────────────────────────────────────────────
 
-  const updateStatus = async () => {
-  if (!selectedId) return;
+
+  const shiftDate = (days: number) => {
+  const d = new Date(selectedDate);
+  d.setDate(d.getDate() + days);
+
+  const newDate = d.toISOString().split("T")[0];
+
+  if (newDate > todayStr()) return;
+
+  setSelectedDate(newDate);
+};
+
+
+
+const updateStatus = async () => {
+  if (selectedId === null) return;
+
+  console.log("Updating ID:", selectedId);
+  console.log("New Status:", selection);
 
   try {
-    const res = await fetch(
-      `http://localhost:3001/attendance/${selectedId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          status: selection
-        })
-      }
-    );
+    const res = await fetch(`${API_URL}/${selectedId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        status: selection
+      })
+    });
+
+    console.log("Response status:", res.status);
 
     if (!res.ok) {
-      console.log("Update failed");
+      const text = await res.text();
+      console.log("Update failed:", text);
       return;
     }
+
+    console.log("Update success");
 
     await fetchAttendance(selectedDate);
     setShowEdit(false);
 
   } catch (err) {
-    console.error(err);
+    console.error("Update error:", err);
   }
 };
-
-
   const handleExportCSV = () => {
     const headers = ["Employee", "Date", "Check-In", "Check-Out", "Status"];
     const rows = data.map((r) => [
@@ -206,14 +225,13 @@ export const Attendance = () => {
         <div className="flex items-center gap-2">
           <button onClick={() => shiftDate(-1)} className="p-2 hover:bg-gray-100 rounded-lg transition"><ChevronLeft size={18}/></button>
           <div className="relative flex items-center gap-2">
-            <CalendarDays size={16} className="text-blue-500" />
-            <input 
-              type="date" 
-              value={selectedDate} 
-              max={todayStr()} 
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="text-sm font-semibold border rounded-lg px-2 py-1 cursor-pointer" 
-            />
+            <CustomDatePicker
+            name="attendanceDate"
+            value={selectedDate}
+            Lable=""
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+
           </div>
           <button onClick={() => shiftDate(1)} disabled={isToday} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight size={18}/></button>
         </div>

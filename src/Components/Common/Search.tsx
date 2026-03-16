@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { FiSearch as SearchIcon } from "react-icons/fi";
 
 interface SearchQueryProps {
-  S1: string;
+  S1?: string;
   S2: (value: string) => void;
 }
 

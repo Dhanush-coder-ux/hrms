@@ -1,9 +1,9 @@
 import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
-import { FormFiled } from "../../../Components/Common/FormFiled";
-import { Selection } from "../../../Components/Common/Selection";
-import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
+import { FormFiled } from "../../../../Components/Common/FormFiled";
+import { Selection } from "../../../../Components/Common/Selection";
+import { CustomDatePicker } from "../../../../Components/Common/CustomDatePicker";
 import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
-import { Checkbox } from "../../../Components/Common/CheckBox";
+import { Checkbox } from "../../../../Components/Common/CheckBox";
 
 interface Education { degree: string; institution: string; graduationYear: string; }
 interface Dependent { person_name: string; relationship_type: string; contact: string; person_dob: string; }
@@ -32,6 +32,7 @@ type EmployeeRegisterProps = {
   initialData?: Employee | null;
   ClicktoAction?: () => void;
   setEmployeeData?: (data: any) => void;
+ 
 };
 
 const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {

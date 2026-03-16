@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 
-import SearchBar    from "./Employee/Searchbar";
-import FilterBar    from "./Employee/FilterBar";
-import EmployeeTable from "./Employee/EmployeeTable";
+import SearchBar    from "../Employee/Searchbar";
+import FilterBar    from "../Employee/FilterBar";
+import EmployeeTable from "../Employee/EmployeeTable";
 
 const API_URL = "http://localhost:3001/employees";
 

@@ -1,6 +1,6 @@
 import { FaPiggyBank, FaUniversity, FaIdCard, FaHashtag, FaCode } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { FormFiled } from "../../../Components/Common/FormFiled";
+import { FormFiled } from "../../../../Components/Common/FormFiled";
 
 interface BankData { bankName: string; accountNumber: string; ifscCode: string; panNumber: string; }
 

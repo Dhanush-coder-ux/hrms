@@ -1,16 +1,65 @@
-.calendar-wrapper {
-  max-width: auto;
-  padding: 50px;
+/* 1. Header Buttons - Modern Floating Style */
+.fc .fc-button {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  border-radius: 8px !important; /* Rounder corners */
+  padding: 6px 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .fc-toolbar-title {
-    font-size: 14px;
-  }
+.fc .fc-button:hover {
+  background-color: #f8fafc !important;
+  transform: translateY(-1px); /* Gentle lift */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  border-color: #3b82f6 !important;
+}
 
-  .fc-button {
-    padding: 4px 6px;
-    font-size: 12px;
-  }
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  gap: 4px !important;
+  border: none !important;
+  transform: scale(0.98);
+}
+.fc .fc-button-group {
+  gap: 8px;
+}
+/* 2. Grid & Animation */
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 1px solid #f1f5f9 !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect on day cells */
+.fc-daygrid-day:hover {
+  background-color: #f8fafc !important;
+  cursor: pointer;
+}
+
+/* 3. Event Card Styling */
+.custom-event-card {
+  border-radius: 6px !important;
+  border: none !important;
+  padding: 3px 8px !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+  transition: transform 0.2s ease, filter 0.2s ease !important;
+}
+
+.custom-event-card:hover {
+  transform: scale(1.03) !important;
+  filter: brightness(1.1);
+  z-index: 10;
+}
+
+/* 4. Smooth Fade-in for the whole calendar */
+.calendar-container {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

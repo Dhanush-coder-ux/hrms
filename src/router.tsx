@@ -5,22 +5,24 @@ import { ModuleSelect } from "./Root/ModuleSelect";
 
 // ── Employee Management (was "OnBoard") ─────────────────────────────────────
 import MainLayout from "./OnBoard/EmployeeManagement/Components/Layout/MainLayout";
-import { Dashboard as EmpDashboard } from "./OnBoard/EmployeeManagement/Dashboard";
-import { Attendance } from "./OnBoard/EmployeeManagement/Attendance";
-import Leaves from "./OnBoard/EmployeeManagement/Leaves";
-import { Department } from "./OnBoard/EmployeeManagement/Department";
-import Payroll from "./OnBoard/EmployeeManagement/Payroll";
-import  Employee  from "./OnBoard/EmployeeManagement/Employee";
+import { Dashboard as EmpDashboard } from "./OnBoard/EmployeeManagement/Features/Dashboard";
+import {Attendance} from "./OnBoard/EmployeeManagement/Features/Attendance";
+
+import Leaves from "./OnBoard/EmployeeManagement/Features/Leaves";
+import { Department } from "./OnBoard/EmployeeManagement/Features/Department";
+import Payroll from "./OnBoard/EmployeeManagement/Features/Payroll";
+import  Employee  from "./OnBoard/EmployeeManagement/Features/Employee";
 import { EMPleaves } from "./OnBoard/EmployeeManagement/Leaves/EMPleaves";
-import { Events } from "./OnBoard/EmployeeManagement/Events";
+import { Events } from "./OnBoard/EmployeeManagement/Features/Events";
 import { EmployeeLeaveDetails } from "./OnBoard/EmployeeManagement/Leaves/EmployeeLeaveDetails";
 
 // ── Onboard Module ───────────────────────────────────────────────────────────
 import OnbordMainLayout from "./OnBoard/Components/Layout/OnboardMainLayout";
-import AddEmployee from "./OnBoard/Features/AddEmployee";
-import EmployeeRegister from "./OnBoard/Features/AddEmployee/EmployeeRegistor";
-import { Salary } from "./OnBoard/Features/AddEmployee/Salary";
+import AddEmployee from "./OnBoard/InterviewProcess/Features/AddEmployee";
+import EmployeeRegister from "./OnBoard/InterviewProcess/Features/AddEmployee/EmployeeRegistor";
+import { Salary } from "./OnBoard/InterviewProcess/Features/AddEmployee/Salary";
 import EmployeeProfile from "./OnBoard/EmployeeManagement/Employee/EmployeePfrofile";
+import PayrollDetails from "./OnBoard/EmployeeManagement/Payroll/PayrollDetails";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +43,7 @@ export const router = createBrowserRouter([
           { path: "leaves",                       element: <Leaves /> },
           { path: "department",                   element: <Department /> },
           { path: "payroll",                      element: <Payroll /> },
+          { path: "payrollDetails/:id",                  element: <PayrollDetails /> },
           { path: "employee",                     element: <Employee /> },
           { path: "employee/:id",                 element: <EmployeeProfile /> },
           { path: "employeeleave",                element: <EMPleaves /> },

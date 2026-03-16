@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { FaMoneyBill } from "react-icons/fa";
-import { FormFiled } from "../../../Components/Common/FormFiled";
-import { Selection } from "../../../Components/Common/Selection";
-import TailwindToggle from "../../../Components/Common/Toggle";
+import { FormFiled } from "../../../../Components/Common/FormFiled";
+import { Selection } from "../../../../Components/Common/Selection";
+import TailwindToggle from "../../../../Components/Common/Toggle";
 
 // ── NEW: accepts initialData ──────────────────────────────────────────────────
 type SalaryProps = {
