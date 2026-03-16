@@ -1,6 +1,6 @@
 // src/pages/Payroll/PayrollDetails.tsx
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ExportCSVButton } from '../../../Components/ExportButton';
+import { ExportCSVButton } from '../../../Components/Common/ExportButton';
 
 const PayrollDetails = () => {
   const { id } = useParams();
