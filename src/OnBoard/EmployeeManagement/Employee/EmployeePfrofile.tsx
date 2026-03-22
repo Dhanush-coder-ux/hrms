@@ -29,8 +29,8 @@ export default function EmployeeProfile() {
     email: "",
     phone: "",
     designation: "",
-    department: "Engineering",
-    status: "Active",
+    department: "",
+    status: "",
     dateOfJoining: "",
   });
 

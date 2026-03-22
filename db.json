@@ -1318,7 +1318,7 @@
       "attendance_date": "2026-03-10",
       "check_in": null,
       "check_out": null,
-      "status": "Leave"
+      "status": "Absent"
     },
     {
       "id": "166",
@@ -1681,88 +1681,17 @@
       "status": "Late"
     }
   ],
+ 
   "employees": [
-    {
-      "id": "EMP001",
-      "name": "Arun Kumar",
-      "email": "arun.kumar@company.com",
-      "phone": "9876543210",
-      "department": "Engineering",
-      "designation": "Frontend Developer",
-      "status": "Active",
-      "dateOfJoining": "2023-05-10"
-    },
-    {
-      "id": "EMP002",
-      "name": "Priya Sharma",
-      "email": "priya.sharma@company.com",
-      "phone": "9123456780",
-      "department": "Engineering",
-      "designation": "Backend Developer",
-      "status": "Active",
-      "dateOfJoining": "2022-11-15"
-    },
-    {
-      "id": "EMP003",
-      "name": "Ravi Kumar",
-      "email": "ravi.kumar@company.com",
-      "phone": "9012345678",
-      "department": "HR",
-      "designation": "HR Manager",
-      "status": "Inactive",
-      "dateOfJoining": "2021-03-22"
-    },
-    {
-      "id": "EMP004",
-      "name": "Sneha Patel",
-      "email": "sneha.patel@company.com",
-      "phone": "9988776655",
-      "department": "Finance",
-      "designation": "Accountant",
-      "status": "Active",
-      "dateOfJoining": "2020-07-30"
-    },
-    {
-      "id": "EMP005",
-      "name": "Vikram Singh",
-      "email": "vikram.singh@company.com",
-      "phone": "9345678901",
-      "department": "Marketing",
-      "designation": "Marketing Executive",
-      "status": "Active",
-      "dateOfJoining": "2024-01-12"
-    },
-    {
-      "id": "EMP006",
-      "name": "Kavya Nair",
-      "email": "kavya.nair@company.com",
-      "phone": "9871234560",
-      "department": "Engineering",
-      "designation": "UI/UX Designer",
-      "status": "Inactive",
-      "dateOfJoining": "2022-09-18"
-    },
-    {
-      "id": "EMP007",
-      "name": "Rahul Verma",
-      "email": "rahul.verma@company.com",
-      "phone": "9001122334",
-      "department": "Support",
-      "designation": "Technical Support",
-      "status": "Active",
-      "dateOfJoining": "2023-12-01"
-    },
-    {
-      "id": "EMP008",
-      "name": "Ananya Reddy",
-      "email": "ananya.reddy@company.com",
-      "phone": "9556677889",
-      "department": "Sales",
-      "designation": "Sales Manager",
-      "status": "Active",
-      "dateOfJoining": "2021-06-14"
-    }
+    { "id": "E101-1", "name": "Parth", "dep_id": 101, "department": "Engineering", "designation": "Full Stack Developer", "status": "Active" },
+    { "id": "E101-2", "name": "Amit Shah", "dep_id": 101, "department": "Engineering", "designation": "Backend Lead", "status": "Active" },
+    { "id": "E102-1", "name": "Jane Doe", "dep_id": 102, "department": "Design", "designation": "UX Director", "status": "Active" },
+    { "id": "E102-2", "name": "Leo Messi", "dep_id": 102, "department": "Design", "designation": "UI Designer", "status": "Active" },
+    { "id": "E103-1", "name": "Chris P.", "dep_id": 103, "department": "Marketing", "designation": "Marketing Manager", "status": "Active" },
+    { "id": "E104-1", "name": "Monica G.", "dep_id": 104, "department": "HR", "designation": "HR Manager", "status": "Active" },
+    { "id": "E105-1", "name": "Steve R.", "dep_id": 105, "department": "Finance", "designation": "Finance Head", "status": "Active" }
   ],
+
   "Total_leaves": [
     {
       "empid": "EMP001",
@@ -1989,7 +1918,7 @@
   ],
   "Payroll": [
     {
-      "id": 1,
+      "id": "1",
       "employee": "Arjun Kumar",
       "salary": 75000,
       "tax": 15000,
@@ -1999,7 +1928,7 @@
       "date": "2026-03-01"
     },
     {
-      "id": 2,
+      "id": "2",
       "employee": "Priya Sharma",
       "salary": 65000,
       "tax": 12000,
@@ -2009,7 +1938,7 @@
       "date": "2026-03-01"
     },
     {
-      "id": 3,
+      "id": "3",
       "employee": "Vikram Singh",
       "salary": 85000,
       "tax": 18000,
@@ -2019,7 +1948,7 @@
       "date": "2026-03-01"
     },
     {
-      "id": 4,
+      "id": "4",
       "employee": "Ananya Iyer",
       "salary": 55000,
       "tax": 8000,
@@ -2029,7 +1958,7 @@
       "date": "2026-03-01"
     },
     {
-      "id": 5,
+      "id": "5",
       "employee": "Rohan Mehra",
       "salary": 90000,
       "tax": 20000,
@@ -2039,7 +1968,7 @@
       "date": "2026-03-01"
     },
     {
-      "id": 6,
+      "id": "6",
       "employee": "Kavita Reddy",
       "salary": 60000,
       "tax": 10000,
@@ -2049,7 +1978,7 @@
       "date": "2026-03-01"
     },
     {
-      "id": 7,
+      "id": "7",
       "employee": "Siddharth Das",
       "salary": 72000,
       "tax": 14000,
@@ -2057,6 +1986,58 @@
       "status": "Processing",
       "department": "Engineering",
       "date": "2026-03-01"
+    }
+  ],
+  "departments": [
+    {
+      "id": "101",
+      "dep_name": "Engineering",
+      "head_of_dep": "Alex Rivera",
+      "emp_count": 6,
+      "Task_status": "In Progress",
+      "budget_utilization": "78%",
+      "location": "Floor 4, Block A",
+      "extral_info": "Focusing on Q3 Product Launch"
+    },
+    {
+      "id": "102",
+      "dep_name": "Design",
+      "head_of_dep": "Sarah Chen",
+      "emp_count": 5,
+      "Task_status": "Completed",
+      "budget_utilization": "92%",
+      "location": "Floor 2, Creative Suite",
+      "extral_info": "Brand guidelines update finalized"
+    },
+    {
+      "id": "103",
+      "dep_name": "Marketing",
+      "head_of_dep": "James Wilson",
+      "emp_count": 5,
+      "Task_status": "On Hold",
+      "budget_utilization": "45%",
+      "location": "Floor 1, East Wing",
+      "extral_info": "Waiting for seasonal campaign approval"
+    },
+    {
+      "id": "104",
+      "dep_name": "Human Resources",
+      "head_of_dep": "Emily Blunt",
+      "emp_count": 5,
+      "Task_status": "Active",
+      "budget_utilization": "60%",
+      "location": "Floor 1, Block B",
+      "extral_info": "Annual recruitment drive active"
+    },
+    {
+      "id": "105",
+      "dep_name": "Finance",
+      "head_of_dep": "Michael Scott",
+      "emp_count": 5,
+      "Task_status": "In Progress",
+      "budget_utilization": "85%",
+      "location": "Floor 3, West Wing",
+      "extral_info": "Quarterly audit preparation"
     }
   ]
 }
