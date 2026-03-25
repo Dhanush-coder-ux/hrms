@@ -44,10 +44,6 @@ export const EMPleaves = () => {
     fetchEmpleave();
   }, []);
 
-  // Calculate high-level stats for the dashboard
-  const totalEmployees = data.length;
-  const totalUsed = data.reduce((acc, curr) => acc + curr.used_leave, 0);
-  const totalAvailable = data.reduce((acc, curr) => acc + curr.available_leaves, 0);
 
   const columns = [
     { header: "ID", accessor: "empid" },

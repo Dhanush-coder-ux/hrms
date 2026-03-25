@@ -74,7 +74,7 @@ export const Department = () => {
           { label: "Avg. Size", value: avgSize, icon: <List size={20}/>, color: "text-violet-600" },
           { label: "Budget Used", value: "72%", icon: <ArrowUpRight size={20}/>, color: "text-amber-600" },
         ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm flex items-center justify-between">
+          <div key={i} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{stat.label}</p>
               <p className={`text-2xl font-black mt-1 ${stat.color}`}>{stat.value}</p>
@@ -84,7 +84,7 @@ export const Department = () => {
         ))}
       </div>
 
-      <div className="bg-white rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <DepTable
           columns={Column}
           TB={filtered}
