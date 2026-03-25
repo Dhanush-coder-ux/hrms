@@ -11,7 +11,7 @@ interface Candidate {
   score: number;
   date: string;
 }
-
+// add some
 export const Interview = () => {
   const [candidates] = useState<Candidate[]>([
     { id: "CAN-001", name: "Arjun Mehta", role: "Frontend Developer", email: "arjun.m@example.com", stage: "Technical", score: 88, date: "2026-03-24" },
