@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import {Table} from "../Components/table/AttendanceTable";
+import { Table } from "../Components/table/AttendanceTable";
 import { Button } from "../../../Components/Common/Button";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
@@ -13,7 +13,7 @@ import {
   ChevronRight,
   ClipboardX,
 } from "lucide-react";
-
+import StatCard from "../../../Components/Common/StatCard";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -42,8 +42,7 @@ interface AttendanceRecord {
   status: string;
 }
 
-
-//Api 
+//Api
 
 const API_URL = "http://localhost:3001/attendance";
 
@@ -66,21 +65,21 @@ export const Attendance = () => {
   const fetchAttendance = useCallback(async (date: string) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${API_URL}?attendance_date=${date}`
-      );
+      const response = await fetch(`${API_URL}?attendance_date=${date}`);
       if (!response.ok) throw new Error("Failed to fetch");
 
       const result: AttendanceRecord[] = await response.json();
       setData(result);
 
       // Update Stats
-setStats({
-  present: result.filter(r => r.status.toLowerCase() === "present").length,
-  onLeave: result.filter(r => ["absent","leave"].includes(r.status.toLowerCase())).length,
-  late: result.filter(r => r.status.toLowerCase() === "late").length,
-});
-
+      setStats({
+        present: result.filter((r) => r.status.toLowerCase() === "present")
+          .length,
+        onLeave: result.filter((r) =>
+          ["absent", "leave"].includes(r.status.toLowerCase()),
+        ).length,
+        late: result.filter((r) => r.status.toLowerCase() === "late").length,
+      });
     } catch (error) {
       console.error("Error fetching attendance:", error);
       setData([]);
@@ -95,54 +94,50 @@ setStats({
 
   // ── Date Navigation ────────────────────────────────────────────────────────────────
 
-
   const shiftDate = (days: number) => {
-  const d = new Date(selectedDate);
-  d.setDate(d.getDate() + days);
+    const d = new Date(selectedDate);
+    d.setDate(d.getDate() + days);
 
-  const newDate = d.toISOString().split("T")[0];
+    const newDate = d.toISOString().split("T")[0];
 
-  if (newDate > todayStr()) return;
+    if (newDate > todayStr()) return;
 
-  setSelectedDate(newDate);
-};
+    setSelectedDate(newDate);
+  };
 
+  const updateStatus = async () => {
+    if (selectedId === null) return;
 
+    console.log("Updating ID:", selectedId);
+    console.log("New Status:", selection);
 
-const updateStatus = async () => {
-  if (selectedId === null) return;
+    try {
+      const res = await fetch(`${API_URL}/${selectedId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: selection,
+        }),
+      });
 
-  console.log("Updating ID:", selectedId);
-  console.log("New Status:", selection);
+      console.log("Response status:", res.status);
 
-  try {
-    const res = await fetch(`${API_URL}/${selectedId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        status: selection
-      })
-    });
+      if (!res.ok) {
+        const text = await res.text();
+        console.log("Update failed:", text);
+        return;
+      }
 
-    console.log("Response status:", res.status);
+      console.log("Update success");
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.log("Update failed:", text);
-      return;
+      await fetchAttendance(selectedDate);
+      setShowEdit(false);
+    } catch (err) {
+      console.error("Update error:", err);
     }
-
-    console.log("Update success");
-
-    await fetchAttendance(selectedDate);
-    setShowEdit(false);
-
-  } catch (err) {
-    console.error("Update error:", err);
-  }
-};
+  };
   const handleExportCSV = () => {
     const headers = ["Employee", "Date", "Check-In", "Check-Out", "Status"];
     const rows = data.map((r) => [
@@ -175,24 +170,62 @@ const updateStatus = async () => {
     return `border ${colors[s] || "text-gray-600 bg-gray-50 border-gray-200"}`;
   };
 
-  const columns = useMemo(() => [
-    { header: "Employee", accessor: "employee_name" },
-    { header: "Date", accessor: "attendance_date" },
-    { header: "Check-In", accessor: "check_in" },
-    { header: "Check-Out", accessor: "check_out" },
-    { header: "Status", accessor: "status" },
-    { header: "Action", type: "action" },
-  ], []);
+  const columns = useMemo(
+    () => [
+      { header: "Employee", accessor: "employee_name" },
+      { header: "Date", accessor: "attendance_date" },
+      { header: "Check-In", accessor: "check_in" },
+      { header: "Check-Out", accessor: "check_out" },
+      { header: "Status", accessor: "status" },
+      { header: "Action", type: "action" },
+    ],
+    [],
+  );
 
   const isToday = selectedDate === todayStr();
+
+  const STC = [
+    {
+      label: "Total Present",
+      value: stats.present,
+      icon: UserCheck,
+      iconBg: "#ECFDF5",
+      iconColor: "#10b981",
+    },
+    {
+      label: "On Leave / Absent",
+      value: stats.onLeave,
+      icon: UserMinus,
+      iconBg: "#fff1f2",
+      iconColor: "#e11d48",
+    },
+    {
+      label: "Late Arrivals",
+      value: stats.late,
+      icon: Clock,
+      iconBg: "#fffbeb",
+      iconColor: "#d97706",
+    },
+    {
+      label: "Viewing Date",
+      value: formatDisplayDate(selectedDate).split(",")[1],
+      icon: Calendar,
+      iconBg: "#eff6ff",
+      iconColor: "#2563eb",
+    },
+  ];
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 bg-[#f8f9fa] min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">Attendance Management</h2>
-          <p className="text-xs text-gray-500 mt-1">Monitor daily employee logs</p>
+          <h2 className="text-xl font-bold text-gray-800">
+            Attendance Management
+          </h2>
+          <p className="text-xs text-gray-500 mt-1">
+            Monitor daily employee logs
+          </p>
         </div>
         <button
           onClick={handleExportCSV}
@@ -204,43 +237,59 @@ const updateStatus = async () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {[
-          { label: "Total Present", value: stats.present, icon: UserCheck, color: "text-emerald-600", bg: "bg-emerald-50" },
-          { label: "On Leave / Absent", value: stats.onLeave, icon: UserMinus, color: "text-rose-600", bg: "bg-rose-50" },
-          { label: "Late Arrivals", value: stats.late, icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
-          { label: "Viewing Date", value: formatDisplayDate(selectedDate).split(',')[1], icon: Calendar, color: "text-blue-600", bg: "bg-blue-50" },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
-            <div className={`p-2 rounded-lg ${stat.bg} ${stat.color}`}><stat.icon size={20} /></div>
-            <div>
-              <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400">{stat.label}</p>
-              <p className="text-lg font-bold text-gray-800">{String(stat.value).padStart(2, '0')}</p>
-            </div>
-          </div>
+        {STC.map((item, index) => (
+          <StatCard
+            key={index}
+            label={item.label}
+            value={item.value}
+            icon={item.icon}
+            iconBg={item.iconBg}
+            iconColor={item.iconColor}
+            valueSize="2xl"
+          />
         ))}
       </div>
 
       {/* Date Navigation */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <button onClick={() => shiftDate(-1)} className="p-2 hover:bg-gray-100 rounded-lg transition"><ChevronLeft size={18}/></button>
+          <button
+            onClick={() => shiftDate(-1)}
+            className="p-2 hover:bg-gray-100 rounded-lg transition"
+          >
+            <ChevronLeft size={18} />
+          </button>
           <div className="relative flex items-center gap-2">
             <CustomDatePicker
-            name="attendanceDate"
-            value={selectedDate}
-            Lable=""
-            onChange={(e) => setSelectedDate(e.target.value)}
-          />
-
+              name="attendanceDate"
+              value={selectedDate}
+              Lable=""
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
           </div>
-          <button onClick={() => shiftDate(1)} disabled={isToday} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight size={18}/></button>
+          <button
+            onClick={() => shiftDate(1)}
+            disabled={isToday}
+            className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30"
+          >
+            <ChevronRight size={18} />
+          </button>
         </div>
         <div className="flex items-center gap-3">
-          <p className="text-sm text-gray-500 hidden sm:block">{formatDisplayDate(selectedDate)}</p>
+          <p className="text-sm text-gray-500 hidden sm:block">
+            {formatDisplayDate(selectedDate)}
+          </p>
           {isToday ? (
-            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">Today</span>
+            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+              Today
+            </span>
           ) : (
-            <button onClick={() => setSelectedDate(todayStr())} className="text-xs font-semibold text-white bg-blue-600 px-3 py-1.5 rounded-lg">Today</button>
+            <button
+              onClick={() => setSelectedDate(todayStr())}
+              className="text-xs font-semibold text-white bg-blue-600 px-3 py-1.5 rounded-lg"
+            >
+              Today
+            </button>
           )}
         </div>
       </div>
@@ -254,15 +303,24 @@ const updateStatus = async () => {
           </div>
         ) : data.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
-            <div className="p-4 bg-gray-50 rounded-full"><ClipboardX size={36} /></div>
-            <p className="font-semibold text-gray-500">No records found for this date</p>
+            <div className="p-4 bg-gray-50 rounded-full">
+              <ClipboardX size={36} />
+            </div>
+            <p className="font-semibold text-gray-500">
+              No records found for this date
+            </p>
           </div>
         ) : (
-          <Table columns={columns} TB={data} getStatusColor={getStatusColor} onEdit={(row: AttendanceRecord) => {
-            setSelectedId(row.id);
-            setSelection(row.status);
-            setShowEdit(true);
-          }} />
+          <Table
+            columns={columns}
+            TB={data}
+            getStatusColor={getStatusColor}
+            onEdit={(row: AttendanceRecord) => {
+              setSelectedId(row.id);
+              setSelection(row.status);
+              setShowEdit(true);
+            }}
+          />
         )}
       </div>
 
@@ -270,7 +328,9 @@ const updateStatus = async () => {
       {showEdit && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white w-full max-w-md p-6 rounded-2xl shadow-xl">
-            <h3 className="text-lg font-bold text-gray-800 mb-2">Update Status</h3>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">
+              Update Status
+            </h3>
             <Selection
               label="Attendance Status"
               name=""
@@ -284,7 +344,12 @@ const updateStatus = async () => {
               onChange={(e) => setSelection(e.target.value)}
             />
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setShowEdit(false)} className="px-4 py-2 text-sm font-semibold text-gray-500">Cancel</button>
+              <button
+                onClick={() => setShowEdit(false)}
+                className="px-4 py-2 text-sm font-semibold text-gray-500"
+              >
+                Cancel
+              </button>
               <Button B_name="Update" ClickToAction={updateStatus} />
             </div>
           </div>

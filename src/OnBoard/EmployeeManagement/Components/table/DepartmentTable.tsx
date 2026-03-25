@@ -1,4 +1,4 @@
-import { Edit2, ExternalLink } from "lucide-react";
+import {ExternalLink } from "lucide-react";
 
 export const DepTable = ({ columns, TB, getStatusColor, onEdit }: any) => {
   return (

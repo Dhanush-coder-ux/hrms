@@ -1,17 +1,18 @@
 import { Users, LayoutGrid, List, ArrowUpRight } from "lucide-react";
-import { SearchQuery } from "../../../Components/Common/Search";
+
 import { Button } from "../../../Components/Common/Button";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepTable } from "../Components/table/DepartmentTable";
 import PageLoading from "../../../Components/Common/PageLoading";
 import type{ Department as IDepartment } from "../Department/types";
+import SearchBar from "../../../Components/Common/Searchbar";
 
 export const Department = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,8 +59,9 @@ export const Department = () => {
           <p className="text-sm text-gray-500">Managing {departments.length} functional organizational units.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="bg-white border border-gray-200 rounded-2xl px-4 py-1 w-72 shadow-sm">
-            <SearchQuery S1={searchQuery} S2={setSearchQuery} />
+          <div>
+            <SearchBar value={searchQuery}
+             onChange={setSearchQuery} />
           </div>
           <Button B_name="+ Create" ClickToAction={() => alert("Modal functionality needed")} />
         </div>
@@ -72,7 +74,7 @@ export const Department = () => {
           { label: "Avg. Size", value: avgSize, icon: <List size={20}/>, color: "text-violet-600" },
           { label: "Budget Used", value: "72%", icon: <ArrowUpRight size={20}/>, color: "text-amber-600" },
         ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-between">
+          <div key={i} className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{stat.label}</p>
               <p className={`text-2xl font-black mt-1 ${stat.color}`}>{stat.value}</p>
@@ -82,7 +84,7 @@ export const Department = () => {
         ))}
       </div>
 
-      <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
         <DepTable
           columns={Column}
           TB={filtered}

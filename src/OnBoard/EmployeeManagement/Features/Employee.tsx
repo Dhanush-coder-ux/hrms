@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
+import StatCard from "../../../Components/Common/StatCard.tsx";
 
-import SearchBar from "../Employee/Searchbar";
+import SearchBar from "../../../Components/Common/Searchbar.tsx";
 import FilterBar from "../Employee/FilterBar";
 import EmployeeTable from "../Employee/EmployeeTable.tsx";
+import { Building, Check, User, X } from "lucide-react";
 
 const API_URL = "http://localhost:3001/employees";
 
@@ -15,36 +17,6 @@ interface Employee {
   designation: string;
   status: "Active" | "Inactive";
   dateOfJoining: string;
-}
-
-/* ── Stat Card ── */
-function StatCard({
-  icon,
-  label,
-  value,
-  iconBg,
-}: {
-  icon: string;
-  label: string;
-  value: number;
-  iconBg: string;
-}) {
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex items-center gap-4">
-      <div
-        className="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0"
-        style={{ background: iconBg }}
-      >
-        {icon}
-      </div>
-      <div>
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-          {label}
-        </p>
-        <p className="text-2xl font-bold text-gray-900 mt-0.5">{value}</p>
-      </div>
-    </div>
-  );
 }
 
 /* ── Page ── */
@@ -113,26 +85,34 @@ export default function Employee() {
         <StatCard
           label="Total Employees"
           value={employees.length}
-          icon="👥"
+          icon={User}
           iconBg="#EFF6FF"
+          iconColor="#23a1a1"
+          valueSize="2xl"
         />
         <StatCard
           label="Active"
           value={activeCount}
-          icon="✅"
+          icon={Check}
           iconBg="#DCFCE7"
+          iconColor="#2dc24d"
+          valueSize="2xl"
         />
         <StatCard
           label="Inactive"
           value={inactiveCount}
-          icon="❌"
+          icon={X}
           iconBg="#FEE2E2"
+          iconColor="#f51625"
+          valueSize="2xl"
         />
         <StatCard
           label="Departments"
           value={departments.length - 1}
-          icon="🏢"
+          icon={Building}
           iconBg="#F0FDF4"
+          iconColor="#04498a"
+          valueSize="2xl"
         />
       </div>
 
