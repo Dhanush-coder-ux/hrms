@@ -3,7 +3,6 @@ import { useState } from "react";
 import {
   LayoutDashboard,
   UserPlus,
-  FileCheck,
   FileText,
   Users,
   ChevronLeft,
@@ -20,7 +19,6 @@ export const OnboardSidebar = () => {
     { label: "Candidates", path: "/onboard/candidates", icon: UserPlus },
     { label: "Interviews", path: "/onboard/interviews", icon: Users },
     { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
-    { label: "Document Verification", path: "/onboard/documents", icon: FileCheck },
     { label: "Add Employee", path: "/onboard/add-employee", icon: PersonStanding },
   ];
 

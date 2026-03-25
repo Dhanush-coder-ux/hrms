@@ -18,9 +18,7 @@ export interface EventFormData {
     [x: string]: string | undefined | { plan_type: string; details: string } | null;
 }
 
-/* ─────────────────────────────────────────────
-   Constants
-───────────────────────────────────────────── */
+
 const API_URL = "http://localhost:3001/Events";
 
 const CAT_COLORS: Record<string, string> = {
@@ -79,9 +77,6 @@ const fmtDate = (d: string) => {
 const catColor = (cat: string) => CAT_COLORS[cat] ?? "#60A5FA";
 const catStyle = (cat: string) => CAT_STYLES[cat] ?? "bg-blue-100 text-blue-800";
 
-/* ─────────────────────────────────────────────
-   Sub-components
-───────────────────────────────────────────── */
 
 /** Days-until badge */
 function DaysChip({ date }: { date: string }) {
@@ -135,7 +130,7 @@ function UpcomingItem({
       className="flex items-start gap-2.5 py-2.5 border-b border-gray-100 last:border-none cursor-pointer hover:bg-gray-50 rounded-lg px-1 transition-colors group"
     >
       <div
-        className="w-1 rounded-full self-stretch min-h-[36px] shrink-0 transition-colors"
+        className="w-1 rounded-full self-stretch min-h-9 shrink-0 transition-colors"
         style={{ background: catColor(ev.category) }}
       />
       <div className="flex-1 min-w-0">
@@ -146,7 +141,7 @@ function UpcomingItem({
           <span className="text-xs text-gray-400">📅 {fmtDate(ev.date)}</span>
           {ev.time && <span className="text-xs text-gray-400">🕐 {ev.time}</span>}
           {ev.location && (
-            <span className="text-xs text-gray-400 truncate max-w-[100px]">
+            <span className="text-xs text-gray-400 truncate max-w-25">
               📍 {ev.location}
             </span>
           )}
@@ -346,7 +341,7 @@ export const Events = () => {
           </AnimatePresence>
 
           {/* Upcoming events panel */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col max-h-[600px]">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col max-h-150">
             {/* Panel header */}
             <div className="px-4 pt-4 pb-3 border-b border-gray-100">
               <div className="flex items-center justify-between mb-3">
