@@ -1,153 +1,302 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Calendar, MoreVertical, UserPlus, Briefcase } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Users, CheckCircle, XCircle, Mail, Phone, X, 
+  Briefcase, User, Calendar, ChevronRight, 
+  Paperclip, Save, ExternalLink, UploadCloud 
+} from "lucide-react";
 import SearchBar from "../../../Components/Common/Searchbar";
+import { CandidateTable } from "./Candidate/CandidatesTable";
+import StatCard from "../../../Components/Common/StatCard";
+import type { Candidate } from "../../../Types/typesOnboarding";
 
-// Types for your Candidate Data
-interface Candidate {
-  id: string;
-  name: string;
-  role: string;
-  email: string;
-  stage: "Applied" | "Technical" | "HR Round" | "Selected" | "Rejected";
-  appliedDate: string;
-  score: number;
-}
+const Api_url = "http://localhost:3001/candidates/";
 
 export const Candidates = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  
+  // State for Modal and Local Changes
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
+  const [localStatus, setLocalStatus] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const candidates: Candidate[] = [
-    { id: "C101", name: "Rahul Sharma", role: "React Developer", email: "rahul@example.com", stage: "Technical", appliedDate: "2026-03-20", score: 85 },
-    { id: "C102", name: "Sneha Patel", role: "UI/UX Designer", email: "sneha@example.com", stage: "Selected", appliedDate: "2026-03-18", score: 92 },
-    { id: "C103", name: "Vikram Singh", role: "Backend Lead", email: "vikram@example.com", stage: "Applied", appliedDate: "2026-03-22", score: 78 },
-    { id: "C104", name: "Ananya Iyer", role: "DevOps Engineer", email: "ananya@example.com", stage: "HR Round", appliedDate: "2026-03-21", score: 88 },
-  ];
-
-  const getStageStyles = (stage: string) => {
-    switch (stage) {
-      case "Selected": return "bg-emerald-50 text-emerald-600 border-emerald-100";
-      case "Rejected": return "bg-rose-50 text-rose-600 border-rose-100";
-      case "Applied": return "bg-blue-50 text-blue-600 border-blue-100";
-      default: return "bg-amber-50 text-amber-600 border-amber-100";
+  const fetchCandidates = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(Api_url);
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      const data = await response.json();
+      setCandidates(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchCandidates();
+  }, []);
+
+  // Sync local status when a candidate is selected
+  useEffect(() => {
+    if (selectedCandidate) {
+      setLocalStatus(selectedCandidate.status);
+    }
+  }, [selectedCandidate]);
+
+  const handleSave = async () => {
+    if (!selectedCandidate || !localStatus) return;
+    
+    setIsSaving(true);
+    try {
+      const response = await fetch(`${Api_url}${selectedCandidate.c_id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: localStatus }),
+      });
+
+      if (response.ok) {
+        await fetchCandidates(); // Refresh list
+        setSelectedCandidate(null); // Close panel
+      }
+    } catch (err) {
+      console.error("Failed to update status:", err);
+      alert("Error saving changes");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleInviteToInterview = async (candidate: Candidate) => {
+    try {
+      const response = await fetch(`${Api_url}${candidate.c_id}/invite`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          candidateId: candidate.c_id,
+          email: candidate.email,
+          name: candidate.name,
+          role: candidate.role,
+          invitedAt: new Date().toISOString()
+        }),
+      });
+
+      if (response.ok) {
+        alert(`Invitation sent to ${candidate.name}`);
+        setSelectedCandidate(null);
+      }
+    } catch (err) {
+      console.error("Invitation error:", err);
+    }
+  };
+
+  const filteredCandidates = candidates.filter((candidate) =>
+    Object.values(candidate).some((val) =>
+      val?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  const rejectedCount = candidates.filter(c => c.status?.toLowerCase() === "rejected").length;
+  const selectedCount = candidates.filter(c => c.status?.toLowerCase() === "selected").length;
+
+  const columns = [
+    { header: "ID", accessor: "c_id" },
+    { header: "Name", accessor: "name" },
+    { header: "Phone", accessor: "phone" },
+    { header: "Email", accessor: "email" },
+    { header: "Reference", accessor: "reference" },
+    { header: "Role", accessor: "role" },
+    { header: "Status", accessor: "status" }
+  ];
+
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      className="p-6 lg:p-10 bg-[#f8fafc] min-h-screen"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="p-6 lg:p-10 bg-[#f8fafc] min-h-screen relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
-        
-        {/* HEADER SECTION */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-          <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Interview Candidates</h1>
-            <p className="text-slate-400 text-sm font-medium mt-1">Review and manage the recruitment pipeline</p>
-          </div>
-          <button className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all">
-            <UserPlus size={18} /> Add New Candidate
-          </button>
+        {/* HEADER */}
+        <div className="mb-10">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight uppercase">
+            Recruitment Funnel
+          </h1>
+          <p className="text-slate-400 text-sm font-medium mt-1">
+            Real-time candidate tracking and management
+          </p>
         </div>
 
-        {/* RECRUITMENT STATS (Integrated Style) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <SummaryWidget label="Total Applicants" value={42} color="indigo" />
-          <SummaryWidget label="In Interviews" value={12} color="amber" />
-          <SummaryWidget label="Shortlisted" value={8} color="emerald" />
-          <SummaryWidget label="Rejected" value={5} color="rose" />
+        {/* STATS SECTION */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <StatCard icon={Users} label="Total Applicants" value={candidates.length} iconBg="#E0E7FF" iconColor="#4F46E5" valueSize="text-2xl" />
+          <StatCard icon={CheckCircle} label="Shortlisted" value={selectedCount} iconBg="#D1FAE5" iconColor="#059669" valueSize="text-2xl" />
+          <StatCard icon={XCircle} label="Rejected" value={rejectedCount} iconBg="#FEE2E2" iconColor="#DC2626" valueSize="text-2xl" />
         </div>
 
-        {/* FILTERS & SEARCH */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="relative flex-1 max-w-md">
-            <SearchBar  value={searchTerm} onChange={(value) => setSearchTerm(value)} />
-          </div>
+        {/* SEARCH */}
+        <div className="mb-8 max-w-md">
+          <SearchBar value={searchTerm} onChange={(value) => setSearchTerm(value)} />
         </div>
 
-        {/* CANDIDATE LIST */}
-        <div className="bg-white rounded-4xl border border-slate-100 shadow-sm overflow-hidden">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-slate-50/50">
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center w-20">Score</th>
-                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Candidate</th>
-                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Applied Role</th>
-                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Stage</th>
-                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50">
-              {candidates.map((person) => (
-                <tr key={person.id} className="group hover:bg-slate-50/50 transition-all cursor-default">
-                  <td className="px-8 py-6">
-                    <div className="flex flex-col items-center">
-                        <span className="text-lg font-black text-slate-700">{person.score}</span>
-                        <div className="w-8 h-1 bg-slate-100 rounded-full mt-1 overflow-hidden">
-                            <div className="h-full bg-indigo-500" style={{ width: `${person.score}%` }}></div>
-                        </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-sm">
-                        {person.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-bold text-slate-800 text-sm">{person.name}</p>
-                        <p className="text-[11px] text-slate-400 font-medium">{person.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-6">
-                    <div className="flex items-center gap-2">
-                        <Briefcase size={14} className="text-slate-300" />
-                        <span className="text-sm font-bold text-slate-600">{person.role}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-6">
-                    <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tight border ${getStageStyles(person.stage)}`}>
-                      {person.stage}
-                    </span>
-                  </td>
-                  <td className="px-6 py-6 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-indigo-600">
-                            <Calendar size={18} />
-                        </button>
-                        <button className="p-2 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
-                            <MoreVertical size={18} />
-                        </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+        {/* TABLE */}
+        {loading ? (
+          <div className="flex justify-center py-20 text-slate-400 font-bold animate-pulse uppercase tracking-widest">Loading Pipeline...</div>
+        ) : error ? (
+          <div className="bg-rose-50 border border-rose-100 p-6 rounded-2xl text-rose-600 text-center">{error}</div>
+        ) : (
+          <CandidateTable
+            columns={columns}
+            data={filteredCandidates}
+            onRowClick={(row) => setSelectedCandidate(row as Candidate)}
+          />
+        )}
       </div>
+
+      {/* CENTERED POP-UP PANEL */}
+      <AnimatePresence>
+        {selectedCandidate && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedCandidate(null)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden flex flex-col"
+            >
+              {/* Header */}
+              <div className="bg-slate-50/50 px-8 pt-8 pb-6 flex flex-col items-center text-center">
+                <button 
+                  onClick={() => setSelectedCandidate(null)}
+                  className="absolute top-6 right-6 p-2 hover:bg-white rounded-full shadow-sm border border-slate-100 transition-all"
+                >
+                  <X size={18} className="text-slate-400" />
+                </button>
+                
+                <div className="w-20 h-20 bg-indigo-600 rounded-2xl rotate-3 shadow-xl flex items-center justify-center text-white mb-4">
+                  <User size={40} strokeWidth={1.5} className="-rotate-3" />
+                </div>
+                
+                <h2 className="text-2xl font-black text-slate-800 tracking-tight">{selectedCandidate.name}</h2>
+                <p className="text-indigo-600 font-bold text-sm uppercase tracking-widest mt-1">{selectedCandidate.role}</p>
+              </div>
+
+              {/* Body */}
+              <div className="px-8 pb-4 space-y-6 overflow-y-auto max-h-[60vh]">
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-lg text-slate-600 text-xs font-semibold">
+                    <Mail size={14} /> {selectedCandidate.email}
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-lg text-slate-600 text-xs font-semibold">
+                    <Phone size={14} /> {selectedCandidate.phone}
+                  </div>
+                </div>
+
+                {/* Resume Status (Smart Logic) */}
+<div className="pt-2">
+  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+    Resume Status
+  </p>
+
+  <div className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
+    selectedCandidate.resumeUrl 
+      ? "bg-emerald-50 border-emerald-100 text-emerald-700" 
+      : "bg-rose-50 border-rose-100 text-rose-700"
+  }`}>
+    <div className="flex items-center gap-3">
+      <Paperclip size={18} className={selectedCandidate.resumeUrl ? "text-emerald-500" : "text-rose-500"} />
+      <span className="text-sm font-bold">
+        {selectedCandidate.resumeUrl ? "Resume Attached" : "Resume Not Attached"}
+      </span>
+    </div>
+
+    {/* Only show the link icon if the URL exists */}
+    {selectedCandidate.resumeUrl && (
+      <button 
+        onClick={() => window.open(selectedCandidate.resumeUrl, '_blank')}
+        className="p-2 bg-white rounded-lg shadow-sm hover:scale-110 active:scale-90 transition-transform"
+      >
+        <ExternalLink size={16} className="text-emerald-600" />
+      </button>
+    )}
+  </div>
+</div>
+
+                <hr className="border-slate-100" />
+
+                {/* Status Toggle Buttons */}
+                <div className="space-y-3">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update Decision</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => setLocalStatus("Selected")}
+                      className={`flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all border ${
+                        localStatus === "Selected" 
+                        ? "bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-100" 
+                        : "bg-slate-50 text-slate-500 border-slate-100 hover:bg-slate-100"
+                      }`}
+                    >
+                      <CheckCircle size={18} /> Select
+                    </button>
+                    <button
+                      onClick={() => setLocalStatus("Rejected")}
+                      className={`flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all border ${
+                        localStatus === "Rejected" 
+                        ? "bg-rose-500 text-white border-rose-500 shadow-lg shadow-rose-100" 
+                        : "bg-slate-50 text-slate-500 border-slate-100 hover:bg-slate-100"
+                      }`}
+                    >
+                      <XCircle size={18} /> Reject
+                    </button>
+                  </div>
+                </div>
+
+                {/* Primary Action */}
+                <button
+                  onClick={() => handleInviteToInterview(selectedCandidate)}
+                  className="w-full bg-indigo-50 text-indigo-700 p-4 rounded-2xl font-bold flex items-center justify-between group hover:bg-indigo-600 hover:text-white transition-all"
+                >
+                  <span className="flex items-center gap-3">
+                    <Calendar size={20} />
+                    Invite to Interview
+                  </span>
+                  <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+
+              {/* Fixed Footer with Save Button */}
+              <div className="p-6 bg-slate-50 border-t border-slate-100">
+                <button
+                  disabled={isSaving || localStatus === selectedCandidate.status}
+                  onClick={handleSave}
+                  className="w-full bg-slate-900 disabled:bg-slate-300 hover:bg-slate-800 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-xl shadow-slate-200"
+                >
+                  {isSaving ? (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Save size={18} />
+                      Save Changes
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
-};
-
-// Internal Widget Component (Integrated design)
-const SummaryWidget = ({ label, value, color }: { label: string, value: number, color: string }) => {
-    const colors: any = {
-        indigo: "text-indigo-600 bg-indigo-50/50",
-        amber: "text-amber-600 bg-amber-50/50",
-        emerald: "text-emerald-600 bg-emerald-50/50",
-        rose: "text-rose-600 bg-rose-50/50"
-    };
-    return (
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{label}</p>
-            <div className="flex items-end justify-between">
-                <span className="text-3xl font-black text-slate-900 leading-none">{value}</span>
-                <span className={`px-2 py-1 rounded-lg text-[10px] font-black ${colors[color]}`}>+12%</span>
-            </div>
-        </div>
-    );
 };

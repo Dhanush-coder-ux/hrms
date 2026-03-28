@@ -4,18 +4,7 @@ import { Selection } from "../../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../../Components/Common/CustomDatePicker";
 import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
 import { Checkbox } from "../../../../Components/Common/CheckBox";
-
-interface Education { degree: string; institution: string; graduationYear: string; }
-interface Dependent { person_name: string; relationship_type: string; contact: string; person_dob: string; }
-interface Employee {
-  Emp_id: string; f_name: string; l_name: string; name: string;
-  gender?: string; dob?: string; email: string; phone: string;
-  Department: string; designation: string; emp_type: string; DateOfJoining: string;
-  education: Education[]; company_name: string; position: string; FromDate: string; ToDate: string;
-  dependents: Dependent[];
-  Street: string; City: string; State: string; Pin_Code: number;
-  p_Street: string; p_City: string; p_State: string; p_Pin_Code: number;
-}
+import type {Employee ,Education} from "../../../../Types/typesOnboarding"
 
 const DEFAULT_FORM: Employee = {
   Emp_id: "", f_name: "", l_name: "", name: "", gender: "", dob: "", email: "", phone: "",

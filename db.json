@@ -2039,5 +2039,98 @@
       "location": "Floor 3, West Wing",
       "extral_info": "Quarterly audit preparation"
     }
+  ],
+  "candidates": [
+    {
+      "c_id": "CAN-001",
+      "name": "Arjun Sharma",
+      "phone": "+91 98765-43210",
+      "email": "arjun.s@techcorp.in",
+      "reference": "LinkedIn",
+      "role": "Software Engineer",
+      "status": "Rejected"
+    },
+    {
+      "c_id": "CAN-002",
+      "name": "Priya Patel",
+      "phone": "+91 91234-56789",
+      "email": "priya.p@solutions.com",
+      "reference": "Employee Referral",
+      "role": "Product Designer",
+      "status": "Rejected"
+    },
+    {
+      "c_id": "CAN-003",
+      "name": "Michael Scott",
+      "phone": "+1 555-010-9988",
+      "email": "m.scott@dundermifflin.com",
+      "reference": "Indeed",
+      "role": "Regional Manager",
+      "status": "Selected",
+      "resumeUrl": "https://example.com/resumes/michael_scott.pdf"
+    },
+    {
+      "c_id": "CAN-004",
+      "name": "Ananya Iyer",
+      "phone": "+91 88776-65544",
+      "email": "ananya.i@devhouse.io",
+      "reference": "Direct",
+      "role": "Backend Developer",
+      "status": "Rejected"
+    },
+    {
+      "c_id": "CAN-005",
+      "name": "David Miller",
+      "phone": "+44 20 7946 0958",
+      "email": "d.miller@global.net",
+      "reference": "Recruiter",
+      "role": "DevOps Engineer",
+      "status": "Selected"
+    },
+    {
+      "c_id": "CAN-006",
+      "name": "Sarah Connor",
+      "phone": "+1 213-555-0199",
+      "email": "s.connor@resistance.org",
+      "reference": "Unknown",
+      "role": "Security Specialist",
+      "status": "Rejected"
+    },
+    {
+      "c_id": "CAN-007",
+      "name": "Rohan Mehra",
+      "phone": "+91 77665-54433",
+      "email": "rohan.m@startup.co",
+      "reference": "LinkedIn",
+      "role": "Full Stack Dev",
+      "status": "Selected"
+    },
+    {
+      "c_id": "CAN-008",
+      "name": "Elena Rodriguez",
+      "phone": "+34 912 345 678",
+      "email": "elena.rod@madrid.es",
+      "reference": "Glassdoor",
+      "role": "Data Scientist",
+      "status": "Rejected"
+    },
+    {
+      "c_id": "CAN-009",
+      "name": "Kevin Malone",
+      "phone": "+1 570-555-0121",
+      "email": "k.malone@accounting.com",
+      "reference": "Walk-in",
+      "role": "Accountant",
+      "status": "Selected"
+    },
+    {
+      "c_id": "CAN-010",
+      "name": "Li Wei",
+      "phone": "+86 10 6410 6999",
+      "email": "li.wei@techhub.cn",
+      "reference": "Campus Placement",
+      "role": "QA Engineer",
+      "status": "Rejected"
+    }
   ]
 }

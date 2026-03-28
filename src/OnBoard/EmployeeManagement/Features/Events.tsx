@@ -1,57 +1,41 @@
 import { useEffect, useState } from "react";
 import CalendarView from "../../../Components/Common/Calander/CalendarView";
 import { motion, AnimatePresence } from "framer-motion"; // <-- Added Framer Motion
-
-/* ─────────────────────────────────────────────
-   Types
-───────────────────────────────────────────── */
-export interface EventFormData {
-    event_id: string;
-    category: string;
-    event_title: string;
-    date: string;
-    time: string | null;
-    location?: string;
-    organizer?: string;
-    description?: string;
-    plan: { plan_type: string; details: string };
-    [x: string]: string | undefined | { plan_type: string; details: string } | null;
-}
-
+import type { EventFormData } from "../../../Types/typesEmployeeManagement";
 
 const API_URL = "http://localhost:3001/Events";
 
 const CAT_COLORS: Record<string, string> = {
-  holidays:   "#34D399",
-  Festival:   "#F59E0B",
-  birthday:   "#EC4899",
-  meeting:    "#6366F1",
-  Party:      "#9e1fda",
-  Workshop:   "#0ea5e9",
+  holidays: "#34D399",
+  Festival: "#F59E0B",
+  birthday: "#EC4899",
+  meeting: "#6366F1",
+  Party: "#9e1fda",
+  Workshop: "#0ea5e9",
   Conference: "#f97316",
-  Others:     "#60A5FA",
+  Others: "#60A5FA",
 };
 
 const CAT_STYLES: Record<string, string> = {
-  Festival:   "bg-amber-100 text-amber-800",
-  birthday:   "bg-pink-100 text-pink-800",
-  meeting:    "bg-indigo-100 text-indigo-800",
-  Party:      "bg-purple-100 text-purple-800",
-  holidays:   "bg-emerald-100 text-emerald-800",
-  Workshop:   "bg-sky-100 text-sky-800",
+  Festival: "bg-amber-100 text-amber-800",
+  birthday: "bg-pink-100 text-pink-800",
+  meeting: "bg-indigo-100 text-indigo-800",
+  Party: "bg-purple-100 text-purple-800",
+  holidays: "bg-emerald-100 text-emerald-800",
+  Workshop: "bg-sky-100 text-sky-800",
   Conference: "bg-orange-100 text-orange-800",
-  Others:     "bg-blue-100 text-blue-800",
+  Others: "bg-blue-100 text-blue-800",
 };
 
 const EVENT_OPTIONS = [
-  { label: "Festival",   value: "Festival" },
-  { label: "Birthday",   value: "birthday" },
-  { label: "Meeting",    value: "meeting" },
-  { label: "Party",      value: "Party" },
-  { label: "Holiday",    value: "holidays" },
-  { label: "Workshop",   value: "Workshop" },
+  { label: "Festival", value: "Festival" },
+  { label: "Birthday", value: "birthday" },
+  { label: "Meeting", value: "meeting" },
+  { label: "Party", value: "Party" },
+  { label: "Holiday", value: "holidays" },
+  { label: "Workshop", value: "Workshop" },
   { label: "Conference", value: "Conference" },
-  { label: "Others",     value: "Others" },
+  { label: "Others", value: "Others" },
 ];
 
 /* ─────────────────────────────────────────────
@@ -61,8 +45,9 @@ const todayStr = new Date().toISOString().slice(0, 10);
 
 const daysUntil = (dateStr: string): number =>
   Math.ceil(
-    (new Date(dateStr + "T00:00:00").getTime() - new Date().setHours(0, 0, 0, 0)) /
-      86400000
+    (new Date(dateStr + "T00:00:00").getTime() -
+      new Date().setHours(0, 0, 0, 0)) /
+      86400000,
   );
 
 const fmtDate = (d: string) => {
@@ -75,8 +60,8 @@ const fmtDate = (d: string) => {
 };
 
 const catColor = (cat: string) => CAT_COLORS[cat] ?? "#60A5FA";
-const catStyle = (cat: string) => CAT_STYLES[cat] ?? "bg-blue-100 text-blue-800";
-
+const catStyle = (cat: string) =>
+  CAT_STYLES[cat] ?? "bg-blue-100 text-blue-800";
 
 /** Days-until badge */
 function DaysChip({ date }: { date: string }) {
@@ -105,7 +90,9 @@ function DaysChip({ date }: { date: string }) {
 /** Category badge */
 function CatBadge({ cat }: { cat: string }) {
   return (
-    <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full ${catStyle(cat)}`}>
+    <span
+      className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full ${catStyle(cat)}`}
+    >
       {cat}
     </span>
   );
@@ -139,7 +126,9 @@ function UpcomingItem({
         </p>
         <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
           <span className="text-xs text-gray-400">📅 {fmtDate(ev.date)}</span>
-          {ev.time && <span className="text-xs text-gray-400">🕐 {ev.time}</span>}
+          {ev.time && (
+            <span className="text-xs text-gray-400">🕐 {ev.time}</span>
+          )}
           {ev.location && (
             <span className="text-xs text-gray-400 truncate max-w-25">
               📍 {ev.location}
@@ -165,7 +154,9 @@ function StatCard({
 }) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-3 shadow-sm text-center">
-      <div className={`text-2xl font-bold tracking-tight ${color}`}>{value}</div>
+      <div className={`text-2xl font-bold tracking-tight ${color}`}>
+        {value}
+      </div>
       <div className="text-[10px] text-gray-400 font-semibold mt-0.5 uppercase tracking-wide">
         {label}
       </div>
@@ -177,15 +168,21 @@ function StatCard({
    Main Component
 ───────────────────────────────────────────── */
 export const Events = () => {
-  const [eventDatas, setEventDatas]     = useState<EventFormData[]>([]);
-  const [showAdd, setShowAdd]           = useState(false);
+  const [eventDatas, setEventDatas] = useState<EventFormData[]>([]);
+  const [showAdd, setShowAdd] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchQ, setSearchQ]           = useState("");
-  const [filterCat, setFilterCat]       = useState("All");
+  const [searchQ, setSearchQ] = useState("");
+  const [filterCat, setFilterCat] = useState("All");
 
   const initialForm: EventFormData = {
-    event_id: "", category: "", event_title: "", date: "", time: null,
-    location: "", organizer: "", description: "",
+    event_id: "",
+    category: "",
+    event_title: "",
+    date: "",
+    time: null,
+    location: "",
+    organizer: "",
+    description: "",
     plan: { plan_type: "", details: "" },
   };
   const [formData, setFormData] = useState<EventFormData>(initialForm);
@@ -193,14 +190,16 @@ export const Events = () => {
   /* ── API ── */
   const fetchEvents = async () => {
     try {
-      const res  = await fetch(API_URL);
+      const res = await fetch(API_URL);
       const data = await res.json();
       setEventDatas(data);
     } catch (e) {
       console.error("Error fetching events:", e);
     }
   };
-  useEffect(() => { fetchEvents(); }, []);
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleSave = async () => {
     const newEvent = {
@@ -238,7 +237,9 @@ export const Events = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -257,7 +258,10 @@ export const Events = () => {
   const past = eventDatas.filter((e) => e.date < todayStr);
   const todayEvents = eventDatas.filter((e) => e.date === todayStr);
 
-  const allCats = ["All", ...Array.from(new Set(eventDatas.map((e) => e.category)))];
+  const allCats = [
+    "All",
+    ...Array.from(new Set(eventDatas.map((e) => e.category))),
+  ];
 
   const filteredUpcoming = upcoming.filter((e) => {
     const matchCat = filterCat === "All" || e.category === filterCat;
@@ -284,39 +288,60 @@ export const Events = () => {
           </h1>
           <p className="text-sm text-gray-400 mt-0.5">
             {new Date().toLocaleDateString("en-IN", {
-              weekday: "long", day: "numeric", month: "long", year: "numeric",
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
             })}
           </p>
         </div>
         <button
-          onClick={() => { setShowAdd(true); setSelectedDate(null); }}
+          onClick={() => {
+            setShowAdd(true);
+            setSelectedDate(null);
+          }}
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-95"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16">
-            <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path
+              d="M8 2v12M2 8h12"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
           </svg>
           New Event
         </button>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-5">
-
         {/* ══ LEFT SIDEBAR ══ */}
         <aside className="flex flex-col gap-4">
-
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3">
-            <StatCard value={eventDatas.length} label="Total"    color="text-gray-800" />
-            <StatCard value={upcoming.length}   label="Upcoming" color="text-blue-600" />
-            <StatCard value={past.length}       label="Done"     color="text-emerald-600" />
+            <StatCard
+              value={eventDatas.length}
+              label="Total"
+              color="text-gray-800"
+            />
+            <StatCard
+              value={upcoming.length}
+              label="Upcoming"
+              color="text-blue-600"
+            />
+            <StatCard
+              value={past.length}
+              label="Done"
+              color="text-emerald-600"
+            />
           </div>
 
           {/* Today banner */}
           <AnimatePresence>
             {todayEvents.length > 0 && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }} 
-                animate={{ opacity: 1, height: "auto" }} 
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
                 className="bg-blue-600 rounded-2xl p-4 text-white shadow-md"
               >
                 <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">
@@ -329,9 +354,13 @@ export const Events = () => {
                         className="w-2 h-2 rounded-full shrink-0 ring-2 ring-white/30"
                         style={{ background: catColor(ev.category) }}
                       />
-                      <span className="text-sm font-semibold truncate">{ev.event_title}</span>
+                      <span className="text-sm font-semibold truncate">
+                        {ev.event_title}
+                      </span>
                       {ev.time && (
-                        <span className="ml-auto text-xs opacity-60 shrink-0">{ev.time}</span>
+                        <span className="ml-auto text-xs opacity-60 shrink-0">
+                          {ev.time}
+                        </span>
                       )}
                     </div>
                   ))}
@@ -345,8 +374,10 @@ export const Events = () => {
             {/* Panel header */}
             <div className="px-4 pt-4 pb-3 border-b border-gray-100">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-bold text-gray-800">Upcoming Events</h2>
-                <motion.span 
+                <h2 className="text-sm font-bold text-gray-800">
+                  Upcoming Events
+                </h2>
+                <motion.span
                   key={filteredUpcoming.length}
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -360,10 +391,22 @@ export const Events = () => {
               <div className="relative mb-2.5">
                 <svg
                   className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
-                  fill="none" viewBox="0 0 16 16"
+                  fill="none"
+                  viewBox="0 0 16 16"
                 >
-                  <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
-                  <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  <circle
+                    cx="7"
+                    cy="7"
+                    r="5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M11 11l3 3"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
                 </svg>
                 <input
                   type="text"
@@ -395,7 +438,11 @@ export const Events = () => {
             {/* List */}
             <div className="px-3 py-1 overflow-y-auto flex-1">
               {filteredUpcoming.length === 0 ? (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-8"
+                >
                   <div className="text-3xl mb-2">📅</div>
                   <p className="text-xs text-gray-400">No upcoming events</p>
                 </motion.div>
@@ -420,10 +467,10 @@ export const Events = () => {
         <div className="bg-white  rounded-2xl border border-gray-100 shadow-sm p-5">
           <CalendarView
             events={eventDatas.map((ev) => ({
-              title:           ev.event_title,
-              start:           ev.time ? `${ev.date}T${ev.time}` : ev.date,
+              title: ev.event_title,
+              start: ev.time ? `${ev.date}T${ev.time}` : ev.date,
               backgroundColor: catColor(ev.category),
-              borderColor:     catColor(ev.category),
+              borderColor: catColor(ev.category),
             }))}
             handleDateClick={handleDateClick}
           />
@@ -439,10 +486,13 @@ export const Events = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={(e) => {
-              if (e.target === e.currentTarget) { setShowAdd(false); setFormData(initialForm); }
+              if (e.target === e.currentTarget) {
+                setShowAdd(false);
+                setFormData(initialForm);
+              }
             }}
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 20, opacity: 0 }}
@@ -452,11 +502,18 @@ export const Events = () => {
               {/* Header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
                 <div>
-                  <h3 className="text-base font-bold text-gray-900">Add New Event</h3>
-                  <p className="text-xs text-gray-400 mt-0.5">Fill in the event details below</p>
+                  <h3 className="text-base font-bold text-gray-900">
+                    Add New Event
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Fill in the event details below
+                  </p>
                 </div>
                 <button
-                  onClick={() => { setShowAdd(false); setFormData(initialForm); }}
+                  onClick={() => {
+                    setShowAdd(false);
+                    setFormData(initialForm);
+                  }}
                   className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 text-sm transition-colors"
                 >
                   ✕
@@ -471,65 +528,99 @@ export const Events = () => {
                     Event Title *
                   </label>
                   <input
-                    type="text" name="event_title" placeholder="Enter event title"
-                    value={formData.event_title} onChange={handleChange}
+                    type="text"
+                    name="event_title"
+                    placeholder="Enter event title"
+                    value={formData.event_title}
+                    onChange={handleChange}
                     className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition placeholder-gray-400"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Date *</label>
+                    <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                      Date *
+                    </label>
                     <input
-                      type="date" name="date" value={formData.date} onChange={handleChange}
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
                       className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Time</label>
+                    <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                      Time
+                    </label>
                     <input
-                      type="time" name="time" value={formData.time ?? ""} onChange={handleChange}
+                      type="time"
+                      name="time"
+                      value={formData.time ?? ""}
+                      onChange={handleChange}
                       className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Category *</label>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Category *
+                  </label>
                   <select
-                    name="category" value={formData.category} onChange={handleChange}
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
                     className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition bg-white"
                   >
                     <option value="">Select category</option>
                     {EVENT_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Location</label>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Location
+                  </label>
                   <input
-                    type="text" name="location" placeholder="Venue or meeting link"
-                    value={formData.location ?? ""} onChange={handleChange}
+                    type="text"
+                    name="location"
+                    placeholder="Venue or meeting link"
+                    value={formData.location ?? ""}
+                    onChange={handleChange}
                     className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition placeholder-gray-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Organizer</label>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Organizer
+                  </label>
                   <input
-                    type="text" name="organizer" placeholder="Your name"
-                    value={formData.organizer ?? ""} onChange={handleChange}
+                    type="text"
+                    name="organizer"
+                    placeholder="Your name"
+                    value={formData.organizer ?? ""}
+                    onChange={handleChange}
                     className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition placeholder-gray-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Description</label>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Description
+                  </label>
                   <textarea
-                    name="description" placeholder="Event details, agenda, notes…"
-                    value={formData.description ?? ""} onChange={handleChange} rows={3}
+                    name="description"
+                    placeholder="Event details, agenda, notes…"
+                    value={formData.description ?? ""}
+                    onChange={handleChange}
+                    rows={3}
                     className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition resize-none placeholder-gray-400"
                   />
                 </div>
@@ -538,14 +629,21 @@ export const Events = () => {
               {/* Footer */}
               <div className="flex justify-end gap-2 px-5 py-4 border-t border-gray-100 bg-gray-50">
                 <button
-                  onClick={() => { setShowAdd(false); setFormData(initialForm); }}
+                  onClick={() => {
+                    setShowAdd(false);
+                    setFormData(initialForm);
+                  }}
                   className="px-4 py-2 text-sm font-semibold text-gray-600 bg-white hover:bg-gray-100 border border-gray-200 rounded-xl transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
-                  disabled={!formData.event_title || !formData.date || !formData.category}
+                  disabled={
+                    !formData.event_title ||
+                    !formData.date ||
+                    !formData.category
+                  }
                   className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all hover:shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   Save Event
@@ -564,9 +662,11 @@ export const Events = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            onClick={(e) => { if (e.target === e.currentTarget) setSelectedDate(null); }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedDate(null);
+            }}
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 20, opacity: 0 }}
@@ -580,7 +680,8 @@ export const Events = () => {
                     {fmtDate(selectedDate)}
                   </h3>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    {dateEvents.length} event{dateEvents.length !== 1 ? "s" : ""} scheduled
+                    {dateEvents.length} event
+                    {dateEvents.length !== 1 ? "s" : ""} scheduled
                   </p>
                 </div>
                 <button
@@ -596,7 +697,9 @@ export const Events = () => {
                 {dateEvents.length === 0 ? (
                   <div className="text-center py-8">
                     <div className="text-3xl mb-2">📭</div>
-                    <p className="text-sm text-gray-400">No events on this day</p>
+                    <p className="text-sm text-gray-400">
+                      No events on this day
+                    </p>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-2.5 py-2">
@@ -619,14 +722,20 @@ export const Events = () => {
                               {ev.event_title}
                             </p>
                             <div className="flex flex-wrap gap-1.5 mt-1">
-                              {ev.time && <span className="text-xs text-gray-400">🕐 {ev.time}</span>}
+                              {ev.time && (
+                                <span className="text-xs text-gray-400">
+                                  🕐 {ev.time}
+                                </span>
+                              )}
                               {ev.location && (
                                 <span className="text-xs text-gray-400 truncate m">
                                   📍 {ev.location}
                                 </span>
                               )}
                               {ev.organizer && (
-                                <span className="text-xs text-gray-400">👤 {ev.organizer}</span>
+                                <span className="text-xs text-gray-400">
+                                  👤 {ev.organizer}
+                                </span>
                               )}
                               <CatBadge cat={ev.category} />
                             </div>
@@ -638,7 +747,7 @@ export const Events = () => {
                           </div>
                           <button
                             onClick={() => {
-                              if (typeof ev.event_id === 'string') {
+                              if (typeof ev.event_id === "string") {
                                 handleDelete(ev.event_id);
                               }
                             }}
@@ -664,7 +773,12 @@ export const Events = () => {
                   className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all hover:shadow-md"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
-                    <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <path
+                      d="M7 1v12M1 7h12"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   Add Event
                 </button>

@@ -5,19 +5,9 @@ import SearchBar from "../../../Components/Common/Searchbar.tsx";
 import FilterBar from "../Employee/FilterBar";
 import EmployeeTable from "../Employee/EmployeeTable.tsx";
 import { Building, Check, User, X } from "lucide-react";
+import type { Employee } from "../../../Types/typesEmployeeManagement.tsx";
 
 const API_URL = "http://localhost:3001/employees";
-
-interface Employee {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  department: string;
-  designation: string;
-  status: "Active" | "Inactive";
-  dateOfJoining: string;
-}
 
 /* ── Page ── */
 export default function Employee() {

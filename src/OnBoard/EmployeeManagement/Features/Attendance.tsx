@@ -3,6 +3,7 @@ import { Table } from "../Components/table/AttendanceTable";
 import { Button } from "../../../Components/Common/Button";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
+import type { AttendanceRecord } from "../../../Types/typesEmployeeManagement";
 import {
   Calendar,
   UserCheck,
@@ -30,19 +31,6 @@ const formatDisplayDate = (dateStr: string) => {
 };
 
 const todayStr = () => toDateString(new Date());
-
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-interface AttendanceRecord {
-  id: number;
-  employee_name: string;
-  attendance_date: string;
-  check_in: string | null;
-  check_out: string | null;
-  status: string;
-}
-
-//Api
 
 const API_URL = "http://localhost:3001/attendance";
 

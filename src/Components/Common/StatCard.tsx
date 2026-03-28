@@ -17,7 +17,7 @@ function StatCard({ icon: Icon, label, value, iconBg, iconColor,valueSize }: Sca
         className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
         style={{ backgroundColor: iconBg, color: iconColor }}
       >
-        <Icon size={30} classname="font-extrabold" />
+        <Icon size={30} className="font-extrabold" />
       </div>
 
       {/* Text Content */}

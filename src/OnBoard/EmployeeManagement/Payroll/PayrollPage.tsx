@@ -1,21 +1,13 @@
-// src/pages/Payroll/PayrollComponents.tsx
+
 import { useNavigate } from "react-router-dom";
 import PayrollTable from "../Components/table/PayRollTable";
 import { useEffect, useState, useMemo } from "react";
 import { Download, CreditCard, Users, PieChart } from "lucide-react";
 import StatCard from "../../../Components/Common/StatCard";
 import SearchBar from "../../../Components/Common/Searchbar";
+import type {PayrollData} from "../../../Types/typesEmployeeManagement"
 
-interface PayrollData {
-  id: number;
-  employee: string;
-  salary: number;
-  tax: number;
-  net: number;
-  status: "Paid" | "Pending" | "Processing";
-  department: string;
-  date: string;
-}
+
 
 interface PageProps {
   data?: Array<PayrollData>;
