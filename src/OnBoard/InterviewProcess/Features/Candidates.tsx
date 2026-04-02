@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Users, CheckCircle, XCircle, Mail, Phone, X, 
-  Briefcase, User, Calendar, ChevronRight, 
-  Paperclip, Save, ExternalLink, UploadCloud 
+   User, Calendar, ChevronRight, 
+  Paperclip, Save, ExternalLink
 } from "lucide-react";
 import SearchBar from "../../../Components/Common/Searchbar";
 import { CandidateTable } from "./Candidate/CandidatesTable";
@@ -140,6 +140,7 @@ export const Candidates = () => {
         {/* SEARCH */}
         <div className="mb-8 max-w-md">
           <SearchBar value={searchTerm} onChange={(value) => setSearchTerm(value)} />
+        
         </div>
 
         {/* TABLE */}

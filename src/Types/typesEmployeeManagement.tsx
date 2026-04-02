@@ -1,6 +1,6 @@
 
 export interface AttendanceRecord {
-  id: number;
+  Emp_id: number;
   employee_name: string;
   attendance_date: string;
   check_in: string | null;
@@ -9,13 +9,13 @@ export interface AttendanceRecord {
 }
 
 export interface Employee {
-  id: string;
+  Emp_id: string;
   name: string;
   email: string;
   phone: string;
-  department: string;
+  Department: string;
   designation: string;
-  status: "Active" | "Inactive";
+  Status: "Active" | "Inactive";
   dateOfJoining: string;
 }
 

@@ -7,7 +7,11 @@ import EmployeeTable from "../Employee/EmployeeTable.tsx";
 import { Building, Check, User, X } from "lucide-react";
 import type { Employee } from "../../../Types/typesEmployeeManagement.tsx";
 
-const API_URL = "http://localhost:3001/employees";
+// employee get endopint
+const GET_API_URL = "http://127.0.0.1:8000/employee/";
+
+// employee post endpoint
+
 
 /* ── Page ── */
 export default function Employee() {
@@ -19,7 +23,7 @@ export default function Employee() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(GET_API_URL);
         const data = await res.json();
         setEmployees(data);
       } catch {
@@ -31,7 +35,7 @@ export default function Employee() {
   }, []);
 
   const departments = useMemo(
-    () => ["All", ...Array.from(new Set(employees.map((e) => e.department)))],
+    () => ["All", ...Array.from(new Set(employees.map((e) => e.Department)))],
     [employees],
   );
 
@@ -41,16 +45,16 @@ export default function Employee() {
       if (
         q &&
         !emp.name.toLowerCase().includes(q) &&
-        !emp.id.toLowerCase().includes(q)
+        !emp.Emp_id.toLowerCase().includes(q)
       )
         return false;
-      if (filterDept !== "All" && emp.department !== filterDept) return false;
+      if (filterDept !== "All" && emp.Department !== filterDept) return false;
       return true;
     });
   }, [employees, search, filterDept]);
 
-  const activeCount = employees.filter((e) => e.status === "Active").length;
-  const inactiveCount = employees.filter((e) => e.status === "Inactive").length;
+  const activeCount = employees.filter((e) => e.Status === "Active").length;
+  const inactiveCount = employees.filter((e) => e.Status === "Inactive").length;
 
   if (loading) {
     return (

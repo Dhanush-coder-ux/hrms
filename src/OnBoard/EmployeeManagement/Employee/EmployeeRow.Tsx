@@ -1,23 +1,23 @@
 import { useNavigate } from "react-router-dom";
 
 interface Employee {
-  id: string;
+  Emp_id: string;
   name: string;
   email: string;
   phone: string;
-  department: string;
+  Department: string;
   designation: string;
-  status: "Active" | "Inactive";
+  Status: "Active" | "Inactive";
   dateOfJoining: string;
 }
 
 /* ── department colour map ── */
 const DEPT_COLORS: Record<string, { bg: string; text: string }> = {
   Engineering: { bg: "#EFF6FF", text: "#1D4ED8" },
-  Design:      { bg: "#FDF4FF", text: "#7E22CE" },
-  Marketing:   { bg: "#FFF7ED", text: "#C2410C" },
-  HR:          { bg: "#F0FDF4", text: "#15803D" },
-  Finance:     { bg: "#FFFBEB", text: "#B45309" },
+  Design: { bg: "#FDF4FF", text: "#7E22CE" },
+  Marketing: { bg: "#FFF7ED", text: "#C2410C" },
+  HR: { bg: "#F0FDF4", text: "#15803D" },
+  Finance: { bg: "#FFFBEB", text: "#B45309" },
 };
 
 function getInitials(name: string) {
@@ -31,12 +31,17 @@ function getInitials(name: string) {
 
 export default function EmployeeRow({ employee }: { employee: Employee }) {
   const navigate = useNavigate();
-  const dept     = DEPT_COLORS[employee.department] ?? { bg: "#F3F4F6", text: "#374151" };
-  const isActive = employee.status === "Active";
+  const dept = DEPT_COLORS[employee.Department] ?? {
+    bg: "#F3F4F6",
+    text: "#374151",
+  };
+  const isActive = employee.Status === "Active";
 
   return (
     <tr
-      onClick={() => navigate(`/EmployeeManagement/employee/${employee.id}`)}
+      onClick={() =>
+        navigate(`/EmployeeManagement/employee/${employee.Emp_id}`)
+      }
       className="border-b border-gray-100 hover:bg-indigo-50/40 cursor-pointer transition-colors"
     >
       {/* Name + Avatar */}
@@ -46,8 +51,10 @@ export default function EmployeeRow({ employee }: { employee: Employee }) {
             {getInitials(employee.name)}
           </div>
           <div>
-            <p className="text-sm font-semibold text-gray-900 leading-tight">{employee.name}</p>
-            <p className="text-xs text-gray-400 mt-0.5">{employee.id}</p>
+            <p className="text-sm font-semibold text-gray-900 leading-tight">
+              {employee.name}
+            </p>
+            <p className="text-xs text-gray-400 mt-0.5">{employee.Emp_id}</p>
           </div>
         </div>
       </td>
@@ -58,12 +65,14 @@ export default function EmployeeRow({ employee }: { employee: Employee }) {
           className="px-2.5 py-1 rounded-md text-xs font-semibold"
           style={{ background: dept.bg, color: dept.text }}
         >
-          {employee.department}
+          {employee.Department}
         </span>
       </td>
 
       {/* Role */}
-      <td className="px-5 py-3.5 text-sm text-gray-600">{employee.designation}</td>
+      <td className="px-5 py-3.5 text-sm text-gray-600">
+        {employee.designation}
+      </td>
 
       {/* Email */}
       <td className="px-5 py-3.5 text-sm text-gray-500">{employee.email}</td>
@@ -77,15 +86,15 @@ export default function EmployeeRow({ employee }: { employee: Employee }) {
           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
             isActive
               ? "bg-green-100 text-green-700"
-              : "bg-gray-100 text-gray-500"
+              : "bg-red-100 text-red-500"
           }`}
         >
           <span
             className={`w-1.5 h-1.5 rounded-full ${
-              isActive ? "bg-green-500" : "bg-gray-400"
+              isActive ? "bg-green-500" : "bg-red-400" 
             }`}
           />
-          {employee.status}
+          {employee.Status}
         </span>
       </td>
     </tr>
