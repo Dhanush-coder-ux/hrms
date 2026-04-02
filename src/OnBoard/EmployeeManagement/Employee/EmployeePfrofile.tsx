@@ -12,24 +12,22 @@ import {
   Edit3,
   Building,
   GraduationCap,
-  Calendar,
+
 } from "lucide-react";
 import { FaMapPin } from "react-icons/fa";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
 
-// --- API CONFIGURATION ---
+
 const BASE_URL = "http://127.0.0.1:8000/employee";
 const Edu_Get_URL           = (id: string) => `${BASE_URL}/EmployeeEducation/${id}`;
-const Edu_UPDATE_URL        = (id: string) => `${BASE_URL}/EmployeeEducationUpdate/${id}`; // FIX: was EmployeeUpdate
+const Edu_UPDATE_URL        = (id: string) => `${BASE_URL}/EmployeeEducationUpdate/${id}`; 
 const DEPENDENTS_Get_URL    = (id: string) => `${BASE_URL}/EmployeeDependents/${id}`;
 const DEPENDENTS_UPDATE_URL = (id: string) => `${BASE_URL}/EmployeeDependentsUpdate/${id}`;
 
 const DEPARTMENTS = ["Engineering", "Design", "Marketing", "HR", "Finance"];
 
-// FIX: backend raises HTTP 404 (not empty array) when no records exist.
-// Treating 404 as empty result prevents the .catch(() => []) from hiding real errors.
 async function fetchOrEmpty(url: string): Promise<any[]> {
   try {
     const res = await fetch(url);

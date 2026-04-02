@@ -1,8 +1,8 @@
 
 export interface AttendanceRecord {
-  Emp_id: number;
+  Emp_id: string;
   employee_name: string;
-  attendance_date: string;
+  date: string;
   check_in: string | null;
   check_out: string | null;
   status: string;
