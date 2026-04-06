@@ -19,23 +19,26 @@ import { FaMapPin, FaRegBuilding} from "react-icons/fa";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
+import { Api_URL } from "../../../APILINK";
 
 
 
 
-const BASE_URL = import.meta.env.VITE_API_URL
+const BASE_URL = Api_URL
 
 const Edu_Get_URL           = (id: string) => `${BASE_URL}/employee/EmployeeEducation/${id}`;
 const Edu_UPDATE_URL        = (id: string) => `${BASE_URL}/employee/EmployeeEducationUpdate/${id}`; 
 const DEPENDENTS_Get_URL    = (id: string) => `${BASE_URL}/employee/EmployeeDependents/${id}`;
 const DEPENDENTS_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeDependentsUpdate/${id}`;
 
+
+
 const DEPARTMENTS = ["Engineering", "Design", "Marketing", "HR", "Finance"];
 
 async function fetchOrEmpty(url: string): Promise<any[]> {
   try {
     const res = await fetch(url);
-    if (res.status === 404) return [];       // no records — not a real error
+    if (res.status === 404) return [];       
     if (!res.ok) throw new Error(`HTTP ${res.status} from ${url}`);
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -181,69 +184,121 @@ const handleChange = (e: any) => {
   }
 };
 
-  const handleSave = async () => {
-    setLoading(true);
-    try {
-      if (!id) {
-        const res = await fetch(`${BASE_URL}/Register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        if (!res.ok) throw new Error("Create failed");
-        navigate("/employees");
-        return;
+const handleSave = async () => {
+  setLoading(true);
+
+  try {
+    if (!id) {
+      // CREATE EMPLOYEE
+      const res = await fetch(`${BASE_URL}/employee/Register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error(`Create failed (${res.status})`);
+
+      alert("Employee created successfully!");
+      navigate("/employees");
+      return;
+    }
+
+    // ===============================
+    // 🔍 DEBUG URLS (VERY IMPORTANT)
+    // ===============================
+    console.log("EMP URL:", `${BASE_URL}/employee/EmployeeUpdate/${id}`);
+    console.log("EDU URL:", Edu_UPDATE_URL(id));
+    console.log("DEP URL:", DEPENDENTS_UPDATE_URL(id));
+
+    // ===============================
+    // 1️⃣ UPDATE EMPLOYEE
+    // ===============================
+    const empRes = await fetch(`${BASE_URL}/employee/EmployeeUpdate/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+
+    console.log("EMP STATUS:", empRes.status);
+
+    if (!empRes.ok) {
+      throw new Error(`Employee update failed (${empRes.status})`);
+    }
+
+    // ===============================
+    // 2️⃣ UPDATE EDUCATION (SAFE)
+    // ===============================
+    let eduRes: Response | null = null;
+
+    if (form.education && form.education.length > 0) {
+      eduRes = await fetch(Edu_UPDATE_URL(id), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          form.education.map((edu) => ({
+            degree: edu.degree,
+            institution: edu.institution,
+            graduationYear: edu.graduation_year || null,
+          }))
+        ),
+      });
+
+      console.log("EDU STATUS:", eduRes.status);
+
+      // 🚨 Ignore 404 (means no record exists yet)
+      if (eduRes.status !== 404 && !eduRes.ok) {
+        throw new Error(`Education update failed (${eduRes.status})`);
       }
 
-      const [empRes, eduRes, depRes] = await Promise.all([
-        // 1. Employee basic info
-        fetch(`${BASE_URL}/EmployeeUpdate/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        }),
-        // 2. Education — keys must match backend EducationCreate schema
-        fetch(Edu_UPDATE_URL(id), {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-  form.education.map((edu) => ({
-    degree: edu.degree,
-    institution: edu.institution,
-    graduationYear: edu.graduation_year || null,
-  }))
-)
-,
-        }),
-        // 3. Dependents — keys must match backend DependentCreate schema
-        fetch(DEPENDENTS_UPDATE_URL(id), {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(
-
-  form.Dependents.map((dep) => ({  
-    person_name: dep.dep_name,      
-    relationship_type: dep.dep_relationship,      
-    contact: dep.dep_contact,      
-    person_dob: dep.dep_dob || null,   }))
-   ),
-        }), 
-      ]);
-
-      // Check each response individually for clearer error messages
-      if (!empRes.ok) throw new Error(`Employee update failed (${empRes.status})`);
-      if (!eduRes.ok) throw new Error(`Education update failed (${eduRes.status})`);
-      if (!depRes.ok) throw new Error(`Dependents update failed (${depRes.status})`);
-
-      setIsEditing(false);
-      alert("Employee updated successfully!");
-    } catch (error: any) {
-      console.error("Save error:", error);
-      alert(`Something went wrong: ${error.message}`);
-    } finally {
-      setLoading(false);
+      if (eduRes.status === 404) {
+        console.warn("⚠️ Education not found → skipping update");
+      }
     }
-  };
+
+    // ===============================
+    // 3️⃣ UPDATE DEPENDENTS (SAFE)
+    // ===============================
+    let depRes: Response | null = null;
+
+    if (form.Dependents && form.Dependents.length > 0) {
+      depRes = await fetch(DEPENDENTS_UPDATE_URL(id), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          form.Dependents.map((dep) => ({
+            person_name: dep.dep_name,
+            relationship_type: dep.dep_relationship,
+            contact: dep.dep_contact,
+            person_dob: dep.dep_dob || null,
+          }))
+        ),
+      });
+
+      console.log("DEP STATUS:", depRes.status);
+
+      // 🚨 Ignore 404
+      if (depRes.status !== 404 && !depRes.ok) {
+        throw new Error(`Dependents update failed (${depRes.status})`);
+      }
+
+      if (depRes.status === 404) {
+        console.warn("⚠️ Dependents not found → skipping update");
+      }
+    }
+
+    // ===============================
+    // ✅ SUCCESS
+    // ===============================
+    setIsEditing(false);
+    alert("✅ Employee updated successfully!");
+
+  } catch (error: any) {
+    console.error("🔥 Save error:", error);
+    alert(`❌ Error: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (fetching)
     return (

@@ -1,29 +1,14 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../../Components/Common/Button";
+import type{Empleaves} from "../../../Types/typesEmployeeManagement"
 
-interface LeaveHistory {
-  apply_date: string;
-  from_date: string;
-  to_date: string;
-  number_of_days: number;
-  approve_status: string;
-  reason: string;
-}
-
-interface Empleaves {
-  empid: string;
-  name: string;
-  total_leave: number;
-  used_leave: number;
-  available_leaves: number;
-  leave_history: LeaveHistory[];
-}
 
 export const EmployeeLeaveDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { empid } = useParams();
   const employee = location.state as Empleaves;
+
 
   if (!employee) {
     return (
@@ -48,7 +33,7 @@ export const EmployeeLeaveDetails = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6">
         <div>
           <h2 className="text-3xl font-extrabold text-gray-800">Leave Details</h2>
-          <p className="text-gray-500">Employee ID: <span className="font-medium text-blue-600">{employee.empid}</span></p>
+          <p className="text-gray-500">Employee ID: <span className="font-medium text-blue-600">{employee.Emp_id}</span></p>
         </div>
         <Button B_name="← Back" ClickToAction={() => navigate(-1)} />
       </div>
@@ -56,7 +41,7 @@ export const EmployeeLeaveDetails = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
           <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold">Employee Name</p>
-          <p className="text-xl font-bold text-gray-800 mt-1">{employee.name}</p>
+          <p className="text-xl font-bold text-gray-800 mt-1">{employee.employee_name}</p>
         </div>
         <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
           <p className="text-sm text-blue-600 uppercase tracking-wider font-semibold">Total Quota</p>
@@ -64,7 +49,7 @@ export const EmployeeLeaveDetails = () => {
         </div>
         <div className="bg-orange-50 p-5 rounded-xl border border-orange-100">
           <p className="text-sm text-orange-600 uppercase tracking-wider font-semibold">Leaves Used</p>
-          <p className="text-2xl font-black text-orange-800 mt-1">{employee.used_leave}</p>
+          <p className="text-2xl font-black text-orange-800 mt-1">{employee.Used}</p>
         </div>
         <div className="bg-green-50 p-5 rounded-xl border border-green-100">
           <p className="text-sm text-green-600 uppercase tracking-wider font-semibold">Available</p>
@@ -88,20 +73,20 @@ export const EmployeeLeaveDetails = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {employee.leave_history.map((leave, index) => (
+              {employee.leave_history?.map((leave, index) => (
                 <tr key={index} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 text-sm text-gray-600">{leave.apply_date}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{leave.applayDate}</td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-800">
                     {leave.from_date} <span className="text-gray-400 mx-2">→</span> {leave.to_date}
                   </td>
-                  <td className="px-6 py-4 text-sm text-center font-bold text-gray-700">{leave.number_of_days}</td>
+                  <td className="px-6 py-4 text-sm text-center font-bold text-gray-700">{leave.Days}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusStyle(leave.approve_status)}`}>
-                      {leave.approve_status}
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusStyle(leave.status)}`}>
+                      {leave.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500 italic max-w-xs truncate">
-                    "{leave.reason}"
+                    "{leave.Reason}"
                   </td>
                 </tr>
               ))}

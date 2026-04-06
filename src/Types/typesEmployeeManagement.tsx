@@ -33,19 +33,25 @@ export interface EventFormData {
 }
 
 export interface LeaveHistory {
-  apply_date: string;
-  from_date: string;
-  to_date: string;
-  number_of_days: number;
-  approve_status: string;
-  reason: string;
+  id: number;
+  Emp_id: string;
+  employee_name: string;
+  Duration: string; // backend format: "YYYY-MM-DD to YYYY-MM-DD"
+  Days: number;
+  status: string;
+  leave_type: string;
+  from_date : string;
+  to_date : string;
+  applayDate : string ;
+  Reason: string;
 }
 
 export interface Empleaves {
-  empid: string;
+  Emp_id: string; 
   name: string;
+  employee_name: string;
   total_leave: number;
-  used_leave: number;
+  Used: number;
   available_leaves: number;
   leave_history: LeaveHistory[];
 }

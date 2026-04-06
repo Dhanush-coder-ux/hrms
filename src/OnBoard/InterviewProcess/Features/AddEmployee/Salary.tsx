@@ -90,8 +90,7 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
     { value: "project", label: "Project Completion Bonus" }, { value: "profit", label: "Profit Sharing" },
   ];
   const frequencies = [
-    { value: "weekly", label: "Weekly" }, { value: "biweekly", label: "Bi-Weekly" },
-    { value: "semimonthly", label: "Semi-Monthly" }, { value: "monthly", label: "Monthly" },
+    { value: "annual", label: "Annual" }, { value: "monthly", label: "Monthly" },
   ];
 
   const handleChange = (
@@ -112,6 +111,8 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); setSalaryData?.(salaryData); ClicktoAction?.();
   };
+
+
 
   return (
     <>
@@ -190,7 +191,7 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
                 <Selection label="Type Of Pay" name="payType" value={salaryData.payType} options={PayTypeList} onChange={handleChange} placeholder="Type Of Pay" />
                 <Selection label="Currency" name="currency" value={salaryData.currency} options={CurrencyList} onChange={handleChange} placeholder="Currency" />
                 <Selection label="Pay Frequency" name="payFrequency" value={salaryData.payFrequency} options={frequencies} onChange={handleChange} placeholder="Pay Frequency" />
-                <FormFiled Lable="Salary" name="annualSalary" value={salaryData.annualSalary} in_PlaceHolder="Enter Salary" onChange={handleChange} icon={currSymbol} />
+                <FormFiled Lable="Annual Salary" name="annualSalary" value={salaryData.annualSalary} in_PlaceHolder="Enter Salary" onChange={handleChange} icon={currSymbol} />
               </div>
             </section>
           </AnimSection>
@@ -255,7 +256,15 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
                 </span>
                 {salaryData.payFrequency && (
                   <><span style={{ color: "#cbd5e1" }}>•</span>
-                  <span style={{ color: "#475569" }}>{salaryData.payFrequency}</span></>
+                  <span style={{ color: "#5b9deb" }}>{salaryData.payFrequency}: </span>
+                  <span className="text-[#02eb5b]">
+                    {salaryData.payFrequency === 'annual' 
+                  ? salaryData.annualSalary 
+                  : (salaryData.annualSalary/12).toFixed(2)} 
+                  </span>
+                  
+                   <span style={{ color: "#64748b" }} >{salaryData.currency}</span>
+                   </>
                 )}
                 {salaryData.provider && (
                   <><span style={{ color: "#cbd5e1" }}>•</span>
@@ -263,7 +272,7 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
                 )}
                 {salaryData.currency && (
                   <><span style={{ color: "#cbd5e1" }}>•</span>
-                  <span style={{ color: "#64748b" }}>Net: <span style={{ color: "#16a34a", fontWeight: 700 }}>565628</span> {salaryData.currency}</span></>
+                  <span style={{ color: "#64748b" }}>Net: <span style={{ color: "#16a34a", fontWeight: 700 }}>{ (Number(salaryData.annualSalary) + (Number(salaryData.annualSalary) * 0.12)  ).toLocaleString('en-IN') }</span> {salaryData.currency}</span></>
                 )}
                 {B_togg && salaryData.bonus_Value > 0 && (
                   <><span style={{ color: "#cbd5e1" }}>•</span>

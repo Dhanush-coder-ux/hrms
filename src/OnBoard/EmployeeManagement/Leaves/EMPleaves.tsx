@@ -3,59 +3,44 @@ import { EmpLeaveTable } from "../../Components/table/EmpLeaveTable";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import StatCard from "../../../Components/Common/StatCard";
-import { Building, UserCheck, UserMinus, Users } from "lucide-react";
+import { UserCheck, UserMinus, Users } from "lucide-react";
 import type { Empleaves } from "../../../Types/typesEmployeeManagement";
+import { Api_URL } from "../../../APILINK";
 
+const LeaveUrl = Api_URL
+
+const LEAVE_API = `${LeaveUrl}/leave/all-balances`
 export const EMPleaves = () => {
   const [data, setData] = useState<Empleaves[]>([]);
   const navigate = useNavigate();
 
-  const fetchEmpleave = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/Total_leaves");
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error("Error fetching leaves:", error);
-    }
-  };
-
+const fetchEmpleave = async () => {
+  try {
+    const response = await fetch(LEAVE_API);
+    const result = await response.json();
+    // Normalize field names to match detail page expectations
+    const normalized = result.map((emp: any) => ({
+      ...emp,
+      total_leave: emp.Total_Leave,
+      available_leaves: emp.Available,
+      empid: emp.Emp_id,
+    }));
+    setData(normalized);
+  } catch (error) {
+    console.error("Error fetching leaves:", error);
+  }
+};
   useEffect(() => {
     fetchEmpleave();
   }, []);
 
-  const columns = [
-    { header: "ID", accessor: "empid" },
-    {
-      header: "Employee",
-      accessor: "name",
-      render: (row: Empleaves) => (
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs">
-            {row.name.charAt(0)}
-          </div>
-          <span className="font-medium text-slate-700">{row.name}</span>
-        </div>
-      ),
-    },
-    { header: "Total", accessor: "total_leave" },
-    {
-      header: "Used",
-      accessor: "used_leave",
-      render: (row: Empleaves) => (
-        <span className="text-rose-600 font-semibold">{row.used_leave}</span>
-      ),
-    },
-    {
-      header: "Available",
-      accessor: "available_leaves",
-      render: (row: Empleaves) => (
-        <span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold">
-          {row.available_leaves} Days
-        </span>
-      ),
-    },
-  ];
+const columns = [
+  { header: "ID", accessor: "Emp_id" },
+  { header: "Employee Name", accessor: "employee_name" },
+  { header: "Total", accessor: "Total_Leave" },
+  { header: "Used", accessor: "Used" },
+  { header: "Available", accessor: "Available" },
+];
 
   return (
     <motion.section
@@ -78,7 +63,7 @@ export const EMPleaves = () => {
       </header>
 
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <StatCard
           label="Total Employees"
           value={data.length}
@@ -103,14 +88,6 @@ export const EMPleaves = () => {
           iconColor="#f43f5e"
           valueSize="2xl"
         />
-        <StatCard
-          label="Departments"
-          value="5"
-          icon={Building}
-          iconBg="#eff6ff"
-          iconColor="#1e40af"
-          valueSize="2xl"
-        />
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -118,9 +95,9 @@ export const EMPleaves = () => {
           columns={columns}
           data={data}
           onRowClick={(row) =>
-            navigate(`/EmployeeManagement/employee-leave/${row.empid}`, {
-              state: row,
-            })
+          navigate(`/EmployeeManagement/employee-leave/${row.Emp_id}`, {
+          state: row,
+              })
           }
         />
       </div>
