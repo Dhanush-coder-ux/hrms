@@ -1,5 +1,4 @@
 // src/components/table/PayrollTable.tsx
-import React from 'react';
 
 type Column = {
   header: string;
