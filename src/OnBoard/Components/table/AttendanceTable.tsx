@@ -267,7 +267,7 @@ export const Attendance = () => {
             className="border rounded px-2 py-1"
           />
 
-          <button onClick={(e) => shiftDate(+1)} disabled={isToday}>
+          <button onClick={() => shiftDate(+1)} disabled={isToday}>
             <ChevronRight />
           </button>
 
