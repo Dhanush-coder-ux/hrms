@@ -15,6 +15,7 @@ import {
   ClipboardX,
 } from "lucide-react";
 import StatCard from "../../../Components/Common/StatCard";
+import { Api_URL } from "../../../APILINK";
 
 const toDateString = (d: Date) => d.toISOString().split("T")[0];
 
@@ -29,7 +30,8 @@ const formatDisplayDate = (dateStr: string) => {
 };
 
 const todayStr = () => toDateString(new Date());
-const API_URL = "http://127.0.0.1:8000/attendance";
+
+const API_URL =`${Api_URL}/attendance`;
 
 export const Attendance = () => {
   const [showEdit, setShowEdit] = useState(false);

@@ -84,14 +84,12 @@ export default function EmployeeRow({ employee }: { employee: Employee }) {
       <td className="px-5 py-3.5">
         <span
           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-            isActive
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-500"
+            isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-500"
           }`}
         >
           <span
             className={`w-1.5 h-1.5 rounded-full ${
-              isActive ? "bg-green-500" : "bg-red-400" 
+              isActive ? "bg-green-500" : "bg-red-400"
             }`}
           />
           {employee.Status}

@@ -26,6 +26,7 @@ import PayrollDetails from "./OnBoard/EmployeeManagement/Payroll/PayrollDetails"
 import { DepartmentProfile } from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
 import  { Interview} from "./OnBoard/InterviewProcess/Features/Interviews";
+import { OfferLetter } from "./OnBoard/InterviewProcess/Features/OfferLetter";
 
 export const router = createBrowserRouter([
   {
@@ -68,7 +69,8 @@ export const router = createBrowserRouter([
           { path: "employeeregistration", element: <EmployeeRegister /> },
           { path: "Salary",               element: <Salary /> },
           {path: "Candidates",            element:<Candidates/>},
-          {path:"interviews",              element:<Interview/>}
+          {path:"interviews",              element:<Interview/>},
+          {path:"offers",                    element:<OfferLetter/>}
         ],
       },
 

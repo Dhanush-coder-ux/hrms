@@ -12,19 +12,23 @@ import {
   Edit3,
   Building,
   GraduationCap,
-
+  ArrowRightIcon,
+  Banknote
 } from "lucide-react";
-import { FaMapPin } from "react-icons/fa";
+import { FaMapPin, FaRegBuilding} from "react-icons/fa";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
 
 
-const BASE_URL = "http://127.0.0.1:8000/employee";
-const Edu_Get_URL           = (id: string) => `${BASE_URL}/EmployeeEducation/${id}`;
-const Edu_UPDATE_URL        = (id: string) => `${BASE_URL}/EmployeeEducationUpdate/${id}`; 
-const DEPENDENTS_Get_URL    = (id: string) => `${BASE_URL}/EmployeeDependents/${id}`;
-const DEPENDENTS_UPDATE_URL = (id: string) => `${BASE_URL}/EmployeeDependentsUpdate/${id}`;
+
+
+const BASE_URL = import.meta.env.VITE_API_URL
+
+const Edu_Get_URL           = (id: string) => `${BASE_URL}/employee/EmployeeEducation/${id}`;
+const Edu_UPDATE_URL        = (id: string) => `${BASE_URL}/employee/EmployeeEducationUpdate/${id}`; 
+const DEPENDENTS_Get_URL    = (id: string) => `${BASE_URL}/employee/EmployeeDependents/${id}`;
+const DEPENDENTS_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeDependentsUpdate/${id}`;
 
 const DEPARTMENTS = ["Engineering", "Design", "Marketing", "HR", "Finance"];
 
@@ -61,10 +65,28 @@ export default function EmployeeProfile() {
     City: "",
     State: "",
     Pin_Code: "",
-    // Education — backend schema: degree, institution, graduationYear
-    // degree: "",
-    // institution: "",
-    // graduation_year: "",
+    provider:"",
+    emp_type:"",
+    payType:"",
+    currency:"",
+    annualSalary:"",
+    bonus_Type:"",
+    bonus_Colucationmode:"",
+    bonus_Value:"",
+
+    monthly_salary:"",
+    PF:"",
+    EPF:"",
+    EPS:"",
+    bankName:"",
+    accountNumber:"",
+    ifscCode:"",
+    panNumber:"",
+    payFrequency:"",
+
+   
+
+
     education: [
   {
     degree: "",
@@ -82,15 +104,16 @@ export default function EmployeeProfile() {
         dep_dob: "",
       }
     ]
-  });
- 
+  }
+);
+
 
   useEffect(() => {
     if (!id) return;
     setFetching(true);
 
     Promise.all([
-      fetch(`${BASE_URL}/${id}`).then((res) => {
+      fetch(`${BASE_URL}/employee/${id}`).then((res) => {
         if (!res.ok) throw new Error("Employee not found");
         return res.json();
       }),
@@ -98,10 +121,22 @@ export default function EmployeeProfile() {
       fetchOrEmpty(DEPENDENTS_Get_URL(id)),
     ])
       .then(([empData, eduData, depData]) => {
+        const empInfo = empData.Employee || {};
+
+        console.log(`data ${empData}`)
+        
         setForm((prev) => ({
           ...prev,
           ...empData,
-          // Backend returns: { degree, institution, graduationYear }
+
+          ...empInfo,
+    
+
+          monthly_salary: empData.monthly_salary ?? 0,
+          PF: empData.PF ?? 0,
+          EPF: empData.EPF ?? 0,
+          EPS: empData.EPS ?? 0,
+
           education: eduData.length
   ? eduData.map((edu: any) => ({
       degree: edu.degree,
@@ -123,11 +158,28 @@ export default function EmployeeProfile() {
       .catch((err) => console.error("Fetch error:", err))
       .finally(() => setFetching(false));
   }, [id]);
+  
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
+const handleChange = (e: any) => {
+  const { name, value } = e.target;
+
+  // Regex to match "arrayName[index].fieldName"
+  const arrayMatch = name.match(/(\w+)\[(\d+)\]\.(\w+)/);
+
+  if (arrayMatch) {
+    const [_, arrayName, index, fieldName] = arrayMatch;
+    const idx = parseInt(index);
+
+    setForm((prev: any) => {
+      const updatedArray = [...prev[arrayName]];
+      updatedArray[idx] = { ...updatedArray[idx], [fieldName]: value };
+      return { ...prev, [arrayName]: updatedArray };
+    });
+  } else {
+    // Normal top-level fields
     setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  }
+};
 
   const handleSave = async () => {
     setLoading(true);
@@ -264,7 +316,9 @@ export default function EmployeeProfile() {
   <p className="text-sm text-slate-500 mb-3">
     {form.designation || "No Designation Set"}
   </p>
-
+  <p className="text-sm text-slate-500 mb-3">
+    {form.emp_type || "No Designation Set"}
+  </p>
   {/* Reduced mb-8 to mb-6 to pull the "Joined" section slightly closer */}
   <div className="mb-6">
     <span
@@ -313,12 +367,91 @@ export default function EmployeeProfile() {
                   </div>
                 </div>
               )}
+
+
+                {/* Leave History */}
+              <div className="flex  flex-col justify-between text-sm mt-3 " onClick={()=>{
+                alert ("none")
+              }}><div> <h1 className="text-blue-700 font-medium mt-1 border-b border-slate-200 pb-2">
+                  Leave and attendance
+                </h1> </div>
+                <div className=" flex justify-between text-sm mt-3">
+                  <span className="text-slate-500 font-medium">Leave History</span>
+                  <span className=" text-slate-500 inline-flex items-center gap-1 cursor-pointer transform transition-all duration-200 hover:scale-100 hover:translate-x-1">
+                      See details
+                      <ArrowRightIcon size={14} className="text-blue-500" />
+                  </span>
+                </div>
+               <div className=" flex justify-between text-sm mt-3">
+                  <span className="text-slate-500 font-medium">Attendance</span>
+                  <span className=" text-slate-500 inline-flex items-center gap-1 cursor-pointer transform transition-all duration-200 hover:scale-100 hover:translate-x-1">
+                      See details
+                      <ArrowRightIcon size={14} className="text-blue-500" />
+                  </span>
+                </div>
+                
+
+              </div>
+
+
+              {/* Pay roll details */}
+              <div className="flex  flex-col justify-between text-sm mt-3 " onClick={()=>{
+                alert ("pay roll details")
+              }}><div> <h1 className="text-blue-700 font-medium mt-1 border-b border-slate-200 pb-2">
+                 PayRoll Details
+                </h1> </div>
+
+                <div className=" flex justify-between text-sm mt-3">
+                  <span className="text-slate-500 font-medium">Payroll Provider</span>
+                  <span className="font-semibold text-slate-700"> 
+                  {form.provider || "No payroll provider"}
+                </span>
+                </div>
+
+               <div className=" flex justify-between text-sm mt-3">
+                <span className="text-slate-500 font-medium">{form.payType}</span> {/* //paytype is not showing in the profile page*/}
+                  <span className="font-semibold text-slate-700"> 
+                  {form.currency || "No payroll provider"}
+                </span>
+                </div>
+
+                <div className=" flex justify-between text-sm mt-3">
+                <span className="text-slate-500 font-medium">Annual Salary</span> {/* //paytype is not showing in the profile page*/}
+                  <span className="font-semibold text-slate-700"> 
+                  {form.annualSalary || "No payroll provider"}  {form.currency || "—"}
+                  
+                </span>
+                </div>
+                <div className=" flex justify-between text-sm mt-3">
+                <span className="text-slate-500 font-medium">Pay Frequency</span> {/* //paytype is not showing in the profile page*/}
+                  <span className="font-semibold text-slate-700"> 
+                  {form.payFrequency}
+                </span>
+                </div>
+                
+                <div className=" flex justify-between text-sm mt-3">
+                <span className="text-slate-500 font-medium">Monthly Salary</span> {/* //paytype is not showing in the profile page*/}
+                  <span className="font-semibold text-slate-700"> 
+                  {form.monthly_salary}  {form.currency || "—"}
+                </span>
+                </div>
+                
+                <div className=" flex justify-between text-sm mt-3">
+                <span className="text-slate-500 font-medium">PF</span> {/* //paytype is not showing in the profile page*/}
+                  <span className="font-semibold text-slate-700"> 
+                  {form.PF}  {form.currency || "—"}
+                </span>
+                </div>
+
+              </div>
+
             </div>
           </div>
         </div>
 
         {/* Info Cards */}
         <div className="lg:col-span-2 space-y-6">
+
           {/* Personal & Work Details */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
@@ -431,6 +564,8 @@ export default function EmployeeProfile() {
     <h3 className="font-bold text-slate-700">Dependents</h3>
   </div>
 
+{/* depand */}
+
   <div className="p-6">
     {isEditing ? (
       /* EDIT MODE: Changed to grid-cols-1 for vertical stacking */
@@ -472,6 +607,31 @@ export default function EmployeeProfile() {
     )}
   </div>
 </div>
+
+      {/* Accounts  */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <User size={18} className="text-indigo-600" />
+              <h3 className="font-bold text-slate-700">Account Details</h3>
+            </div>
+            <div className="p-6">
+              {isEditing ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormFiled Lable="Bank Name"   name="bankName"        value={form.bankName}        onChange={handleChange} in_PlaceHolder="BankName" />
+                  <FormFiled Lable="Account Number"      name="accountNumber"       value={form.accountNumber}       onChange={handleChange} in_PlaceHolder="Accountnumber" />
+                  <FormFiled Lable="IFSC Code"       name="ifscCode"       value={form.ifscCode}       onChange={handleChange} in_PlaceHolder="Ifscnumber" />
+                  <FormFiled Lable="PAN Number" name="panNumber" value={form.panNumber} onChange={handleChange} in_PlaceHolder="PanNumber" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6">
+                  <DetailItem icon={<FaRegBuilding  size={16} />}      label="Bank Name"   value={form.bankName} />
+                  <DetailItem icon={<Banknote  size={16} />}      label="Account Number"       value={form.accountNumber} />
+                  <DetailItem icon={<Phone size={16} />}     label="IFSC Code"       value={form.ifscCode} />
+                  <DetailItem icon={<Briefcase size={16} />} label="PAN Number" value={form.panNumber} />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

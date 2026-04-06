@@ -3,6 +3,7 @@ import CalendarView from "../../../Components/Common/Calander/CalendarView";
 import { motion, AnimatePresence } from "framer-motion"; // <-- Added Framer Motion
 import type { EventFormData } from "../../../Types/typesEmployeeManagement";
 
+
 const API_URL = "http://localhost:3001/Events";
 
 const CAT_COLORS: Record<string, string> = {

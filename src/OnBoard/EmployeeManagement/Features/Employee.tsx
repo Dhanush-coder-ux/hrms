@@ -8,9 +8,11 @@ import { Building, Check, User, X } from "lucide-react";
 import type { Employee } from "../../../Types/typesEmployeeManagement.tsx";
 
 // employee get endopint
-const GET_API_URL = "http://127.0.0.1:8000/employee/";
 
-// employee post endpoint
+const BASE_URL = import.meta.env.VITE_API_URL;
+
+export const GET_API_URL = `${BASE_URL}/employee/`;
+
 
 
 /* ── Page ── */
@@ -19,13 +21,17 @@ export default function Employee() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterDept, setFilterDept] = useState("All");
+  console.log({BASE_URL})
 
   useEffect(() => {
     (async () => {
       try {
         const res = await fetch(GET_API_URL);
         const data = await res.json();
-        setEmployees(data);
+        console.log("Full API data:", data);
+        
+        console.log("First item:", JSON.stringify(data[0], null, 2)); // 👈 paste the output here
+        setEmployees(data.map((item: any) => item.Employee));
       } catch {
         console.error("Failed to fetch employees");
       } finally {

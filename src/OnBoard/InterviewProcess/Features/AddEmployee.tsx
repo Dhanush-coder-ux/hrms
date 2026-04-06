@@ -4,8 +4,10 @@ import EmployeeRegister from "./AddEmployee/EmployeeRegistor";
 import { Salary } from "./AddEmployee/Salary";
 import { BankDetails } from "./AddEmployee/BankDetails";
 import { Verify } from "./AddEmployee/Veryfy";
+import { Api_URL } from "../../../APILINK";
 
-const API_URL = "http://127.0.0.1:8000/employee/Register";
+const API_URL = `${Api_URL}/employee/Register`;
+
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState("Step 1");
