@@ -30,8 +30,7 @@ const AnimCard = ({ children, delay = 0, className = "" }: { children: React.Rea
 export const Verify = ({ 
   employeeData, 
   salaryData, 
-  bankData, 
-  insData, // <--- Destructure it here
+  bankData,
   onFinalSubmit 
 }: VerifyProps) => {
   const InfoRow = ({ label, value }: { label: string; value: any }) => (

@@ -26,7 +26,7 @@ const Toggle: React.FC<ToggleProps> = ({ label, initialState = false, onToggle }
         aria-checked={enabled}
         onClick={handleToggle}
         className={`
-          relative inline-flex h-[22px] w-[44px] items-center rounded-full transition-colors 
+          relative inline-flex h-5.5 w-11 items-center rounded-full transition-colors 
           outline-none ring-0 border-2
           ${enabled ? 'bg-blue-400 border-blue-400' : 'bg-white border-gray-300'}
         `}
@@ -34,7 +34,7 @@ const Toggle: React.FC<ToggleProps> = ({ label, initialState = false, onToggle }
         <span
           className={`
             inline-block h-4 w-4 transform rounded-full transition-transform duration-200 ease-in-out
-            ${enabled ? 'translate-x-[22px] bg-white' : 'translate-x-1 bg-blue-400'}
+            ${enabled ? 'translate-x-5.5 bg-white' : 'translate-x-1 bg-blue-400'}
           `}
         />
       </button>

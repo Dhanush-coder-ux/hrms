@@ -20,29 +20,23 @@ const CollapsibleSection = ({ isOpen, children }: { isOpen?: boolean; children: 
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateRows: isOpen ? "1fr" : "0fr",
-        transition: "grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
         overflow: "hidden",
+        maxHeight: isOpen ? "500px" : "0px", // ✅ change here
+        transition: "max-height 0.35s ease",
       }}
     >
-      <div style={{ minHeight: 0 }}>
-        <div
-          style={{
-            opacity: isOpen ? 1 : 0,
-            transform: isOpen ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.98)",
-            transition: "opacity 0.3s ease-out, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-            transformOrigin: "top",
-            padding: isOpen ? "16px 0" : "0",
-          }}
-        >
-          {children}
-        </div>
+      <div
+        style={{
+          opacity: isOpen ? 1 : 0,
+          padding: isOpen ? "16px 0" : "0",
+          transition: "opacity 0.25s ease",
+        }}
+      >
+        {children}
       </div>
     </div>
   );
 };
-
 const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number; }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [triggered, setTriggered] = useState(false);
@@ -281,13 +275,13 @@ export const Insurance = ({
                     initialState={hasESI}
                     onToggle={(val: boolean) => sethasESI(val)}
                   />
-                  <CollapsibleSection >
+                  <CollapsibleSection isOpen={hasESI} >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormFiled name="esi_no" value={INSFD.esi_no || ""} Lable="ESI Number" in_PlaceHolder="Enter ESI Number" onChange={onChange} />
                       <FormFiled name="esi_name" value={INSFD.esi_name || ""} Lable="Name in ESI" in_PlaceHolder="Name as per ESI records" onChange={onChange} />
                     </div>
                   </CollapsibleSection>
-                  <CollapsibleSection isOpen={hasESI} >
+                  <CollapsibleSection isOpen={!hasESI} >
                     <Checkbox checked={checkESI} label="Apply for new ESI Registration" onChange={(val: boolean) => setcheckESI(val)} name="apply_esi" />
                   </CollapsibleSection>
                 </>
