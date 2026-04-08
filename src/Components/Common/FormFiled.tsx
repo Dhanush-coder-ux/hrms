@@ -5,7 +5,7 @@ type Form = {
   Lable?: string;
   in_PlaceHolder: string;
   value: string | number;
-  name: string;
+  name?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon?: React.ReactNode;
   PrivacyInput?: boolean;

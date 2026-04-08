@@ -10,10 +10,10 @@ const DEFAULT_FORM: Employee = {
   Emp_id: "", f_name: "", l_name: "", name: "", gender: "", dob: "", email: "", phone: "",
   Department: "", designation: "", emp_type: "", DateOfJoining: "",
   education: [{ degree: "", institution: "", graduationYear: "" }],
-  company_name: "", position: "", FromDate: "", ToDate: "",
+  WorkExp: [{ company_name: "", position: "", FromDate: "", ToDate: "" }],
   Street: "", City: "", State: "", Pin_Code: 0,
   p_Street: "", p_City: "", p_State: "", p_Pin_Code: 0,
-  dependents: [{ person_name: "", relationship_type: "", contact: "", person_dob: "" }],
+  Familys: [{ person_name: "", relationship_type: "", contact: "", person_dob: "" }],
 };
 
 // ── NEW: accepts initialData so the form re-hydrates on back-navigation ───────
@@ -81,20 +81,32 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
     if (e?.preventDefault) e.preventDefault();
     setFormData({ ...formData, education: [...formData.education, { degree: "", institution: "", graduationYear: "" }] });
   };
+  const addExperienceSection = (e?: any) => {
+    if (e?.preventDefault) e.preventDefault();
+    setFormData({ ...formData, WorkExp: [...formData.WorkExp, {
+      company_name: "", ToDate: "", FromDate: "",
+      position: ""
+    }] });
+  };
 
   const removeEducationSection = (index: number) => {
     if (formData.education.length > 1)
       setFormData({ ...formData, education: formData.education.filter((_, i) => i !== index) });
   };
 
-  const addDependentSection = (e?: any) => {
-    if (e?.preventDefault) e.preventDefault();
-    setFormData({ ...formData, dependents: [...formData.dependents, { person_name: "", relationship_type: "", contact: "", person_dob: "" }] });
+  const removeWorkexpSection = (index: number) => {
+    if (formData.WorkExp.length > 1)
+      setFormData({ ...formData, WorkExp: formData.WorkExp.filter((_, i) => i !== index) });
   };
 
-  const removeDependentSection = (index: number) => {
-    if (formData.dependents.length > 1)
-      setFormData({ ...formData, dependents: formData.dependents.filter((_, i) => i !== index) });
+  const addFamilySection = (e?: any) => {
+    if (e?.preventDefault) e.preventDefault();
+    setFormData({ ...formData, Familys: [...formData.Familys, { person_name: "", relationship_type: "", contact: "", person_dob: "" }] });
+  };
+
+  const removeFamilySection = (index: number) => {
+    if (formData.Familys.length > 1)
+      setFormData({ ...formData, Familys: formData.Familys.filter((_, i) => i !== index) });
   };
 
   const handleSameAddress = (checked: boolean) => {
@@ -166,6 +178,8 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
       `}</style>
 
       <div className="emp-page">
+
+
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
             <FaUser className="text-[26px] text-indigo-500 shrink-0" />
@@ -174,6 +188,8 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
         </AnimSection>
 
         <form className="space-y-8" onSubmit={onSubmit}>
+
+{/* Employee Basic Details */}
           <AnimSection delay={60}>
             <section>
               <div className="emp-section-head">Employee Basic Details</div>
@@ -190,6 +206,8 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
             </section>
           </AnimSection>
 
+
+{/* Job Information */}
           <AnimSection delay={120}>
             <section>
               <div className="emp-section-head">Job Information</div>
@@ -202,6 +220,8 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
             </section>
           </AnimSection>
 
+
+{/* Education History */}
           <AnimSection delay={180}>
             <section>
               <div className="emp-section-head">
@@ -243,53 +263,114 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
             </section>
           </AnimSection>
 
-          <AnimSection delay={240}>
+
+{/* Work Experience Information */}
+          <AnimSection delay={300}>
             <section>
-              <div className="emp-section-head">Work Information</div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <FormFiled name="company_name" Lable="Company Name" in_PlaceHolder="Company Name" value={formData.company_name} onChange={onChange} />
-                <FormFiled name="position" Lable="Position" in_PlaceHolder="Position" value={formData.position} onChange={onChange} />
-                <CustomDatePicker name="FromDate" value={formData.FromDate || ""} Lable="From" onChange={onChange} />
-                <CustomDatePicker name="ToDate" value={formData.ToDate || ""} Lable="To" onChange={onChange} />
-              </div>
-            </section>
+  <div className="emp-section-head">
+    Work Experience Information
+    <button type="button" className="emp-add-btn" onClick={addExperienceSection}>
+      <FaPlus size={11} /> Add Experience
+    </button>
+  </div>
+  {formData.WorkExp.map((work, index) => (
+    <AnimRow key={index}>
+      <div className="emp-row-card">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-3">
+            <FormFiled 
+              Lable="Company Name"
+              in_PlaceHolder="Company Name"
+              value={work.company_name}
+              onChange={(e) => {
+                const u = [...formData.WorkExp];
+                u[index] = { ...u[index], company_name: e.target.value };
+                setFormData({ ...formData, WorkExp: u });
+              } } name={""}            />
+          </div>
+          <div className="md:col-span-3">
+            <FormFiled 
+              Lable="Position"
+              in_PlaceHolder="Software Engineer"
+              value={work.position}
+              onChange={(e) => {
+                const u = [...formData.WorkExp];
+                u[index] = { ...u[index], position: e.target.value };
+                setFormData({ ...formData, WorkExp: u });
+              } } name={""}            />
+          </div>
+          <div className="md:col-span-2">
+            <CustomDatePicker 
+              Lable="From Date"
+              value={work.FromDate}
+              onChange={(val) => {
+                const v = typeof val === "string" ? val : (val.target?.value || "");
+                const u = [...formData.WorkExp];
+                u[index] = { ...u[index], FromDate: v };
+                setFormData({ ...formData, WorkExp: u });
+              } } name={""}            />
+          </div>
+          <div className="md:col-span-2">
+            <CustomDatePicker 
+              Lable="To Date"
+              value={work.ToDate}
+              onChange={(val) => {
+                const v = typeof val === "string" ? val : (val.target?.value || "");
+                const u = [...formData.WorkExp];
+                u[index] = { ...u[index], ToDate: v };
+                setFormData({ ...formData, WorkExp: u });
+              } } name={""}            />
+          </div>
+          <div className="md:col-span-2 flex items-end justify-center">
+            {formData.WorkExp.length > 1 && (
+              <button type="button" className="emp-remove-btn" onClick={() => removeWorkexpSection(index)}>
+                <FaTrash size={13} />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </AnimRow>
+  ))}
+</section>
           </AnimSection>
 
+{/* Family Details */}
           <AnimSection delay={300}>
             <section>
               <div className="emp-section-head">
-                Dependent Details
-                <button type="button" className="emp-add-btn" onClick={addDependentSection}>
+                Family Details
+                <button type="button" className="emp-add-btn" onClick={addFamilySection}>
                   <FaPlus size={11} /> Add Person
                 </button>
               </div>
-              {formData.dependents.map((Depen, index) => (
+              {formData.Familys.map((Depen, index) => (
                 <AnimRow key={index}>
                   <div className="emp-row-card">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                       <div className="md:col-span-3">
-                        <FormFiled name="name" value={Depen.person_name} Lable="Name" in_PlaceHolder="Dependent Name"
-                          onChange={(e) => { const u = [...formData.dependents]; u[index] = { ...u[index], person_name: e.target.value }; setFormData({ ...formData, dependents: u }); }} />
+                        <FormFiled name="name" value={Depen.person_name} Lable="Name" in_PlaceHolder="Family Name"
+                          onChange={(e) => { const u = [...formData.Familys]; u[index] = { ...u[index], person_name: e.target.value }; setFormData({ ...formData, Familys: u }); }} />
                       </div>
                       <div className="md:col-span-3">
                         <Selection label="Relationship" name="relationship" options={relationshipOptions} value={Depen.relationship_type}
-                          onChange={(e) => { const u = [...formData.dependents]; u[index] = { ...u[index], relationship_type: e.target.value }; setFormData({ ...formData, dependents: u }); }} />
+                          onChange={(e) => { const u = [...formData.Familys]; u[index] = { ...u[index], relationship_type: e.target.value }; setFormData({ ...formData, Familys: u }); }} />
                       </div>
                       <div className="md:col-span-3">
                         <FormFiled name="contact" value={Depen.contact} Lable="Contact" in_PlaceHolder="+91 9876543210"
-                          onChange={(e) => { const u = [...formData.dependents]; u[index] = { ...u[index], contact: e.target.value }; setFormData({ ...formData, dependents: u }); }} />
+                          onChange={(e) => { const u = [...formData.Familys]; u[index] = { ...u[index], contact: e.target.value }; setFormData({ ...formData, Familys: u }); }} />
                       </div>
                       <div className="md:col-span-2">
                         <CustomDatePicker name="DOB" value={Depen.person_dob} Lable="Date of Birth"
                           onChange={(val) => {
                             const v = typeof val === "string" ? val : (val.target?.value || "");
-                            const u = [...formData.dependents]; u[index] = { ...u[index], person_dob: v };
-                            setFormData({ ...formData, dependents: u });
+                            const u = [...formData.Familys]; u[index] = { ...u[index], person_dob: v };
+                            setFormData({ ...formData, Familys: u });
                           }} />
                       </div>
                       <div className="md:col-span-1 flex items-end justify-center">
-                        {formData.dependents.length > 1 ? (
-                          <button type="button" className="emp-remove-btn" onClick={() => removeDependentSection(index)} title="Remove">
+                        {formData.Familys.length > 1 ? (
+                          <button type="button" className="emp-remove-btn" onClick={() => removeFamilySection(index)} title="Remove">
                             <FaTrash size={13} />
                           </button>
                         ) : <div className="w-8 h-8 mb-4" />}
@@ -301,6 +382,8 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
             </section>
           </AnimSection>
 
+
+{/* Current Address Details */}
           <AnimSection delay={360}>
             <section>
               <div className="emp-section-head">Current Address Details</div>
@@ -313,6 +396,7 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
             </section>
           </AnimSection>
 
+{/* Permanent Address Details */}
           <AnimSection delay={420}>
             <section>
               <div className="emp-section-head">Permanent Address Details</div>

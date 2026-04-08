@@ -3,6 +3,7 @@ import { FaMoneyBill } from "react-icons/fa";
 import { FormFiled } from "../../../../Components/Common/FormFiled";
 import { Selection } from "../../../../Components/Common/Selection";
 import TailwindToggle from "../../../../Components/Common/Toggle";
+import type { PayrollData } from "../../../../Types/typesOnboarding";
 
 // ── NEW: accepts initialData ──────────────────────────────────────────────────
 type SalaryProps = {
@@ -12,12 +13,9 @@ type SalaryProps = {
   ClicktoAction?: () => void;
 };
 
-interface PayrollData {
-  provider: string; payType: string; currency: string; payFrequency: string;
-  annualSalary: number; bonus_Type: string; bonus_CalculationMode: "percentage" | "fixed"; bonus_Value: number;
-}
 
-const DEFAULT_SALARY: PayrollData = {
+
+export const DEFAULT_SALARY: PayrollData = {
   provider: "", payType: "", currency: "", payFrequency: "",
   annualSalary: 0, bonus_Type: "", bonus_CalculationMode: "percentage", bonus_Value: 0,
 };

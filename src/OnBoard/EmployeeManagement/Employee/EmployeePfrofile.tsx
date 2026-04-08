@@ -28,8 +28,8 @@ const BASE_URL = Api_URL
 
 const Edu_Get_URL           = (id: string) => `${BASE_URL}/employee/EmployeeEducation/${id}`;
 const Edu_UPDATE_URL        = (id: string) => `${BASE_URL}/employee/EmployeeEducationUpdate/${id}`; 
-const DEPENDENTS_Get_URL    = (id: string) => `${BASE_URL}/employee/EmployeeDependents/${id}`;
-const DEPENDENTS_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeDependentsUpdate/${id}`;
+const FamilyS_Get_URL    = (id: string) => `${BASE_URL}/employee/EmployeeFamilys/${id}`;
+const FamilyS_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeFamilysUpdate/${id}`;
 
 
 
@@ -98,8 +98,8 @@ export default function EmployeeProfile() {
   },
 ],
 
-    // Dependents — backend schema: person_name, relationship_type, contact, person_dob
-    Dependents:[
+    // Familys — backend schema: person_name, relationship_type, contact, person_dob
+    Familys:[
       {
         dep_name: "",
         dep_relationship: "",
@@ -121,7 +121,7 @@ export default function EmployeeProfile() {
         return res.json();
       }),
       fetchOrEmpty(Edu_Get_URL(id)),
-      fetchOrEmpty(DEPENDENTS_Get_URL(id)),
+      fetchOrEmpty(FamilyS_Get_URL(id)),
     ])
       .then(([empData, eduData, depData]) => {
         const empInfo = empData.Employee || {};
@@ -149,7 +149,7 @@ export default function EmployeeProfile() {
   : [{ degree: "", institution: "", graduation_year: "" }],
 
           // Backend returns: { person_name, relationship_type, contact, person_dob }
-          Dependents: depData.length? depData.map((dep: any) => ({
+          Familys: depData.length? depData.map((dep: any) => ({
             dep_name: dep.person_name,
             dep_relationship: dep.relationship_type,
             dep_contact: dep.contact,
@@ -208,7 +208,7 @@ const handleSave = async () => {
     // ===============================
     console.log("EMP URL:", `${BASE_URL}/employee/EmployeeUpdate/${id}`);
     console.log("EDU URL:", Edu_UPDATE_URL(id));
-    console.log("DEP URL:", DEPENDENTS_UPDATE_URL(id));
+    console.log("DEP URL:", FamilyS_UPDATE_URL(id));
 
     // ===============================
     // 1️⃣ UPDATE EMPLOYEE
@@ -256,16 +256,16 @@ const handleSave = async () => {
     }
 
     // ===============================
-    // 3️⃣ UPDATE DEPENDENTS (SAFE)
+    // 3️⃣ UPDATE FamilyS (SAFE)
     // ===============================
     let depRes: Response | null = null;
 
-    if (form.Dependents && form.Dependents.length > 0) {
-      depRes = await fetch(DEPENDENTS_UPDATE_URL(id), {
+    if (form.Familys && form.Familys.length > 0) {
+      depRes = await fetch(FamilyS_UPDATE_URL(id), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          form.Dependents.map((dep) => ({
+          form.Familys.map((dep) => ({
             person_name: dep.dep_name,
             relationship_type: dep.dep_relationship,
             contact: dep.dep_contact,
@@ -278,11 +278,11 @@ const handleSave = async () => {
 
       // 🚨 Ignore 404
       if (depRes.status !== 404 && !depRes.ok) {
-        throw new Error(`Dependents update failed (${depRes.status})`);
+        throw new Error(`Familys update failed (${depRes.status})`);
       }
 
       if (depRes.status === 404) {
-        console.warn("⚠️ Dependents not found → skipping update");
+        console.warn("⚠️ Familys not found → skipping update");
       }
     }
 
@@ -612,42 +612,41 @@ const handleSave = async () => {
   </div>
 </div>
 
-          {/* Dependents */}
+          {/* Familys */}
 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
     <User size={18} className="text-indigo-600" />
-    <h3 className="font-bold text-slate-700">Dependents</h3>
+    <h3 className="font-bold text-slate-700">Familys</h3>
   </div>
 
 {/* depand */}
 
   <div className="p-6">
     {isEditing ? (
-      /* EDIT MODE: Changed to grid-cols-1 for vertical stacking */
       <div className="space-y-6">
-        {form.Dependents.map((dep, index) => (
+        {form.Familys.map((dep, index) => (
           <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 border-b border-slate-100 last:border-0">
-            <FormFiled Lable="Name" name={`Dependents[${index}].dep_name`} value={dep.dep_name} onChange={handleChange} in_PlaceHolder="Enter dependent's name" />
-            <FormFiled Lable="Relationship" name={`Dependents[${index}].dep_relationship`} value={dep.dep_relationship} onChange={handleChange} in_PlaceHolder="Enter relationship" />
-            <FormFiled Lable="Contact" name={`Dependents[${index}].dep_contact`} value={dep.dep_contact} onChange={handleChange} in_PlaceHolder="Enter contact" />
-            <FormFiled Lable="Date of Birth" name={`Dependents[${index}].dep_dob`} value={dep.dep_dob} onChange={handleChange} in_PlaceHolder="YYYY-MM-DD" />
+            <FormFiled Lable="Name" name={`Familys[${index}].dep_name`} value={dep.dep_name} onChange={handleChange} in_PlaceHolder="Enter Family's name" />
+            <FormFiled Lable="Relationship" name={`Familys[${index}].dep_relationship`} value={dep.dep_relationship} onChange={handleChange} in_PlaceHolder="Enter relationship" />
+            <FormFiled Lable="Contact" name={`Familys[${index}].dep_contact`} value={dep.dep_contact} onChange={handleChange} in_PlaceHolder="Enter contact" />
+            <FormFiled Lable="Date of Birth" name={`Familys[${index}].dep_dob`} value={dep.dep_dob} onChange={handleChange} in_PlaceHolder="YYYY-MM-DD" />
           </div>
         ))}
         <button
           type="button"
           onClick={() => setForm({
             ...form,
-            Dependents: [...form.Dependents, { dep_name: "", dep_relationship: "", dep_contact: "", dep_dob: "" }],
+            Familys: [...form.Familys, { dep_name: "", dep_relationship: "", dep_contact: "", dep_dob: "" }],
           })}
           className="mt-2 text-indigo-600 font-medium hover:underline"
         >
-          + Add Dependent
+          + Add Family
         </button>
       </div>
     ) : (
       /* VIEW MODE: Changed to grid-cols-1 to ensure row-wise display */
       <div className="grid grid-cols-1 gap-y-8">
-        {form.Dependents.map((dep, index) => (
+        {form.Familys.map((dep, index) => (
           <div 
             key={index} 
             className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0"

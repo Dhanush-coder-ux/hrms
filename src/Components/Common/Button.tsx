@@ -1,9 +1,9 @@
 import React from "react";
 
-interface ButtonProps {
-  B_name: string;
-  ClickToAction: () => void;
-}
+  interface ButtonProps {
+    B_name: string;
+    ClickToAction: () => void;
+  }
 
 export const Button: React.FC<ButtonProps> = ({
   B_name,

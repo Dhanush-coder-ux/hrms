@@ -4,7 +4,7 @@ import { FormFiled } from "../../../../Components/Common/FormFiled";
 
 interface BankData { bankName: string; accountNumber: string; ifscCode: string; panNumber: string; }
 
-// ── NEW: accepts initialData ──────────────────────────────────────────────────
+
 type BankProps = {
   empId?: string;
   initialData?: BankData | null;
@@ -26,7 +26,7 @@ const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay
 };
 
 export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: BankProps) => {
-  // ── Seed from initialData on mount / back-navigation ─────────────────────
+
   const [localBankDetails, setLocalBankDetails] = useState<BankData>(() => initialData ?? DEFAULT_BANK);
   const [confirmAccountNumber, setConfirmAccountNumber] = useState(
     () => initialData?.accountNumber ?? ""

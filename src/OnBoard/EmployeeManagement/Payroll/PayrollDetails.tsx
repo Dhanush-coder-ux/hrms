@@ -1,6 +1,7 @@
 
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ExportCSVButton } from '../../../Components/Common/ExportButton';
+import { Backbutton } from '../../../Components/Common/Backbutton';
 
 const PayrollDetails = () => {
   const { id } = useParams();
@@ -19,9 +20,7 @@ const PayrollDetails = () => {
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="max-w-3xl mx-auto">
-        <button onClick={() => navigate(-1)} className="group mb-6 flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition-colors">
-          <span className="mr-2 transition-transform group-hover:-translate-x-1">←</span> Back to list
-        </button>
+        <Backbutton ClickToAction={() => navigate(-1)}/>
         <div className="flex justify-end mb-3 px-3">
           <ExportCSVButton data={[data]} columns={columns} />
         </div>

@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { FaUser, FaMoneyBill, FaPiggyBank, FaCheckCircle } from "react-icons/fa";
 
 interface VerifyProps {
-  employeeData: any; salaryData: any; bankData: any; onFinalSubmit: () => void;
+  employeeData: any; 
+  salaryData: any; 
+  bankData: any; 
+  insData: any;
+  onFinalSubmit: () => void;
+  
 }
 
 const AnimCard = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => {
@@ -22,7 +27,13 @@ const AnimCard = ({ children, delay = 0, className = "" }: { children: React.Rea
   );
 };
 
-export const Verify = ({ employeeData, salaryData, bankData, onFinalSubmit }: VerifyProps) => {
+export const Verify = ({ 
+  employeeData, 
+  salaryData, 
+  bankData, 
+  insData, // <--- Destructure it here
+  onFinalSubmit 
+}: VerifyProps) => {
   const InfoRow = ({ label, value }: { label: string; value: any }) => (
     <div style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -134,6 +145,19 @@ export const Verify = ({ employeeData, salaryData, bankData, onFinalSubmit }: Ve
                     ? `${salaryData.bonus_Value}%`
                     : `${salaryData.currency} ${salaryData.bonus_Value}`} />
               )}
+            </div>
+          </AnimCard>
+
+          <AnimCard delay={80}>
+            <div className="vfy-card vfy-card-emp">
+              <div className="vfy-card-head" style={{ color: "#4338ca" }}>
+                <FaUser /> Employee Details
+              </div>
+              <InfoRow label="Full Name"    value={employeeData.name} />
+              <InfoRow label="Employee ID"  value={employeeData.Emp_id} />
+              <InfoRow label="Department"   value={employeeData.Department} />
+              <InfoRow label="Designation"  value={employeeData.designation} />
+              <InfoRow label="Email"        value={employeeData.email} />
             </div>
           </AnimCard>
 
