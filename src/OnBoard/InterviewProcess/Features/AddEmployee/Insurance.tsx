@@ -267,23 +267,16 @@ export const Insurance = ({
                     initialState={hasESI}
                     onToggle={(val: boolean) => sethasESI(val)}
                   />
-                  
-                  {hasESI && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <CollapsibleSection>
+                  {hasESI && (<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormFiled name="esi_no" value={INSFD.esi_no || ""} Lable="ESI Number" in_PlaceHolder="Enter ESI Number" onChange={onChange} />
                       <FormFiled name="esi_name" value={INSFD.esi_name || ""} Lable="Name in ESI" in_PlaceHolder="Name as per ESI records" onChange={onChange} />
-                      </CollapsibleSection>
-                    </div>
-                    
-                    )||
-                    <CollapsibleSection>
+                    </div>)||(
                       <Checkbox checked={checkESI} label="Apply for new ESI Registration" onChange={(val: boolean) => setcheckESI(val)} name="apply_esi" />
-                    </CollapsibleSection>
-                    } 
+                       )}
                 </>
               )}
             </section>
+
             
           </AnimSection>
 
