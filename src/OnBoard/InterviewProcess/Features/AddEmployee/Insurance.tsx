@@ -15,18 +15,6 @@ type EmployeeRegisterProps = {
   setInsPFdata?: (data: any) => void;
 };
 
-/* ─── Collapsible Wrapper for Toggle Animations ───────────────────────────── */
-const CollapsibleSection = ({ isOpen, children }: { isOpen?: boolean; children: React.ReactNode }) => {
-  if (!isOpen) return null; // ✅ completely removes from DOM
-
-  return (
-    <div className="py-4">
-      {children}
-    </div>
-  );
-};
-
-
 
 const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number; }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -237,17 +225,14 @@ export const Insurance = ({
                 initialState={hasUAN}
                 onToggle={(val: boolean) => setHasUAN(val)}
               />
-              
-              <CollapsibleSection isOpen={hasUAN}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {hasUAN && (<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormFiled name="uan_number" value={INSFD.uan_number} Lable="UAN Number" in_PlaceHolder="Enter 12-digit UAN" onChange={onChange} />
                   <FormFiled name="pf_id" value={INSFD.pf_id} Lable="PF Member ID" in_PlaceHolder="Enter PF Member ID" onChange={onChange} />
-                </div>
-              </CollapsibleSection>
-
-              <CollapsibleSection isOpen={!hasUAN}>
+                </div>)||
+                (
                 <FormFiled name="aadhar_no" in_PlaceHolder="XXXX-XXXX-1234" value={INSFD.aadhar_no || ""} onChange={onChange} Lable="Aadhar Number (for new PF)" />
-              </CollapsibleSection>
+              )
+              }
             </section>
           </AnimSection>
 
@@ -289,18 +274,21 @@ export const Insurance = ({
                 initialState={hasINS}
                 onToggle={(val: boolean) => sethasINS(val)}
               />
-              <CollapsibleSection isOpen={hasINS}>
+              {hasINS&&( 
                 <FormFiled name="insurance_no" value={INSFD.insurance_no} Lable="Policy Number" in_PlaceHolder="Enter Policy ID" onChange={onChange} />
-              </CollapsibleSection>
-              <CollapsibleSection isOpen={!hasINS}>
-                <Selection label="Select Provider" name="insurance_provider" value={INSFD.insurance_provider || ""} options={InsuProvider} onChange={onChange} />
-              </CollapsibleSection>
+                )||(
+                    <Selection label="Select Provider" 
+                    name="insurance_provider" 
+                    value={INSFD.insurance_provider || ""} 
+                    options={InsuProvider} onChange={onChange} />
+                )}
             </section>
           </AnimSection>
 
           {/* NOMINEES (Only shows if Insurance toggle is ON) */}
-          <CollapsibleSection isOpen={!hasINS}>
-            <AnimSection delay={0}>
+
+          {!hasINS&&(
+                        <AnimSection delay={0}>
               <section className="bg-white p-2 rounded-xl">
                 <div className="emp-section-head">
                   <span>NOMINEE INFORMATION</span>
@@ -330,7 +318,9 @@ export const Insurance = ({
                 ))}
               </section>
             </AnimSection>
-          </CollapsibleSection>
+          )}
+
+
 
           <AnimSection delay={320}>
             <div className="pt-4">
