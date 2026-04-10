@@ -18,7 +18,7 @@ const PayrollDetails = () => {
   if (!data) return <div className="p-10 text-center text-gray-500">No record found.</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8  min-h-screen">
       <div className="max-w-3xl mx-auto">
         <Backbutton ClickToAction={() => navigate(-1)}/>
         <div className="flex justify-end mb-3 px-3">

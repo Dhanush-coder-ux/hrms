@@ -1,26 +1,14 @@
-import { NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
-import {
-  LayoutDashboard,
-  UserPlus,
-  FileText,
-  Users,
-  ChevronLeft,
-  ChevronRight,
-  PersonStanding
-} from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { employeeNavigation, onboardNavigation } from "../PanalSidebar";
 
-export const OnboardSidebar = () => {
+export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
-  const onboardNavigation = [
-    { label: "Dashboard", path: "/onboard", icon: LayoutDashboard },
-    { label: "Candidates", path: "/onboard/candidates", icon: UserPlus },
-    { label: "Interviews", path: "/onboard/interviews", icon: Users },
-    { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
-    { label: "Add Employee", path: "/onboard/add-employee", icon: PersonStanding },
-  ];
+  const isEmployeeModule = location.pathname.startsWith("/EmployeeManagement");
+  const currentNav = isEmployeeModule ? employeeNavigation : onboardNavigation;
 
   return (
  <aside 
@@ -49,7 +37,7 @@ export const OnboardSidebar = () => {
 
       {/* Slim Navigation */}
       <nav className="flex-1 px-2 space-y-0.5">
-        {onboardNavigation.map((item) => {
+        {currentNav.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <NavLink

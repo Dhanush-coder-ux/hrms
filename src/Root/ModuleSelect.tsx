@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { UserPlus, UserMinus, UserCheck } from "lucide-react";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 export const ModuleSelect = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="h-full bg-gray-100 flex flex-col items-center justify-center">
+    <div className="h-full  flex flex-col items-center justify-center">
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-gray-800 mb-12">
@@ -58,7 +59,7 @@ export const ModuleSelect = () => {
         </div>
 
         {/* Offboard CARD */}
-                <div
+        <div
           onClick={() => navigate("/Offboard")}
           className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
           hover:shadow-xl hover:-translate-y-1 transition duration-300"
@@ -75,6 +76,27 @@ export const ModuleSelect = () => {
 
           <p className="text-gray-500 text-sm mt-2">
             Employee offboarding process
+          </p>
+        </div>
+
+        {/* Admin Login */}
+        <div
+          onClick={() => navigate("/Offboard")}
+          className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
+          hover:shadow-xl hover:-translate-y-1 transition duration-300"
+        >
+          <div className="flex justify-center mb-4">
+            <div className="p-4 bg-blue-100 rounded-full">
+              <MdOutlineAdminPanelSettings size={36} className="text-yellow-600" />
+            </div>
+          </div>
+
+          <h2 className="text-lg font-semibold text-gray-800">
+            Admin
+          </h2>
+
+          <p className="text-gray-500 text-sm mt-2">
+            Tools Fix & Update process
           </p>
         </div>
 

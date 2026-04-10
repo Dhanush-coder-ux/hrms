@@ -185,7 +185,7 @@ export const Verify = ({ employeeData, salaryData, bankData, insData, onFinalSub
                 </div>
                 <div>
                   <span className="text-[11px] font-bold text-slate-400 uppercase">Insurance Nominees</span>
-                  {insData.Nominees?.map((n: any, i: number) => (
+                  {insData.Nominee?.map((n: any, i: number) => (
                     <div key={i} className="flex justify-between text-sm py-1 border-b border-dashed">
                       <span>{n.nominee_name}</span>
                       <span className="text-xs font-mono">{n.nominee_aadhar}</span>

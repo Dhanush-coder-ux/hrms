@@ -127,7 +127,7 @@ const PayrollComponents = ({ data: initialData }: PageProps) => {
     );
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8  min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">

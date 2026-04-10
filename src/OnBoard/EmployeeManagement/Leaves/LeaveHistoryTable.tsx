@@ -8,7 +8,7 @@ interface HistoryTableProps {
 
 export const LeaveHistoryTable = ({ history, getStatusStyle }: HistoryTableProps) => {
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className=" rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
       {/* Table Header Section */}
       <div className="px-8 py-6 border-b border-slate-50 flex items-center justify-between">
         <h3 className="text-xl font-bold text-slate-800">Detailed History</h3>

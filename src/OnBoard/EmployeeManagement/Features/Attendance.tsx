@@ -142,7 +142,7 @@ const updateStatus = async () => {
   const isToday = selectedDate === todayStr();
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-[#f8f9fa] min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8  min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>

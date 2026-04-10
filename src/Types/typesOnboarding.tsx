@@ -41,7 +41,7 @@ export interface InsuranceTypes {
   esi_no:string;
   esi_name: string;
   insurance_provider: string;
-  Nominees :Nominees[];
+  Nominee :Nominees[];
 }
 
 export interface PayrollData {

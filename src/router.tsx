@@ -4,7 +4,7 @@ import { RootLayout } from "./Root/RootLayout";
 import { ModuleSelect } from "./Root/ModuleSelect";
 
 // ── Employee Management (was "OnBoard") ─────────────────────────────────────
-import MainLayout from "./OnBoard/EmployeeManagement/Components/Layout/MainLayout";
+
 import { Dashboard as EmpDashboard } from "./OnBoard/EmployeeManagement/Features/Dashboard";
 import {Attendance} from "./OnBoard/EmployeeManagement/Features/Attendance";
 
@@ -17,7 +17,7 @@ import { Events } from "./OnBoard/EmployeeManagement/Features/Events";
 import { EmployeeLeaveDetails } from "./OnBoard/EmployeeManagement/Leaves/EmployeeLeaveDetails";
 
 // ── Onboard Module ───────────────────────────────────────────────────────────
-import OnbordMainLayout from "./OnBoard/Components/Layout/OnboardMainLayout";
+
 import AddEmployee from "./OnBoard/InterviewProcess/Features/AddEmployee";
 import EmployeeRegister from "./OnBoard/InterviewProcess/Features/AddEmployee/EmployeeRegistor";
 import { Salary } from "./OnBoard/InterviewProcess/Features/AddEmployee/Salary";
@@ -40,7 +40,6 @@ export const router = createBrowserRouter([
       // OnBOARD MODULE (Employee Management)
       {
         path: "EmployeeManagement",
-        element: <MainLayout />,
         children: [
           { index: true,                          element: <EmpDashboard /> },
           { path: "attendance",                   element: <Attendance /> },
@@ -59,7 +58,7 @@ export const router = createBrowserRouter([
 
       {
         path: "onboard",
-        element: <OnbordMainLayout />,
+        
         children: [
           {
             index: true,
@@ -73,6 +72,9 @@ export const router = createBrowserRouter([
           {path:"offers",                    element:<OfferLetter/>}
         ],
       },
+      {
+        path : "Admin"
+      }
 
     ],
   },

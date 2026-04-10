@@ -1,18 +1,30 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
+import { Sidebar } from "./Sidebar";
 
 export const RootLayout = () => {
-  return (
-    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
+  const location = useLocation();
+  const hideSidebarRoutes = ["/"];
+  const isSelectionPage = hideSidebarRoutes.includes(location.pathname);
 
-      {/* Common Navbar */}
+  return (
+    // 1. Change to flex-col so Navbar stays at the top
+    <div className="h-screen w-full flex flex-col overflow-hidden">
+      
       <Navbar />
 
-      {/* Page Content */}
-      <div className="flex-1 overflow-hidden">
-        <Outlet />
-      </div>
+      {/* 2. This container holds the Sidebar and Main content side-by-side */}
+      <div className="flex flex-1 overflow-hidden">
+        
+        {!isSelectionPage && <Sidebar />}
 
+        <main className="flex-1 h-full overflow-y-auto custom-scrollbar">
+          <div className=" bg-slate-50 p-4 lg:p-6 min-h-full">
+            <Outlet />
+          </div>
+        </main>
+
+      </div>
     </div>
   );
 };

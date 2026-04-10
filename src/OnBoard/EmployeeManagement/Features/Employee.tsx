@@ -71,7 +71,7 @@ export default function Employee() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
+    <div className="min-h-screen  pb-12">
       {/* ── Page Header ── */}
       <div className="px-8 pt-8">
         <h1 className="text-xl font-bold text-gray-900 tracking-tight">

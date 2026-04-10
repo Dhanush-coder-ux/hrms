@@ -280,7 +280,7 @@ export const Events = () => {
 
   /* ── Render ── */
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen  p-4 md:p-6">
       {/* Page header */}
       <div className="max-w-7xl mx-auto mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>

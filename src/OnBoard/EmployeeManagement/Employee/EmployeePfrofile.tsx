@@ -308,7 +308,7 @@ const handleSave = async () => {
     );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-20">
+    <div className="min-h-screen pb-20">
       {/* Top Nav */}
       <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">

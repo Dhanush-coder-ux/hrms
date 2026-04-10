@@ -92,8 +92,8 @@ const DEFAULT_FORM: InsuranceTypes = {
   esi_no: "",
   esi_name: "",
   insurance_provider: "",
-  Nominees: [{ nominee_name: "", nominee_aadhar: "" }],
-  apply_esi: undefined
+  Nominee: [{ nominee_name: "", nominee_aadhar: "" }],
+  apply_esi: ""
 };
 
 /* ─── Main component ──────────────────────────────────────────────────────── */
@@ -136,32 +136,55 @@ export const Insurance = ({
   };
 
   const handleNomineeChange = (index: number, field: string, value: string) => {
-    const updatedNominees = [...(INSFD.Nominees || [])];
+    const updatedNominees = [...(INSFD.Nominee || [])];
     updatedNominees[index] = { ...updatedNominees[index], [field]: value };
-    setINSFD({ ...INSFD, Nominees: updatedNominees });
+    setINSFD({ ...INSFD, Nominee: updatedNominees });
   };
 
   const addNomineeSection = () => {
-    const nextIndex = (INSFD.Nominees || []).length;
+    const nextIndex = (INSFD.Nominee || []).length;
     setNewNomineeIndices((prev) => new Set(prev).add(nextIndex));
     setINSFD({
       ...INSFD,
-      Nominees: [...(INSFD.Nominees || []), { nominee_name: "", nominee_aadhar: "" }],
+      Nominee: [...(INSFD.Nominee || []), { nominee_name: "", nominee_aadhar: "" }],
     });
   };
 
   const removeNomineeSection = (index: number) => {
-    if (INSFD.Nominees.length > 1) {
-      const updated = INSFD.Nominees.filter((_: any, i: number) => i !== index);
-      setINSFD({ ...INSFD, Nominees: updated });
+    if (INSFD.Nominee.length > 1) {
+      const updated = INSFD.Nominee.filter((_: any, i: number) => i !== index);
+      setINSFD({ ...INSFD, Nominee: updated });
     }
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setInsPFdata?.(INSFD);
-    ClicktoAction?.();
+
+  //  onSubmit
+
+const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  // This ensures every single field is at least an empty string, never null
+  const payload = {
+    uan_number: INSFD.uan_number || "",
+    pf_id: INSFD.pf_id || "",
+    insurance_no: INSFD.insurance_no || "",
+    aadhar_no: INSFD.aadhar_no || "",
+    esi_no: INSFD.esi_no || "",
+    esi_name: INSFD.esi_name || "",
+    insurance_provider: INSFD.insurance_provider || "",
+    apply_esi: checkESI ? "New registration apply" : "", // Force string
+    Nominee: INSFD.Nominee.map(n => ({
+        nominee_name: n.nominee_name || "",
+        nominee_aadhar: n.nominee_aadhar || ""
+    }))
   };
+
+  console.log("Payload being sent:", payload); // Check your browser console!
+  setInsPFdata?.(payload);
+  ClicktoAction?.();
+};
+
+
 
   return (
     <>
@@ -256,7 +279,15 @@ export const Insurance = ({
                       <FormFiled name="esi_no" value={INSFD.esi_no || ""} Lable="ESI Number" in_PlaceHolder="Enter ESI Number" onChange={onChange} />
                       <FormFiled name="esi_name" value={INSFD.esi_name || ""} Lable="Name in ESI" in_PlaceHolder="Name as per ESI records" onChange={onChange} />
                     </div>)||(
-                      <Checkbox checked={checkESI} label="Apply for new ESI Registration" onChange={(val: boolean) => setcheckESI(val)} name="apply_esi" />
+                  <Checkbox 
+                    checked={checkESI} 
+                    label="Apply for new ESI Registration" 
+                    onChange={(val: boolean) => {
+                    setcheckESI(val);
+                    setINSFD(prev => ({ ...prev, apply_esi: val ? "New registration apply" : "" }));
+                      }} 
+                    name="apply_esi" 
+                  />
                        )}
                 </>
               )}
@@ -297,7 +328,7 @@ export const Insurance = ({
                   </button>
                 </div>
 
-                {INSFD.Nominees.map((nominee: any, index: number) => (
+                {INSFD.Nominee.map((nominee: any, index: number) => (
                   <NomineeRow key={index} isNew={newNomineeIndices.has(index)}>
                     <div className="emp-row-card">
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
@@ -308,7 +339,7 @@ export const Insurance = ({
                           <FormFiled Lable="Aadhar Number" in_PlaceHolder="XXXX-XXXX-XXXX" value={nominee.nominee_aadhar} name={`nominee_aadhar_${index}`} onChange={(e) => handleNomineeChange(index, "nominee_aadhar", e.target.value)} />
                         </div>
                         <div className="md:col-span-2 flex items-end justify-center pb-2">
-                          {INSFD.Nominees.length > 1 && (
+                          {INSFD.Nominee.length > 1 && (
                             <button type="button" className="emp-remove-btn" onClick={() => removeNomineeSection(index)}><FaTrash size={14} /></button>
                           )}
                         </div>
