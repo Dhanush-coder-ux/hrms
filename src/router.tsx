@@ -27,6 +27,9 @@ import { DepartmentProfile } from "./OnBoard/EmployeeManagement/Department/Depar
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
 import  { Interview} from "./OnBoard/InterviewProcess/Features/Interviews";
 import { OfferLetter } from "./OnBoard/InterviewProcess/Features/OfferLetter";
+import { StackVariables} from "./AdminPort/Features/StackVeriables";
+import { DepartmentsStacks } from "./AdminPort/Features/Department/DepartmentStacks";
+import { EmployeeStack } from "./AdminPort/Features/Employee/EmployeeStack";
 
 export const router = createBrowserRouter([
   {
@@ -68,12 +71,21 @@ export const router = createBrowserRouter([
           { path: "employeeregistration", element: <EmployeeRegister /> },
           { path: "Salary",               element: <Salary /> },
           {path: "Candidates",            element:<Candidates/>},
-          {path:"interviews",              element:<Interview/>},
-          {path:"offers",                    element:<OfferLetter/>}
+          {path:"interviews",             element:<Interview/>},
+          {path:"offers",                 element:<OfferLetter/>}
         ],
       },
       {
-        path : "Admin"
+        path : "Admin",
+        children:[
+          {
+            index: true,
+            element: <h1>Admin DashBoard</h1>
+          },
+          {path:"stacks",        element:<StackVariables/>},
+          {path:"departmentstacks", element:<DepartmentsStacks/>    },
+          {path:"employeestacks",     element:<EmployeeStack/> }
+        ]
       }
 
     ],

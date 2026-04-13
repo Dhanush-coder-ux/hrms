@@ -35,7 +35,7 @@ export const EmployeeLeaveDetails = () => {
     <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6">
         <div>
-          <Backbutton ClickToAction={()=>{navigate(-1)}}/>
+          <Backbutton/>
           <h2 className="text-3xl font-extrabold text-gray-800">Leave Details</h2>
           <p className="text-gray-500">Employee ID: <span className="font-medium text-blue-600">{employee.Emp_id}</span></p>
         </div>

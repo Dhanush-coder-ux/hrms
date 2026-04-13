@@ -1681,17 +1681,64 @@
       "status": "Late"
     }
   ],
- 
   "employees": [
-    { "id": "E101-1", "name": "Parth", "dep_id": 101, "department": "Engineering", "designation": "Full Stack Developer", "status": "Active" },
-    { "id": "E101-2", "name": "Amit Shah", "dep_id": 101, "department": "Engineering", "designation": "Backend Lead", "status": "Active" },
-    { "id": "E102-1", "name": "Jane Doe", "dep_id": 102, "department": "Design", "designation": "UX Director", "status": "Active" },
-    { "id": "E102-2", "name": "Leo Messi", "dep_id": 102, "department": "Design", "designation": "UI Designer", "status": "Active" },
-    { "id": "E103-1", "name": "Chris P.", "dep_id": 103, "department": "Marketing", "designation": "Marketing Manager", "status": "Active" },
-    { "id": "E104-1", "name": "Monica G.", "dep_id": 104, "department": "HR", "designation": "HR Manager", "status": "Active" },
-    { "id": "E105-1", "name": "Steve R.", "dep_id": 105, "department": "Finance", "designation": "Finance Head", "status": "Active" }
+    {
+      "id": "E101-1",
+      "name": "Parth",
+      "dep_id": 101,
+      "department": "Engineering",
+      "designation": "Full Stack Developer",
+      "status": "Active"
+    },
+    {
+      "id": "E101-2",
+      "name": "Amit Shah",
+      "dep_id": 101,
+      "department": "Engineering",
+      "designation": "Backend Lead",
+      "status": "Active"
+    },
+    {
+      "id": "E102-1",
+      "name": "Jane Doe",
+      "dep_id": 102,
+      "department": "Design",
+      "designation": "UX Director",
+      "status": "Active"
+    },
+    {
+      "id": "E102-2",
+      "name": "Leo Messi",
+      "dep_id": 102,
+      "department": "Design",
+      "designation": "UI Designer",
+      "status": "Active"
+    },
+    {
+      "id": "E103-1",
+      "name": "Chris P.",
+      "dep_id": 103,
+      "department": "Marketing",
+      "designation": "Marketing Manager",
+      "status": "Active"
+    },
+    {
+      "id": "E104-1",
+      "name": "Monica G.",
+      "dep_id": 104,
+      "department": "HR",
+      "designation": "HR Manager",
+      "status": "Active"
+    },
+    {
+      "id": "E105-1",
+      "name": "Steve R.",
+      "dep_id": 105,
+      "department": "Finance",
+      "designation": "Finance Head",
+      "status": "Active"
+    }
   ],
-
   "Total_leaves": [
     {
       "empid": "EMP001",
@@ -2048,7 +2095,8 @@
       "email": "arjun.s@techcorp.in",
       "reference": "LinkedIn",
       "role": "Software Engineer",
-      "status": "Rejected"
+      "status": "Rejected",
+      "id": "e002"
     },
     {
       "c_id": "CAN-002",
@@ -2057,7 +2105,8 @@
       "email": "priya.p@solutions.com",
       "reference": "Employee Referral",
       "role": "Product Designer",
-      "status": "Rejected"
+      "status": "Rejected",
+      "id": "3a50"
     },
     {
       "c_id": "CAN-003",
@@ -2067,7 +2116,8 @@
       "reference": "Indeed",
       "role": "Regional Manager",
       "status": "Selected",
-      "resumeUrl": "https://example.com/resumes/michael_scott.pdf"
+      "resumeUrl": "https://example.com/resumes/michael_scott.pdf",
+      "id": "1fc6"
     },
     {
       "c_id": "CAN-004",
@@ -2076,7 +2126,8 @@
       "email": "ananya.i@devhouse.io",
       "reference": "Direct",
       "role": "Backend Developer",
-      "status": "Rejected"
+      "status": "Rejected",
+      "id": "f7ef"
     },
     {
       "c_id": "CAN-005",
@@ -2085,7 +2136,8 @@
       "email": "d.miller@global.net",
       "reference": "Recruiter",
       "role": "DevOps Engineer",
-      "status": "Selected"
+      "status": "Selected",
+      "id": "4063"
     },
     {
       "c_id": "CAN-006",
@@ -2094,7 +2146,8 @@
       "email": "s.connor@resistance.org",
       "reference": "Unknown",
       "role": "Security Specialist",
-      "status": "Rejected"
+      "status": "Rejected",
+      "id": "3bc7"
     },
     {
       "c_id": "CAN-007",
@@ -2103,7 +2156,8 @@
       "email": "rohan.m@startup.co",
       "reference": "LinkedIn",
       "role": "Full Stack Dev",
-      "status": "Selected"
+      "status": "Selected",
+      "id": "e58f"
     },
     {
       "c_id": "CAN-008",
@@ -2112,7 +2166,8 @@
       "email": "elena.rod@madrid.es",
       "reference": "Glassdoor",
       "role": "Data Scientist",
-      "status": "Rejected"
+      "status": "Rejected",
+      "id": "bc23"
     },
     {
       "c_id": "CAN-009",
@@ -2121,7 +2176,8 @@
       "email": "k.malone@accounting.com",
       "reference": "Walk-in",
       "role": "Accountant",
-      "status": "Selected"
+      "status": "Selected",
+      "id": "75e7"
     },
     {
       "c_id": "CAN-010",
@@ -2130,7 +2186,258 @@
       "email": "li.wei@techhub.cn",
       "reference": "Campus Placement",
       "role": "QA Engineer",
-      "status": "Rejected"
+      "status": "Rejected",
+      "id": "6166"
+    }
+  ],
+  "departmentsStacks": [
+    {
+      "id": "1",
+      "name": "Engineering",
+      "head": "Aravind Kumar",
+      "employees": 24,
+      "iconBg": "#b3b9f4",
+      "iconName": "FaFireExtinguisher",
+      "iconColor": "#205de1"
+    },
+    {
+      "id": "2",
+      "name": "HR",
+      "head": "Sandeep Reddy",
+      "employees": 6,
+      "iconBg": "#dbeafe",
+      "iconName": "FaFireExtinguisher",
+      "iconColor": "#2563eb"
+    },
+    {
+      "id": "df15",
+      "name": "Sales",
+      "head": "ravi kumar",
+      "employees": 0,
+      "iconBg": "#285ce0",
+      "iconName": "FaUserTie",
+      "iconColor": "#a2deee"
+    },
+    {
+      "id": "bf02",
+      "name": "jkajk",
+      "head": "deepak",
+      "employees": 0,
+      "iconName": "FaTools",
+      "iconBg": "#e5f5eb",
+      "iconColor": "#2aef72"
+    }
+  ],
+  "payrollProviders": [
+    {
+      "id": "provider_001",
+      "name": "Basic Payroll",
+      "description": "Simple payroll structure",
+      "earnings": [
+        {
+          "code": "BASIC",
+          "name": "Basic Salary",
+          "type": "fixed",
+          "value": 25000
+        },
+        {
+          "code": "HRA",
+          "name": "House Rent Allowance",
+          "type": "percentage",
+          "value": "40%"
+        }
+      ],
+      "deductions": [
+        {
+          "code": "PF",
+          "name": "Provident Fund",
+          "type": "percentage",
+          "value": "12%"
+        },
+        {
+          "code": "TAX",
+          "name": "Income Tax",
+          "type": "fixed",
+          "value": 2000
+        }
+      ]
+    },
+    {
+      "id": "provider_002",
+      "name": "Startup Payroll",
+      "description": "Flexible startup payroll",
+      "earnings": [
+        {
+          "code": "BASIC",
+          "name": "Basic Salary",
+          "type": "fixed",
+          "value": 30000
+        },
+        {
+          "code": "BONUS",
+          "name": "Performance Bonus",
+          "type": "fixed",
+          "value": 5000
+        }
+      ],
+      "deductions": [
+        {
+          "code": "PF",
+          "name": "Provident Fund",
+          "type": "percentage",
+          "value": "10%"
+        },
+        {
+          "code": "LOP",
+          "name": "Loss of Pay",
+          "type": "fixed",
+          "value": 1000
+        }
+      ]
+    },
+    {
+      "id": "provider_003",
+      "name": "Corporate Payroll",
+      "description": "Enterprise payroll system",
+      "earnings": [
+        {
+          "code": "BASIC",
+          "name": "Basic Salary",
+          "type": "fixed",
+          "value": 50000
+        },
+        {
+          "code": "DA",
+          "name": "Dearness Allowance",
+          "type": "percentage",
+          "value": "20%"
+        }
+      ],
+      "deductions": [
+        {
+          "code": "ESI",
+          "name": "ESI",
+          "type": "percentage",
+          "value": "1.75%"
+        },
+        {
+          "code": "PROF_TAX",
+          "name": "Professional Tax",
+          "type": "fixed",
+          "value": 200
+        }
+      ]
+    },
+    {
+      "id": "provider_004",
+      "name": "Local Payroll",
+      "description": "Custom local payroll",
+      "earnings": [
+        {
+          "code": "BASIC",
+          "name": "Basic Salary",
+          "type": "fixed",
+          "value": 20000
+        },
+        {
+          "code": "ALLOW",
+          "name": "Allowance",
+          "type": "percentage",
+          "value": "15%"
+        }
+      ],
+      "deductions": [
+        {
+          "code": "PF",
+          "name": "PF",
+          "type": "percentage",
+          "value": "12%"
+        },
+        {
+          "code": "TAX",
+          "name": "Tax",
+          "type": "fixed",
+          "value": 1500
+        }
+      ]
+    },
+    {
+      "id": "provider_005",
+      "name": "Tibos",
+      "description": "nothing of it",
+      "supports": {
+        "esi_auto": false,
+        "hra_exemption": false,
+        "tax_calculation": false,
+        "attendance_integration": false
+      },
+      "earnings": [
+        {
+          "code": "house allowence",
+          "name": "",
+          "type": "Percentage",
+          "value": 5
+        }
+      ],
+      "deductions": []
+    }
+  ],
+  "StackValue": [
+    {
+      "id": "1",
+      "gender": [
+        {
+          "label": "Male",
+          "value": "Male"
+        },
+        {
+          "label": "Female",
+          "value": "female"
+        }
+      ],
+      "payType": [
+        {
+          "label": "Monthly",
+          "value": "monthly"
+        }
+      ],
+      "employeeType": [
+        {
+          "label": "Full Time",
+          "value": "fulltime"
+        }
+      ],
+      "currency": [
+        {
+          "label": "INR - Indian rupee (₹)",
+          "value": "INR",
+          "symbol": "₹"
+        }
+      ],
+      "payFrequency": [
+        {
+          "label": "Monthly",
+          "value": "monthly"
+        }
+      ],
+      "relationship": [
+        {
+          "label": "Father",
+          "value": "father"
+        },
+        {
+          "label": "Mother",
+          "value": "mother"
+        },
+        {
+          "label": "Brother",
+          "value": "brother"
+        },
+        {
+          "label": "Wife",
+          "value": "wife"
+        }
+      ]
     }
   ]
 }

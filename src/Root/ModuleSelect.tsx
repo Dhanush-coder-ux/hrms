@@ -81,7 +81,7 @@ export const ModuleSelect = () => {
 
         {/* Admin Login */}
         <div
-          onClick={() => navigate("/Offboard")}
+          onClick={() => navigate("/Admin")}
           className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
           hover:shadow-xl hover:-translate-y-1 transition duration-300"
         >

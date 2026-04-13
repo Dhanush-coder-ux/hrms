@@ -5,6 +5,11 @@ import { CustomDatePicker } from "../../../../Components/Common/CustomDatePicker
 import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
 import { Checkbox } from "../../../../Components/Common/CheckBox";
 import type {Employee ,Education} from "../../../../Types/typesOnboarding"
+// import { departmentOptions,genderOptions,useEmpTypeOptions, useRelationshipOptions } from "../../../../Stacks";
+
+import { useOptions, Stackvalues,DepAPI_Url } from "../../../../Stacks";
+import { useListOptions } from "../../../../Hooks/ListOption";
+
 
 const DEFAULT_FORM: Employee = {
   Emp_id: "", f_name: "", l_name: "", name: "", gender: "", dob: "", email: "", phone: "",
@@ -58,6 +63,16 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState<Employee>(() => initialData ?? DEFAULT_FORM);
 
+const departmentOptions = useListOptions(DepAPI_Url);
+
+const genderOptions = useOptions(Stackvalues, "gender", "label", "value");
+
+const relationOptions = useOptions(Stackvalues, "relationship", "label", "value");
+
+const employeeTypeOptions = useOptions(Stackvalues, "employeeType", "label", "value");
+
+
+  
   // If parent re-passes initialData (e.g. hot-reload), stay in sync
   useEffect(() => {
     if (initialData) setFormData(initialData);
@@ -122,14 +137,6 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
     e.preventDefault(); setEmployeeData?.(formData); ClicktoAction?.();
   };
 
-  const genderOptions = [{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }];
-  const departmentOptions = [{ label: "HR", value: "HR" }, { label: "IT", value: "IT" }, { label: "Finance", value: "Finance" }];
-  const empTypeOptions = [{ label: "Full Time", value: "Full Time" }, { label: "Part Time", value: "Part Time" }, { label: "Contract", value: "Contract" }];
-  const relationshipOptions = [
-    { label: "Wife", value: "Wife" }, { label: "Child", value: "Child" },
-    { label: "Father", value: "Father" }, { label: "Mother", value: "Mother" },
-    { label: "Brother", value: "Brother" }, { label: "Sister", value: "Sister" },
-  ];
 
   return (
     <>
@@ -215,7 +222,7 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
                 <Selection label="Department" name="Department" options={departmentOptions} value={formData.Department || ""} onChange={onChange} />
                 <FormFiled name="designation" value={formData.designation} Lable="Designation" in_PlaceHolder="Software Engineer" onChange={onChange} />
                 <CustomDatePicker name="DateOfJoining" value={formData.DateOfJoining || ""} Lable="Date of Joining" onChange={onChange} />
-                <Selection label="Employment Type" name="emp_type" options={empTypeOptions} value={formData.emp_type || ""} onChange={onChange} />
+                <Selection label="Employment Type" name="emp_type" options={employeeTypeOptions} value={formData.emp_type || ""} onChange={onChange} />
               </div>
             </section>
           </AnimSection>
@@ -353,7 +360,7 @@ const EmployeeRegister = ({ ClicktoAction, setEmployeeData, initialData }: Emplo
                           onChange={(e) => { const u = [...formData.Familys]; u[index] = { ...u[index], person_name: e.target.value }; setFormData({ ...formData, Familys: u }); }} />
                       </div>
                       <div className="md:col-span-3">
-                        <Selection label="Relationship" name="relationship" options={relationshipOptions} value={Depen.relationship_type}
+                        <Selection label="Relationship" name="relationship" options={relationOptions} value={Depen.relationship_type}
                           onChange={(e) => { const u = [...formData.Familys]; u[index] = { ...u[index], relationship_type: e.target.value }; setFormData({ ...formData, Familys: u }); }} />
                       </div>
                       <div className="md:col-span-3">

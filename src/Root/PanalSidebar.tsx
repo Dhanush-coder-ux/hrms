@@ -1,4 +1,4 @@
-import { Building2, CalendarCheck, CalendarDays, FileSpreadsheet, FileText, LayoutDashboard, PersonStanding, ReceiptIndianRupee, UserPlus, Users } from "lucide-react";
+import { Building2, CalendarCheck, CalendarDays, FileSpreadsheet, FileText, icons, LayoutDashboard, PersonStanding, ReceiptIndianRupee, UserPlus, Users, Variable } from "lucide-react";
 
  export const employeeNavigation = [
     { label: "Dashboard",  path: "/EmployeeManagement",            icon: LayoutDashboard },
@@ -17,3 +17,8 @@ import { Building2, CalendarCheck, CalendarDays, FileSpreadsheet, FileText, Layo
     { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
     { label: "Add Employee", path: "/onboard/add-employee", icon: PersonStanding },
   ];
+
+  export const AdminPort = [
+    {label: "Dashboard", path:"/admin" , icon: LayoutDashboard},
+    {label: "stack Values" , path:"/admin/stacks",  icon: Variable }
+  ]

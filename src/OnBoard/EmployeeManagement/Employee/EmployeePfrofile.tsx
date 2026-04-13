@@ -87,9 +87,6 @@ export default function EmployeeProfile() {
     panNumber:"",
     payFrequency:"",
 
-   
-
-
     education: [
   {
     degree: "",
@@ -97,7 +94,6 @@ export default function EmployeeProfile() {
     graduation_year: "",
   },
 ],
-
     // Familys — backend schema: person_name, relationship_type, contact, person_dob
     Familys:[
       {
@@ -109,7 +105,6 @@ export default function EmployeeProfile() {
     ]
   }
 );
-
 
   useEffect(() => {
     if (!id) return;

@@ -4,8 +4,10 @@ import { FormFiled } from "../../../../Components/Common/FormFiled";
 import { Selection } from "../../../../Components/Common/Selection";
 import TailwindToggle from "../../../../Components/Common/Toggle";
 import type { PayrollData } from "../../../../Types/typesOnboarding";
+import { useOptions } from "../../../../Stacks";
+import { useCurrencies } from "../../../../Hooks/CurrenciesSelect";
+import { useListOptions } from "../../../../Hooks/ListOption";
 
-// ── NEW: accepts initialData ──────────────────────────────────────────────────
 type SalaryProps = {
   empId?: string;
   initialData?: any;
@@ -13,36 +15,68 @@ type SalaryProps = {
   ClicktoAction?: () => void;
 };
 
-
+const PayRollAPI_Url = "http://localhost:3001/payrollProviders";
 
 export const DEFAULT_SALARY: PayrollData = {
-  provider: "", payType: "", currency: "", payFrequency: "",
-  annualSalary: 0, bonus_Type: "", bonus_CalculationMode: "percentage", bonus_Value: 0,
+  provider: "",
+  payType: "",
+  currency: "INR",           // ← default currency
+  payFrequency: "",
+  annualSalary: 0,
+  bonus_Type: "",
+  bonus_CalculationMode: "percentage",
+  bonus_Value: 0,
 };
 
-const CURRENCY_SYMBOL: Record<string, string> = {
-  USD: "$", EUR: "€", GBP: "£", INR: "₹", AUD: "A$", CAD: "C$", JPY: "¥", CNY: "¥", SGD: "S$",
-};
-
-const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+// ── Fade-up animation wrapper ────────────────────────────────────────────────
+const AnimSection = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) => {
   const [v, setV] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setV(true), delay); return () => clearTimeout(t); }, [delay]);
+  useEffect(() => {
+    const t = setTimeout(() => setV(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
   return (
-    <div style={{
-      opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(18px)",
-      transition: "opacity 0.45s ease, transform 0.45s cubic-bezier(0.4,0,0.2,1)",
-    }}>{children}</div>
+    <div
+      style={{
+        opacity: v ? 1 : 0,
+        transform: v ? "translateY(0)" : "translateY(18px)",
+        transition:
+          "opacity 0.45s ease, transform 0.45s cubic-bezier(0.4,0,0.2,1)",
+      }}
+    >
+      {children}
+    </div>
   );
 };
 
-export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProps) => {
+export const Salary = ({
+  setSalaryData,
+  ClicktoAction,
+  initialData,
+}: SalaryProps) => {
   const [B_togg, setB_togg] = useState(() => !!initialData?.bonus_Value);
   const bonusRef = useRef<HTMLDivElement>(null);
   const [bonusHeight, setBonusHeight] = useState(0);
 
-  // ── Seed from initialData on mount / back-navigation ─────────────────────
-  const [salaryData, setLocalSalaryData] = useState<PayrollData>(() => initialData ?? DEFAULT_SALARY);
+  // ── Form state ──────────────────────────────────────────────────────────────
+  const [salaryData, setLocalSalaryData] = useState<PayrollData>(
+    () => initialData ?? DEFAULT_SALARY,
+  );
 
+  // ── useCurrencies hook (replaces all old hardcoded currency logic) ───────────
+  const { currencyOptions, currencySymbolMap, currencyLoading, currencyError } =
+    useCurrencies();
+
+  // ── Derive live currency symbol from the hook's symbol map ──────────────────
+  const currSymbol = currencySymbolMap[salaryData.currency] ?? salaryData.currency ?? "$";
+
+  // ── Sync initialData on back-navigation ────────────────────────────────────
   useEffect(() => {
     if (initialData) {
       setLocalSalaryData(initialData);
@@ -50,6 +84,7 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
     }
   }, [initialData]);
 
+  // ── Bonus accordion height ──────────────────────────────────────────────────
   useEffect(() => {
     const el = bonusRef.current;
     if (!el) return;
@@ -65,34 +100,35 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
     }
   }, [B_togg]);
 
-  const currSymbol = CURRENCY_SYMBOL[salaryData.currency] ?? "$";
+  // ── Static options ──────────────────────────────────────────────────────────
+  const ProviderList = useListOptions(PayRollAPI_Url);
 
-  const ProviderList = [
-    { value: "adp", label: "ADP" }, { value: "gusto", label: "Gusto" },
-    { value: "paychex", label: "Paychex" }, { value: "rippling", label: "Rippling" },
-    { value: "quickbooks", label: "QuickBooks Payroll" }, { value: "bamboohr", label: "BambooHR" },
-    { value: "workday", label: "Workday" }, { value: "manual", label: "Manual / In-house" },
+  const PayTypeList = [
+    { value: "Salary", label: "Salary" },
+    { value: "Stipend", label: "Stipend" },
   ];
-  const PayTypeList = [{ value: "Salary", label: "Salary" }, { value: "Stipend", label: "Stipend" }];
-  const CurrencyList = [
-    { value: "USD", label: "USD - US Dollar" }, { value: "EUR", label: "EUR - Euro" },
-    { value: "GBP", label: "GBP - British Pound" }, { value: "INR", label: "INR - Indian Rupee" },
-    { value: "AUD", label: "AUD - Australian Dollar" }, { value: "CAD", label: "CAD - Canadian Dollar" },
-    { value: "JPY", label: "JPY - Japanese Yen" }, { value: "CNY", label: "CNY - Chinese Yuan" },
-    { value: "SGD", label: "SGD - Singapore Dollar" },
-  ];
+
   const bonusTypes = [
-    { value: "performance", label: "Performance Bonus" }, { value: "signing", label: "Signing Bonus" },
-    { value: "retention", label: "Retention Bonus" }, { value: "annual", label: "Annual / Year-End Bonus" },
-    { value: "spot", label: "Spot Bonus" }, { value: "referral", label: "Referral Bonus" },
-    { value: "project", label: "Project Completion Bonus" }, { value: "profit", label: "Profit Sharing" },
-  ];
-  const frequencies = [
-    { value: "annual", label: "Annual" }, { value: "monthly", label: "Monthly" },
+    { value: "performance", label: "Performance Bonus" },
+    { value: "signing", label: "Signing Bonus" },
+    { value: "retention", label: "Retention Bonus" },
+    { value: "annual", label: "Annual / Year-End Bonus" },
+    { value: "spot", label: "Spot Bonus" },
+    { value: "referral", label: "Referral Bonus" },
+    { value: "project", label: "Project Completion Bonus" },
+    { value: "profit", label: "Profit Sharing" },
   ];
 
+  const frequencies = [
+    { value: "annual", label: "Annual" },
+    { value: "monthly", label: "Monthly" },
+  ];
+
+  // ── Handlers ────────────────────────────────────────────────────────────────
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | { target: { name: string; value: any } }
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      | { target: { name: string; value: any } },
   ) => {
     const { name, value } = e.target;
     setLocalSalaryData((prev) => ({ ...prev, [name]: value }));
@@ -107,11 +143,25 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); setSalaryData?.(salaryData); ClicktoAction?.();
+    e.preventDefault();
+    setSalaryData?.(salaryData);
+    ClicktoAction?.();
   };
 
+  // ── Currency dropdown label / placeholder (loading & error states) ──────────
+  const currencyLabel = currencyLoading
+    ? "Currency (loading…)"
+    : currencyError
+      ? "Currency (unavailable)"
+      : "Currency";
 
+  const currencyPlaceholder = currencyLoading
+    ? "Fetching currencies…"
+    : currencyError
+      ? "Could not load currencies"
+      : "Select Currency";
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <>
       <style>{`
@@ -185,45 +235,125 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
             <section>
               <div className="sal-section-head">Employee Basic Details</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Selection label="Payroll Provider" name="provider" value={salaryData.provider} options={ProviderList} onChange={handleChange} placeholder="Select Provider" />
-                <Selection label="Type Of Pay" name="payType" value={salaryData.payType} options={PayTypeList} onChange={handleChange} placeholder="Type Of Pay" />
-                <Selection label="Currency" name="currency" value={salaryData.currency} options={CurrencyList} onChange={handleChange} placeholder="Currency" />
-                <Selection label="Pay Frequency" name="payFrequency" value={salaryData.payFrequency} options={frequencies} onChange={handleChange} placeholder="Pay Frequency" />
-                <FormFiled Lable="Annual Salary" name="annualSalary" value={salaryData.annualSalary} in_PlaceHolder="Enter Salary" onChange={handleChange} icon={currSymbol} />
+                <Selection
+                  label="Payroll Provider"
+                  name="provider"
+                  value={salaryData.provider}
+                  options={ProviderList}
+                  onChange={handleChange}
+                  placeholder="Select Provider"
+                />
+                <Selection
+                  label="Type Of Pay"
+                  name="payType"
+                  value={salaryData.payType}
+                  options={PayTypeList}
+                  onChange={handleChange}
+                  placeholder="Type Of Pay"
+                />
+                {/* ── Currency dropdown powered by useCurrencies ── */}
+                <Selection
+                  label={currencyLabel}
+                  name="currency"
+                  value={salaryData.currency}
+                  options={currencyOptions}          // from hook
+                  onChange={handleChange}            // updates salaryData.currency
+                  placeholder={currencyPlaceholder}
+                />
+                <Selection
+                  label="Pay Frequency"
+                  name="payFrequency"
+                  value={salaryData.payFrequency}
+                  options={frequencies}
+                  onChange={handleChange}
+                  placeholder="Pay Frequency"
+                />
+                {/* ── Annual Salary — icon is the live symbol from the hook ── */}
+                <FormFiled
+                  Lable="Annual Salary"
+                  name="annualSalary"
+                  value={salaryData.annualSalary}
+                  in_PlaceHolder="Enter Salary"
+                  onChange={handleChange}
+                  icon={currSymbol}                  // derived from hook's symbolMap
+                />
               </div>
             </section>
           </AnimSection>
 
           <AnimSection delay={120}>
-            <TailwindToggle label="Bonus Eligible" initialState={B_togg} onToggle={() => setB_togg(b => !b)} />
+            <TailwindToggle
+              label="Bonus Eligible"
+              initialState={B_togg}
+              onToggle={() => setB_togg((b) => !b)}
+            />
           </AnimSection>
 
           <div
             className="sal-bonus-accordion"
-            style={{ height: bonusHeight, opacity: B_togg ? 1 : 0, pointerEvents: B_togg ? "auto" : "none" }}
+            style={{
+              height: bonusHeight,
+              opacity: B_togg ? 1 : 0,
+              pointerEvents: B_togg ? "auto" : "none",
+            }}
           >
             <div ref={bonusRef} className="sal-bonus-inner">
               <div className="sal-section-head">Bonus Details</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Selection label="Bonus Type" name="bonus_Type" value={salaryData.bonus_Type} options={bonusTypes} onChange={handleChange} placeholder="Select Bonus Type" />
+                <Selection
+                  label="Bonus Type"
+                  name="bonus_Type"
+                  value={salaryData.bonus_Type}
+                  options={bonusTypes}
+                  onChange={handleChange}
+                  placeholder="Select Bonus Type"
+                />
                 <div>
                   <div className="sal-label">Calculation Method</div>
                   <div className="sal-mode-pill">
-                    <button type="button"
-                      className={`sal-mode-btn ${salaryData.bonus_CalculationMode === "percentage" ? "active" : ""}`}
-                      onClick={() => handleChange({ target: { name: "bonus_CalculationMode", value: "percentage" } })}>
+                    <button
+                      type="button"
+                      className={`sal-mode-btn ${
+                        salaryData.bonus_CalculationMode === "percentage"
+                          ? "active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        handleChange({
+                          target: {
+                            name: "bonus_CalculationMode",
+                            value: "percentage",
+                          },
+                        })
+                      }
+                    >
                       % of Salary
                     </button>
-                    <button type="button"
-                      className={`sal-mode-btn ${salaryData.bonus_CalculationMode === "fixed" ? "active" : ""}`}
-                      onClick={() => handleChange({ target: { name: "bonus_CalculationMode", value: "fixed" } })}>
+                    <button
+                      type="button"
+                      className={`sal-mode-btn ${
+                        salaryData.bonus_CalculationMode === "fixed"
+                          ? "active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        handleChange({
+                          target: {
+                            name: "bonus_CalculationMode",
+                            value: "fixed",
+                          },
+                        })
+                      }
+                    >
                       Fixed Amount
                     </button>
                   </div>
                 </div>
                 <div>
                   <div className="sal-label">
-                    {salaryData.bonus_CalculationMode === "percentage" ? "Bonus Percentage" : "Bonus Amount"}
+                    {salaryData.bonus_CalculationMode === "percentage"
+                      ? "Bonus Percentage"
+                      : "Bonus Amount"}
                   </div>
                   <div className="relative">
                     <input
@@ -231,10 +361,16 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
                       value={salaryData.bonus_Value}
                       onChange={handleChange}
                       className="sal-bonus-input"
-                      placeholder={salaryData.bonus_CalculationMode === "percentage" ? "e.g. 10" : "e.g. 5000"}
+                      placeholder={
+                        salaryData.bonus_CalculationMode === "percentage"
+                          ? "e.g. 10"
+                          : "e.g. 5000"
+                      }
                     />
                     <span className="sal-bonus-suffix">
-                      {salaryData.bonus_CalculationMode === "percentage" ? "%" : currSymbol}
+                      {salaryData.bonus_CalculationMode === "percentage"
+                        ? "%"
+                        : currSymbol}          {/* live symbol from hook */}
                     </span>
                   </div>
                 </div>
@@ -249,42 +385,82 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
                 <span style={{ color: "#d97706", fontWeight: 700 }}>
                   {currSymbol} {salaryData.annualSalary || "0"}
                   {salaryData.payType && (
-                    <span style={{ color: "#94a3b8", fontWeight: 400 }}> / {salaryData.payType}</span>
+                    <span style={{ color: "#94a3b8", fontWeight: 400 }}>
+                      {" "}
+                      / {salaryData.payType}
+                    </span>
                   )}
                 </span>
                 {salaryData.payFrequency && (
-                  <><span style={{ color: "#cbd5e1" }}>•</span>
-                  <span style={{ color: "#5b9deb" }}>{salaryData.payFrequency}: </span>
-                  <span className="text-[#02eb5b]">
-                    {salaryData.payFrequency === 'annual' 
-                  ? salaryData.annualSalary 
-                  : (salaryData.annualSalary/12).toFixed(2)} 
-                  </span>
-                  
-                   <span style={{ color: "#64748b" }} >{salaryData.currency}</span>
-                   </>
+                  <>
+                    <span style={{ color: "#cbd5e1" }}>•</span>
+                    <span style={{ color: "#5b9deb" }}>
+                      {salaryData.payFrequency}:{" "}
+                    </span>
+                    <span className="text-[#02eb5b]">
+                      {salaryData.payFrequency === "annual"
+                        ? salaryData.annualSalary
+                        : (salaryData.annualSalary / 12).toFixed(2)}
+                    </span>
+                    <span style={{ color: "#64748b" }}>
+                      {salaryData.currency}
+                    </span>
+                  </>
                 )}
                 {salaryData.provider && (
-                  <><span style={{ color: "#cbd5e1" }}>•</span>
-                  <span style={{ color: "#6366f1", textTransform: "uppercase" as const }}>{salaryData.provider}</span></>
+                  <>
+                    <span style={{ color: "#cbd5e1" }}>•</span>
+                    <span
+                      style={{
+                        color: "#6366f1",
+                        textTransform: "uppercase" as const,
+                      }}
+                    >
+                      {salaryData.provider}
+                    </span>
+                  </>
                 )}
                 {salaryData.currency && (
-                  <><span style={{ color: "#cbd5e1" }}>•</span>
-                  <span style={{ color: "#64748b" }}>Net: <span style={{ color: "#16a34a", fontWeight: 700 }}>{ (Number(salaryData.annualSalary) + (Number(salaryData.annualSalary) * 0.12)  ).toLocaleString('en-IN') }</span> {salaryData.currency}</span></>
+                  <>
+                    <span style={{ color: "#cbd5e1" }}>•</span>
+                    <span style={{ color: "#64748b" }}>
+                      Net:{" "}
+                      <span style={{ color: "#16a34a", fontWeight: 700 }}>
+                        {(
+                          Number(salaryData.annualSalary) +
+                          Number(salaryData.annualSalary) * 0.12
+                        ).toLocaleString("en-IN")}
+                      </span>{" "}
+                      {salaryData.currency}
+                    </span>
+                  </>
                 )}
                 {B_togg && salaryData.bonus_Value > 0 && (
-                  <><span style={{ color: "#cbd5e1" }}>•</span>
-                  <span style={{ color: "#16a34a", fontWeight: 700 }}>
-                    +{currSymbol}{calculateBonusDisplay()}{" "}
-                    <span style={{ color: "#94a3b8", fontSize: "11px", fontWeight: 400 }}>Bonus</span>
-                  </span></>
+                  <>
+                    <span style={{ color: "#cbd5e1" }}>•</span>
+                    <span style={{ color: "#16a34a", fontWeight: 700 }}>
+                      +{currSymbol}
+                      {calculateBonusDisplay()}{" "}
+                      <span
+                        style={{
+                          color: "#94a3b8",
+                          fontSize: "11px",
+                          fontWeight: 400,
+                        }}
+                      >
+                        Bonus
+                      </span>
+                    </span>
+                  </>
                 )}
               </div>
             </div>
           </AnimSection>
 
           <AnimSection delay={240}>
-            <button type="submit" className="sal-submit-btn">Next</button>
+            <button type="submit" className="sal-submit-btn">
+              Next
+            </button>
           </AnimSection>
         </form>
       </div>
