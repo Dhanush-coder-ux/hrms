@@ -6,7 +6,6 @@ import { Plus, Trash2, X } from "lucide-react";
 import { Selection } from "../../../Components/Common/Selection";
 import { Api_URL } from "../../../APILINK";
 
-
 type Variable = {
   name: string;
   type: "";
@@ -15,42 +14,41 @@ type Variable = {
 
 type PayrollProvider = {
   provider_id: string;
-  providername: string;   // ✅ FIXED
+  providername: string; // ✅ FIXED
   description: string;
   earnings: Variable[];
   deductions: Variable[];
 };
-
-
 
 const TypeOValue = [
   { label: "Fixed", value: "fixed" },
   { label: "Percentage %", value: "percentage" },
 ];
 
-const CreateProviderList_Url =`${Api_URL}/payroll/create/providers`;
+const CreateProviderList_Url = `${Api_URL}/payroll/create/providers`;
 const ProviderList_Url = `${Api_URL}/payroll/providers`;
+const DeleteProvider_Url = `${Api_URL}/payroll/providers`;
+// assuming backend: DELETE /payroll/providers/{id}
 
 export const Payrollprovider = () => {
   const [providers, setProviders] = useState<PayrollProvider[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [ShowModal, setShowModal] = useState(false);
-const [newProvider, setNewProvider] = useState<{
-  providername: string;
-  description: string;
-  earnings: Variable[];
-  deductions: Variable[];
-}>({
-  providername: "",   // ✅ FIXED
-  description: "",
-  earnings: [],
-  deductions: [],
-});
+  const [newProvider, setNewProvider] = useState<{
+    providername: string;
+    description: string;
+    earnings: Variable[];
+    deductions: Variable[];
+  }>({
+    providername: "",
+    description: "",
+    earnings: [],
+    deductions: [],
+  });
 
   // ➕ Add Variable
   const addVariable = (category: "earnings" | "deductions") => {
     const emptyVar: Variable = {
-
       name: "",
       type: "",
       value: 0,
@@ -62,87 +60,109 @@ const [newProvider, setNewProvider] = useState<{
     });
   };
 
-useEffect(() => {fetchData()}, []);
-const fetchData = async () => {
-  try {
-    const res = await fetch(ProviderList_Url);
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const res = await fetch(ProviderList_Url);
 
-    console.log("STATUS:", res.status);
+      console.log("STATUS:", res.status);
 
-    if (!res.ok) {
-      const err = await res.text();
-      console.error("API ERROR:", err);
+      if (!res.ok) {
+        const err = await res.text();
+        console.error("API ERROR:", err);
+        setProviders([]);
+        return;
+      }
+
+      const data = await res.json();
+      console.log("FULL RESPONSE:", data);
+
+      let list: any[] = [];
+
+      if (Array.isArray(data)) {
+        list = data;
+      } else if (Array.isArray(data.data)) {
+        list = data.data;
+      } else {
+        console.error("Unexpected format:", data);
+        setProviders([]);
+        return;
+      }
+
+      setProviders(list);
+    } catch (error) {
+      console.error("Fetch error:", error);
       setProviders([]);
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    const data = await res.json();
-    console.log("FULL RESPONSE:", data);
-
-    let list: any[] = [];
-
-    if (Array.isArray(data)) {
-      list = data;
-    } else if (Array.isArray(data.data)) {
-      list = data.data;
-    } else {
-      console.error("Unexpected format:", data);
-      setProviders([]);
-      return;
-    }
-
-    setProviders(list);
-
-  } catch (error) {
-    console.error("Fetch error:", error);
-    setProviders([]);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
   // ➕ Submit
-const handleAddProvider = async () => {
-  try {
-    const payload = {
-      ...newProvider,
-      // Ensure strings match backend Enums and numbers are valid
-      earnings: newProvider.earnings.map(e => ({
-        name: e.name,
-        type: e.type.toLowerCase(), // Force lowercase
-        value: Number(e.value || 0),
-      })),
-      deductions: newProvider.deductions.map(d => ({
-        name: d.name,
-        type: d.type.toLowerCase(), // Force lowercase
-        value: Number(d.value || 0),
-      })),
-    };
-    const res = await fetch(CreateProviderList_Url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+  const handleAddProvider = async () => {
+    try {
+      const payload = {
+        ...newProvider,
+        // Ensure strings match backend Enums and numbers are valid
+        earnings: newProvider.earnings.map((e) => ({
+          name: e.name,
+          type: e.type.toLowerCase(), // Force lowercase
+          value: Number(e.value || 0),
+        })),
+        deductions: newProvider.deductions.map((d) => ({
+          name: d.name,
+          type: d.type.toLowerCase(), // Force lowercase
+          value: Number(d.value || 0),
+        })),
+      };
+      const res = await fetch(CreateProviderList_Url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("POST FAILED:", errorData);
-      return;
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("POST FAILED:", errorData);
+        return;
+      }
+
+      await fetchData();
+      setShowModal(false);
+      setNewProvider({
+        providername: "",
+        description: "",
+        earnings: [],
+        deductions: [],
+      });
+    } catch (error) {
+      console.error("POST ERROR:", error);
     }
+  };
 
-    await fetchData();
-    setShowModal(false);
-    setNewProvider({
-      providername: "",
-      description: "",
-      earnings: [],
-      deductions: [],
-    });
+  const handleDeleteProvider = async (provider_id: string) => {
+    if (!confirm("Are you sure you want to delete this provider?")) return;
 
-  } catch (error) {
-    console.error("POST ERROR:", error);
-  }
-};
+    try {
+      const res = await fetch(`${Api_URL}/payroll/providers/${provider_id}`, {
+        method: "DELETE",
+      });
 
+      if (!res.ok) {
+        const err = await res.text();
+        console.error("DELETE FAILED:", err);
+        return;
+      }
+
+      console.log("Deleted successfully");
+
+      // Refresh list
+      await fetchData();
+    } catch (error) {
+      console.error("DELETE ERROR:", error);
+    }
+  };
   return (
     <main className="flex-1 flex flex-col">
       <div className="flex-1 overflow-y-auto">
@@ -230,20 +250,34 @@ const handleAddProvider = async () => {
                                 "No description available"}
                             </p>
                           </div>
-                          <div className="text-slate-300 group-hover:text-blue-400 transition-colors">
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+
+                          <div className="flex items-center gap-2">
+                            {/* DELETE BUTTON */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation(); // VERY IMPORTANT
+                                handleDeleteProvider(provider.provider_id);
+                              }}
+                              className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
+                              <Trash2 size={16} />
+                            </button>
+                            {/* ARROW */}
+                            <div className="text-slate-300 group-hover:text-blue-400">
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            </div>
                           </div>
                         </div>
                       </motion.div>
@@ -303,10 +337,14 @@ const handleAddProvider = async () => {
                       <FormFiled
                         Lable="Provider Name"
                         value={newProvider.providername}
-                        onChange={(e) => setNewProvider({
-                          ...newProvider,
-                          providername: e.target.value, // ✅ FIXED
-                        })} in_PlaceHolder={"Provider Name"}/>
+                        onChange={(e) =>
+                          setNewProvider({
+                            ...newProvider,
+                            providername: e.target.value, // ✅ FIXED
+                          })
+                        }
+                        in_PlaceHolder={"Provider Name"}
+                      />
                       <FormFiled
                         in_PlaceHolder="Briefly describe..."
                         Lable="Description"
@@ -357,7 +395,9 @@ const handleAddProvider = async () => {
                                 placeholder="BASIC"
                                 value={v.name}
                                 onChange={(e) => {
-                                  const updated: Variable[] = [...newProvider[category]];
+                                  const updated: Variable[] = [
+                                    ...newProvider[category],
+                                  ];
                                   updated[idx].name = e.target.value;
                                   setNewProvider({
                                     ...newProvider,

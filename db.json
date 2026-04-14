@@ -2399,6 +2399,10 @@
         {
           "label": "Monthly",
           "value": "monthly"
+        },
+        {
+          "label": "Yearly",
+          "value": "yearly"
         }
       ],
       "employeeType": [

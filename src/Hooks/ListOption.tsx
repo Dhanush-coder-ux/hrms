@@ -11,7 +11,6 @@ export const useListOptions = (url: string) => {
 
         console.log("API Response:", data);
 
-        // ✅ handle both formats (safe)
         const list = Array.isArray(data)
           ? data
           : Array.isArray(data.data)
