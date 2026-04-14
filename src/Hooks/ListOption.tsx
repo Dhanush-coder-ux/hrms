@@ -9,15 +9,23 @@ export const useListOptions = (url: string) => {
         const res = await fetch(url);
         const data = await res.json();
 
-        // ✅ Extract only name + id
-        const formatted = data.map((item: any) => ({
-          label: item.name,
-          value: item.id,
+        console.log("API Response:", data);
+
+        // ✅ handle both formats (safe)
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data.data)
+          ? data.data
+          : [];
+
+        const formatted = list.map((item: any) => ({
+          label: item.providername || item.name,   // flexible
+          value: item.provider_id || item.id,      // flexible
         }));
 
         setOptions(formatted);
       } catch (err) {
-        console.error("Error  names:", err);
+        console.error("Error names:", err);
         setOptions([]);
       }
     };

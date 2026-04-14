@@ -7,7 +7,7 @@ import { Checkbox } from "../../../../Components/Common/CheckBox";
 import type {Employee ,Education} from "../../../../Types/typesOnboarding"
 // import { departmentOptions,genderOptions,useEmpTypeOptions, useRelationshipOptions } from "../../../../Stacks";
 
-import { useOptions, Stackvalues,DepAPI_Url } from "../../../../Stacks";
+import { useOptions, Stackvalues, DepAPI_Url} from "../../../../Stacks";
 import { useListOptions } from "../../../../Hooks/ListOption";
 
 

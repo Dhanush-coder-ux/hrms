@@ -2,57 +2,57 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Button } from "../../../Components/Common/Button";
 import { FormFiled } from "../../../Components/Common/FormFiled";
-import { CheckCircle2, Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { Selection } from "../../../Components/Common/Selection";
+import { Api_URL } from "../../../APILINK";
+
 
 type Variable = {
-  code: string;
   name: string;
-  type: "fixed" | "percentage" | "dynamic";
+  type: "";
   value?: number;
 };
 
 type PayrollProvider = {
-  id: string;
-  name: string;
+  provider_id: string;
+  providername: string;   // ✅ FIXED
   description: string;
-  supports: Record<string, boolean>;
   earnings: Variable[];
   deductions: Variable[];
 };
 
+
+
 const TypeOValue = [
-  { label: "Fixed", value: "Fixed" },
-  { label: "Percentage %", value: "Percentage" },
-  { label: "Dynamic", value: "Dynamic" },
+  { label: "Fixed", value: "fixed" },
+  { label: "Percentage %", value: "percentage" },
 ];
 
-const ProviderList_Url = "http://localhost:3001/payrollProviders";
+const CreateProviderList_Url =`${Api_URL}/payroll/create/providers`;
+const ProviderList_Url = `${Api_URL}/payroll/providers`;
 
 export const Payrollprovider = () => {
   const [providers, setProviders] = useState<PayrollProvider[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [ShowModal, setShowModal] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [newProvider, setNewProvider] = useState<Omit<PayrollProvider, "id">>({
-    name: "",
-    description: "",
-    supports: {
-      esi_auto: false,
-      hra_exemption: false,
-      tax_calculation: false,
-      attendance_integration: false,
-    },
-    earnings: [],
-    deductions: [],
-  });
+const [newProvider, setNewProvider] = useState<{
+  providername: string;
+  description: string;
+  earnings: Variable[];
+  deductions: Variable[];
+}>({
+  providername: "",   // ✅ FIXED
+  description: "",
+  earnings: [],
+  deductions: [],
+});
 
   // ➕ Add Variable
   const addVariable = (category: "earnings" | "deductions") => {
     const emptyVar: Variable = {
-      code: "",
+
       name: "",
-      type: "fixed",
+      type: "",
       value: 0,
     };
 
@@ -62,52 +62,86 @@ export const Payrollprovider = () => {
     });
   };
 
-  // 📡 Fetch Providers
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(ProviderList_Url);
-        const data = await res.json();
-        setProviders(data);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+useEffect(() => {fetchData()}, []);
+const fetchData = async () => {
+  try {
+    const res = await fetch(ProviderList_Url);
 
+    console.log("STATUS:", res.status);
+
+    if (!res.ok) {
+      const err = await res.text();
+      console.error("API ERROR:", err);
+      setProviders([]);
+      return;
+    }
+
+    const data = await res.json();
+    console.log("FULL RESPONSE:", data);
+
+    let list: any[] = [];
+
+    if (Array.isArray(data)) {
+      list = data;
+    } else if (Array.isArray(data.data)) {
+      list = data.data;
+    } else {
+      console.error("Unexpected format:", data);
+      setProviders([]);
+      return;
+    }
+
+    setProviders(list);
+
+  } catch (error) {
+    console.error("Fetch error:", error);
+    setProviders([]);
+  } finally {
+    setIsLoading(false);
+  }
+};
   // ➕ Submit
-  const handleAddProvider = async () => {
-    const newItem = {
-      id: `provider_00${providers.length + 1}`,
+const handleAddProvider = async () => {
+  try {
+    const payload = {
       ...newProvider,
+      // Ensure strings match backend Enums and numbers are valid
+      earnings: newProvider.earnings.map(e => ({
+        name: e.name,
+        type: e.type.toLowerCase(), // Force lowercase
+        value: Number(e.value || 0),
+      })),
+      deductions: newProvider.deductions.map(d => ({
+        name: d.name,
+        type: d.type.toLowerCase(), // Force lowercase
+        value: Number(d.value || 0),
+      })),
     };
-
-    await fetch(ProviderList_Url, {
+    const res = await fetch(CreateProviderList_Url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newItem),
+      body: JSON.stringify(payload),
     });
 
-    setProviders((prev) => [...prev, newItem]);
-    setShowModal(false);
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("POST FAILED:", errorData);
+      return;
+    }
 
-    // Reset
+    await fetchData();
+    setShowModal(false);
     setNewProvider({
-      name: "",
+      providername: "",
       description: "",
-      supports: {
-        esi_auto: false,
-        hra_exemption: false,
-        tax_calculation: false,
-        attendance_integration: false,
-      },
       earnings: [],
       deductions: [],
     });
-  };
+
+  } catch (error) {
+    console.error("POST ERROR:", error);
+  }
+};
 
   return (
     <main className="flex-1 flex flex-col">
@@ -176,21 +210,20 @@ export const Payrollprovider = () => {
                   ))
                 ) : providers.length > 0 ? (
                   providers.map((provider) => {
-                    const isSelected = selectedId === provider.id;
                     return (
                       <motion.div
-                        key={provider.id}
+                        key={provider.provider_id}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() =>
-                          alert(`Ready to create ${provider.name}`)
+                          alert(`Ready to create ${provider.providername}`)
                         }
                         className="p-4 rounded-xl border border-slate-200 bg-white hover:bg-blue-50/50 hover:border-blue-300 cursor-pointer transition-colors duration-200 group"
                       >
                         <div className="flex justify-between items-start">
                           <div>
                             <h2 className="text-sm font-semibold text-slate-700 group-hover:text-blue-700">
-                              {provider.name}
+                              {provider.providername}
                             </h2>
                             <p className="text-xs text-slate-500 mt-1 line-clamp-2">
                               {provider.description ||
@@ -268,16 +301,12 @@ export const Payrollprovider = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                       <FormFiled
-                        in_PlaceHolder="e.g. Stripe Payroll"
                         Lable="Provider Name"
-                        value={newProvider.name}
-                        onChange={(e) =>
-                          setNewProvider({
-                            ...newProvider,
-                            name: e.target.value,
-                          })
-                        }
-                      />
+                        value={newProvider.providername}
+                        onChange={(e) => setNewProvider({
+                          ...newProvider,
+                          providername: e.target.value, // ✅ FIXED
+                        })} in_PlaceHolder={"Provider Name"}/>
                       <FormFiled
                         in_PlaceHolder="Briefly describe..."
                         Lable="Description"
@@ -326,10 +355,10 @@ export const Payrollprovider = () => {
                               <input
                                 className="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-sm focus:ring-2 ring-blue-500 outline-none font-medium"
                                 placeholder="BASIC"
-                                value={v.code}
+                                value={v.name}
                                 onChange={(e) => {
-                                  const updated = [...newProvider[category]];
-                                  updated[idx].code = e.target.value;
+                                  const updated: Variable[] = [...newProvider[category]];
+                                  updated[idx].name = e.target.value;
                                   setNewProvider({
                                     ...newProvider,
                                     [category]: updated,
@@ -363,6 +392,7 @@ export const Payrollprovider = () => {
                                 type="number"
                                 className="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-sm outline-none"
                                 placeholder="0.00"
+                                value={v.value || ""}
                                 onChange={(e) => {
                                   const updated = [...newProvider[category]];
                                   updated[idx].value = Number(e.target.value);
