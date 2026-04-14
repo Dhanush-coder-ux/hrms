@@ -127,7 +127,7 @@ export const Selection = ({ label, name, value, options, onChange, placeholder }
 
   return (
     <>
-      <style>{`
+    <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
         .sel-wrapper { font-family: 'DM Sans', sans-serif; position: relative; width: 100%; user-select: none; }
         .sel-label {
@@ -140,7 +140,7 @@ export const Selection = ({ label, name, value, options, onChange, placeholder }
 
         .sel-trigger {
           width: 100%; display: flex; align-items: center; justify-content: space-between;
-          gap: 8px; padding: 11px 14px; background: #fff; border: 1.5px solid #cbd5e1; border-radius: 10px;
+          gap: 8px; padding: 11px 14px; background: #fff; border: 1.5px solid #868687; border-radius: 10px;
           box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3.5px transparent;
           cursor: text; transition: border-color 0.2s, box-shadow 0.2s; outline: 2px solid transparent;
           will-change: box-shadow, border-color;
