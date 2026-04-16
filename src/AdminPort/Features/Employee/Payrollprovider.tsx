@@ -27,7 +27,6 @@ const TypeOValue = [
 
 const CreateProviderList_Url = `${Api_URL}/payroll/create/providers`;
 const ProviderList_Url = `${Api_URL}/payroll/providers`;
-const DeleteProvider_Url = `${Api_URL}/payroll/providers`;
 // assuming backend: DELETE /payroll/providers/{id}
 
 export const Payrollprovider = () => {

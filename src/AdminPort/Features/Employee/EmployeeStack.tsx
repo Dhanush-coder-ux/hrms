@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import {  User } from "lucide-react";
 import { Payrollprovider } from "./Payrollprovider";
-import { BasicValues } from "./basicValues";
+import { BasicValues } from "./BasicValues";
 
 
 

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Loader2, Check } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import SearchBar from "../../../Components/Common/Searchbar";
 import { DepartmentTable } from "./DepartmentTable";
@@ -184,7 +184,7 @@ export const DepartmentsStacks = () => {
                     <label className="text-xs font-black uppercase text-gray-400 mb-2 block">Icon Color</label>
                     <HexColorPicker 
                       color={selectedDept.iconColor} 
-                      onChange={(color) => setSelectedDept({ ...selectedDept, iconColor: color })} 
+                      onChange={(color: string) => setSelectedDept({ ...selectedDept, iconColor: color })} 
                     />
                     <div className="mt-2 text-center font-mono text-sm">{selectedDept.iconColor}</div>
                   </div>
@@ -192,7 +192,7 @@ export const DepartmentsStacks = () => {
                     <label className="text-xs font-black uppercase text-gray-400 mb-2 block">Background Color</label>
                     <HexColorPicker 
                       color={selectedDept.iconBg} 
-                      onChange={(color) => setSelectedDept({ ...selectedDept, iconBg: color })} 
+                      onChange={(color: string) => setSelectedDept({ ...selectedDept, iconBg: color })} 
                     />
                     <div className="mt-2 text-center font-mono text-sm">{selectedDept.iconBg}</div>
                   </div>

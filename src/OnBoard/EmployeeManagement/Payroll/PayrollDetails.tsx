@@ -1,11 +1,10 @@
 
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { ExportCSVButton } from '../../../Components/Common/ExportButton';
 import { Backbutton } from '../../../Components/Common/Backbutton';
 
 const PayrollDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { state: data } = useLocation();
   const columns = [
     { header: 'Employee', accessor: 'employee' },
@@ -20,7 +19,7 @@ const PayrollDetails = () => {
   return (
     <div className="p-8  min-h-screen">
       <div className="max-w-3xl mx-auto">
-        <Backbutton ClickToAction={() => navigate(-1)}/>
+        <Backbutton />
         <div className="flex justify-end mb-3 px-3">
           <ExportCSVButton data={[data]} columns={columns} />
         </div>

@@ -1,4 +1,4 @@
-import { Building2, CalendarCheck, CalendarDays, FileSpreadsheet, FileText, icons, LayoutDashboard, PersonStanding, ReceiptIndianRupee, UserPlus, Users, Variable } from "lucide-react";
+import { Building2, CalendarCheck, CalendarDays, FileSpreadsheet, FileText, LayoutDashboard, PersonStanding, ReceiptIndianRupee, UserPlus, Users, Variable } from "lucide-react";
 
  export const employeeNavigation = [
     { label: "Dashboard",  path: "/EmployeeManagement",            icon: LayoutDashboard },

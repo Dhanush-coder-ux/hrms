@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, ChevronDown, Check, Loader2 } from "lucide-react";
 import { useCurrencies } from "../../../Hooks/CurrenciesSelect";
-import { Api_URL } from "../../../APILINK";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type OptionItem = {
@@ -122,7 +121,6 @@ export const BasicValues = () => {
   const [newVal, setNewVal] = useState("");
   const [syncState, setSyncState] = useState<SyncState>("idle");
   const [loading, setLoading] = useState(true);
-  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { currencyOptions, currencySymbolMap, currencyLoading } =
     useCurrencies();

@@ -53,7 +53,7 @@ const AnimSection = ({ children, delay = 0 }: { children: React.ReactNode; delay
 export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProps) => {
   // 1. Fetch System Settings inside the component
   const systemDefaultOptions = useOptions(Stackvalues, "currency", "label", "value");
-  const { currencyOptions, currencySymbolMap, currencyLoading, currencyError } = useCurrencies();
+  const { currencyOptions, currencySymbolMap, currencyLoading } = useCurrencies();
 
   const [B_togg, setB_togg] = useState(() => !!initialData?.bonus_Value);
   const bonusRef = useRef<HTMLDivElement>(null);
