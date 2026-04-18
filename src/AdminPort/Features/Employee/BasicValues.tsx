@@ -285,7 +285,7 @@ export const BasicValues = () => {
                         );
                         if (opt) handleUpdateCurrency(opt);
                       }}
-                      className="appearance-none bg-slate-50 border border-slate-200 hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 rounded-xl px-3 py-2 pr-8 text-sm font-medium text-slate-700 outline-none transition-all cursor-pointer min-w-[180px]"
+                      className="appearance-none bg-slate-50 border border-slate-200 hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 rounded-xl px-3 py-2 pr-8 text-sm font-medium text-slate-700 outline-none transition-all cursor-pointer min-w-45"
                     >
                       <option value="" disabled>
                         Select Currency

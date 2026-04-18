@@ -62,15 +62,17 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
   // 2. Initialize state
   const [salaryData, setLocalSalaryData] = useState<PayrollData>(() => initialData ?? DEFAULT_SALARY);
 
-  // 3. EFFECT: Set the default currency from system settings if no initialData exists
-  useEffect(() => {
-    if (!initialData && systemDefaultOptions?.length > 0 && !salaryData.currency) {
-      // Logic: Pick the first value from your "Basic Settings" stack (GIP in your screenshot)
-      const defaultVal = systemDefaultOptions[0].value;
-      setLocalSalaryData((prev) => ({ ...prev, currency: defaultVal }));
-    }
-  }, [systemDefaultOptions, initialData]);
 
+
+  // 3. EFFECT: Set the default currency from system settings if no initialData exists
+useEffect(() => {
+  if (!initialData && systemDefaultOptions.length > 0) {
+    setLocalSalaryData((prev) => ({
+      ...prev,
+      currency: prev.currency || systemDefaultOptions[0].value, // ✅ default from stack
+    }));
+  }
+}, [systemDefaultOptions, initialData]);
   // Derive live currency symbol
   const currSymbol = currencySymbolMap[salaryData.currency] ?? "$";
 
@@ -100,11 +102,8 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
 
   const ProviderList = useListOptions(PayRollAPI_Url);
 
-
-  const PayTypeList = [
-    { value: "Salary", label: "Salary" },
-    { value: "Stipend", label: "Stipend" },
-  ];
+const  frequencies = useOptions(Stackvalues, "payFrequency", "label", "value");
+const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
 
   const bonusTypes = [
     { value: "performance", label: "Performance Bonus" },
@@ -112,10 +111,10 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
     { value: "annual", label: "Annual Bonus" },
   ];
 
-  const frequencies = [
-    { value: "annual", label: "Annual" },
-    { value: "monthly", label: "Monthly" },
-  ];
+  // const frequencies = [
+  //   { value: "annual", label: "Annual" },
+  //   { value: "monthly", label: "Monthly" },
+  // ];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | { target: { name: string; value: any } }

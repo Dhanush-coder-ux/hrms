@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export const useOptions = (
   url: string,
-  key: string,        // 👈 NEW (gender / payType / etc)
+  key: string,
   labelKey: string,
   valueKey?: string
 ) => {
@@ -10,17 +10,21 @@ export const useOptions = (
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(url);
-      const data = await res.json();
+      try {
+        const res = await fetch(`${url}${key}`); // 🔥 IMPORTANT
+        const data = await res.json();
 
-      const list = data[key]; // 👈 get specific array
+        const list = data.options || []; // ✅ FIX
 
-      const formatted = list.map((item: any) => ({
-        label: item[labelKey],
-        value: valueKey ? item[valueKey] : item[labelKey],
-      }));
+        const formatted = list.map((item: any) => ({
+          label: item[labelKey],
+          value: valueKey ? item[valueKey] : item[labelKey],
+        }));
 
-      setOptions(formatted);
+        setOptions(formatted);
+      } catch (err) {
+        console.error("Options fetch error:", err);
+      }
     };
 
     fetchData();
