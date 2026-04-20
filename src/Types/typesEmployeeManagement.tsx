@@ -57,6 +57,7 @@ export interface Empleaves {
 }
 
 export interface PayrollData {
+  emp_id: any;
   id: number;
   employee: string;
   salary: number;

@@ -9,7 +9,6 @@ import type { Employee, Education } from "../../../../Types/typesOnboarding";
 
 import { useOptions, Stackvalues, DepAPI_Url } from "../../../../Stacks";
 import { useListOptions } from "../../../../Hooks/ListOption";
-import { Api_URL } from "../../../../APILINK";
 
 const DEFAULT_FORM: Employee = {
 
