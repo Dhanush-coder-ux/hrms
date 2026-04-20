@@ -109,9 +109,9 @@ export const DepartmentsStacks = () => {
             <Plus size={20} /> ADD NEW
           </button>
         </div>
-
+        <div className="mb-2">
         <SearchBar value={searchTerm} onChange={(e: any) => setSearchTerm(e.target.value)} />
-
+        </div>
         {isLoading ? (
           <div className="flex justify-center p-20"><Loader2 className="animate-spin text-indigo-600" /></div>
         ) : (

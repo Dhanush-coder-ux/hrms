@@ -20,7 +20,7 @@ export interface WorkExpInfo{
 } 
 export interface Employee {
 
-  Emp_id: string; f_name: string; l_name: string; name: string;
+ f_name: string; l_name: string; name: string;
   gender?: string; dob?: string; email: string; phone: string;
   Department: string; designation: string; emp_type: string; DateOfJoining: string;
   education: Education[]; 

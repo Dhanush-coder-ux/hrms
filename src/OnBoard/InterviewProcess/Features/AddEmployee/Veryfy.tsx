@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaUser, FaMoneyBill, FaPiggyBank, FaCheckCircle, FaBriefcase, FaGraduationCap, FaUsers, FaShieldAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { Api_URL } from "../../../../APILINK";
 
 interface VerifyProps {
   employeeData: any;
@@ -26,8 +27,14 @@ const AnimCard = ({ children, delay = 0, className = "" }: { children: React.Rea
   );
 };
 
+
+
+
 export const Verify = ({ employeeData, salaryData, bankData, insData, onFinalSubmit }: VerifyProps) => {
   
+
+
+
   const InfoRow = ({ label, value }: { label: string; value: any }) => (
     <div style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -40,6 +47,24 @@ export const Verify = ({ employeeData, salaryData, bankData, insData, onFinalSub
     </div>
   );
 
+const [empId, setEmpId] = useState("");
+
+useEffect(() => {
+  const fetchEmpId = async () => {
+    try {
+      const res = await fetch(`${Api_URL}/employee/next-id`);
+      const data = await res.json();
+      console.log("FULL API RESPONSE:", data);
+      setEmpId(data.next_id);
+    } catch (err) {
+      console.error("Failed to fetch Emp ID", err);
+    }
+  };
+
+  fetchEmpId();
+}, []);
+console.log("Employee Data:", empId);
+console.log("API URL:", `${Api_URL}/employee/next-id`);
   if (!employeeData || !salaryData || !bankData || !insData) {
     return (
       <div style={{ textAlign: "center", padding: "60px 20px" }}>
@@ -49,6 +74,11 @@ export const Verify = ({ employeeData, salaryData, bankData, insData, onFinalSub
     );
   }
 
+
+
+
+
+console.log("Employee Data:", empId);
   return (
     <>
       <style>{`
@@ -94,7 +124,7 @@ export const Verify = ({ employeeData, salaryData, bankData, insData, onFinalSub
             <div className="vfy-card" style={{ borderColor: "#c7d2fe", background: "#f8faff" }}>
               <div className="vfy-card-head" style={{ color: "#4338ca" }}><FaUser /> Primary Profile</div>
               <InfoRow label="Full Name" value={employeeData.name} />
-              <InfoRow label="Employee ID" value={employeeData.Emp_id} />
+              <InfoRow label="Employee ID" value={empId || "Generating..."} />
               <InfoRow label="DOB" value={employeeData.dob} />
               <InfoRow label="Gender" value={employeeData.gender} />
               <InfoRow label="Email" value={employeeData.email} />

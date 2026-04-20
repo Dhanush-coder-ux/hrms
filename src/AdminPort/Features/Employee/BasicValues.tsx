@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, ChevronDown, Check, Loader2 } from "lucide-react";
 import { useCurrencies } from "../../../Hooks/CurrenciesSelect";
+import { Backbutton } from "../../../Components/Common/Backbutton";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type OptionItem = {
@@ -231,12 +232,15 @@ export const BasicValues = () => {
 
   return (
     <main className="flex-1 min-h-screen bg-slate-50 p-6 lg:p-10">
+       
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
+       
         <header className="mb-8 flex items-start justify-between">
+          
           <div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               Basic Settings

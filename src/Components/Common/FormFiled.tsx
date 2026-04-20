@@ -9,10 +9,18 @@ type Form = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon?: React.ReactNode;
   PrivacyInput?: boolean;
+  disabled?: boolean;
 };
 
 export const FormFiled = ({
-  Lable, icon, name, value, onChange, in_PlaceHolder, PrivacyInput,
+  Lable,
+  icon,
+  name,
+  value,
+  onChange,
+  in_PlaceHolder,
+  PrivacyInput,
+  disabled,
 }: Form) => {
   const [showValue, setShowValue] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -89,27 +97,56 @@ export const FormFiled = ({
         }
         .ff-eye-btn:hover { background: #eef2ff; color: #4f46e5; }
         .ff-eye-btn:focus { outline: none; }
+        .ff-input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
       `}</style>
 
       <div className="ff-wrapper">
-        <label className={`ff-label ${isFocused ? "focused" : ""} ${hasValue ? "has-value" : ""}`}>
+        <label
+          className={`ff-label ${isFocused ? "focused" : ""} ${hasValue ? "has-value" : ""}`}
+        >
           {Lable}
         </label>
         <div className="ff-input-wrap">
           {icon && (
-            <span className={`ff-icon-left ${isFocused ? "focused" : ""}`}>{icon}</span>
+            <span className={`ff-icon-left ${isFocused ? "focused" : ""}`}>
+              {icon}
+            </span>
           )}
           <input
-            type={inputType} name={name} value={value}
-            placeholder={in_PlaceHolder} onChange={onChange}
-            onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)}
-            className={["ff-input", icon ? "with-icon-left" : "", PrivacyInput ? "with-icon-right" : ""].filter(Boolean).join(" ")}
+            type={inputType}
+            name={name}
+            value={value}
+            placeholder={in_PlaceHolder}
+            onChange={onChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className={[
+              "ff-input",
+              icon ? "with-icon-left" : "",
+              PrivacyInput ? "with-icon-right" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            disabled={disabled}
           />
           {PrivacyInput && (
-            <button type="button" className="ff-eye-btn"
-              onClick={() => setShowValue(v => !v)} tabIndex={-1}
-              aria-label={showValue ? "Hide" : "Show"}>
-              {showValue ? <EyeOff size={15} strokeWidth={2} /> : <Eye size={15} strokeWidth={2} />}
+            <button
+              type="button"
+              className="ff-eye-btn"
+              onClick={() => setShowValue((v) => !v)}
+              tabIndex={-1}
+              aria-label={showValue ? "Hide" : "Show"}
+            >
+              {showValue ? (
+                <EyeOff size={15} strokeWidth={2} />
+              ) : (
+                <Eye size={15} strokeWidth={2} />
+              )}
             </button>
           )}
         </div>

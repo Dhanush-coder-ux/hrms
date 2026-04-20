@@ -10,6 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { MessagePopup } from "./AddEmployee/PopDetials";
 import {Insurance} from "./AddEmployee/Insurance"
 
+type PopupData = {
+  Emp_id?: string;
+  message?: string;
+};
 
 
 const API_URL = `${Api_URL}/employee/Register`;
@@ -28,11 +32,16 @@ const API_URL = `${Api_URL}/employee/Register`;
     msg: "", 
     type: "success" as "success" | "error" 
   });
-  const [popup, setPopup] = useState({ 
-  show: false, 
-  msg: "", 
-  type: "success" as "success" | "error",
-  data: null // Add this to hold the summary data
+const [popup, setPopup] = useState<{
+  show: boolean;
+  msg: string;
+  type: "success" | "error";
+  data: PopupData | null;
+}>({
+  show: false,
+  msg: "",
+  type: "success",
+  data: null
 });
 
   const steps = [
@@ -67,7 +76,7 @@ const API_URL = `${Api_URL}/employee/Register`;
         ...edu,
         graduationYear: normaliseDate(edu.graduationYear),
       })),
-      familys: (raw.familys || []).map((dep: any) => ({
+      Familys: (raw.familys || []).map((dep: any) => ({
         ...dep,
         person_dob: normaliseDate(dep.person_dob),
       })),
@@ -83,12 +92,13 @@ const API_URL = `${Api_URL}/employee/Register`;
       });
 
       if (res.ok) {
+        const result = await res.json();
 
         setPopup({ 
               show: true, 
               msg: "Employee created successfully!", 
               type: "success",
-              data: finalData // Pass the details here!
+              data: result // Pass the details here!
             });
         
 
@@ -111,11 +121,12 @@ const API_URL = `${Api_URL}/employee/Register`;
     }
   };
 
- const handleSuccessClose = () => {
+const handleSuccessClose = () => {
   setPopup(prev => ({ ...prev, show: false }));
-  // Using employeeData.Emp_id here is safe because Step 1 must be completed
-  if (employeeData?.Emp_id) {
-    navigate(`/EmployeeManagement/employee/${employeeData.Emp_id}`);
+
+  if (popup.data?.Emp_id) {if (popup.data?.Emp_id) {
+  navigate(`/EmployeeManagement/employee/${popup.data.Emp_id}`);
+} 
   }
 };
 
