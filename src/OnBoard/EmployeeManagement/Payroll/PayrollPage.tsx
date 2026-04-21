@@ -5,6 +5,7 @@ import { CreditCard, Users, PieChart } from "lucide-react";
 import StatCard from "../../../Components/Common/StatCard";
 import SearchBar from "../../../Components/Common/Searchbar";
 import type { PayrollData } from "../../../Types/typesEmployeeManagement";
+import FilterBar from "../Employee/FilterBar";
 
 const API_URL = "http://127.0.0.1:8000/payroll";
 
@@ -67,6 +68,7 @@ const PayrollComponents = () => {
   // ✅ TABLE
   const columns = [
     { header: "Employee", accessor: "employee" },
+    {header:"provider", accessor:"provider_name"},
     { header: "Dept.", accessor: "department" },
     {
       header: "Net Pay",
@@ -121,11 +123,11 @@ const PayrollComponents = () => {
         {/* FILTER */}
         <div className="mb-6 flex gap-4">
           <SearchBar value={searchTerm} onChange={(v) => setSearchTerm(String(v))} />
-          <select onChange={(e) => setFilterDept(e.target.value)}>
-            {departments.map((d) => (
-              <option key={d}>{d}</option>
-            ))}
-          </select>
+          <FilterBar
+                    departments={departments}
+                    value={filterDept}
+                    onChange={setFilterDept}
+                  />
         </div>
 
         {/* TABLE */}
