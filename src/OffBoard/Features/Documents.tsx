@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FileText, Download, UploadCloud, CheckCircle2, AlertCircle, UserCircle, FileCheck, Search } from "lucide-react";
+import { FileText, Download, UploadCloud, AlertCircle, UserCircle, FileCheck, Search } from "lucide-react";
 
 type DocItem = {
   id: string;

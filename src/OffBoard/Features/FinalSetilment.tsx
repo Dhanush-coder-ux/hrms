@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Wallet, Landmark, TrendingUp, TrendingDown, FileCheck, Download, Calculator, ChevronDown, ChevronUp, UserCircle } from "lucide-react";
+import { Landmark, TrendingUp, TrendingDown, FileCheck, Download, Calculator, ChevronDown, ChevronUp, UserCircle } from "lucide-react";
 
 type SettlementLine = {
   label: string;

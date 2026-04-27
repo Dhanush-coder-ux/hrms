@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CheckCircle2, Circle, Clock, Building2, ShieldCheck, Wallet, UserCircle, AlertCircle } from "lucide-react";
+import { CheckCircle2, Clock, UserCircle, AlertCircle } from "lucide-react";
 
 type DeptClearance = {
   dept: string;
@@ -22,7 +22,7 @@ export const Clearance = () => {
     setTimeout(() => {
       setData([
         {
-          emp_id: "EMP001",
+          emp_id: "EMP007",
           emp_name: "Arun Kumar",
           department: "Engineering",
           clearanceList: [
