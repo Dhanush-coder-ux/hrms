@@ -1,24 +1,82 @@
-import { Building2, CalendarCheck, CalendarDays, FileSpreadsheet, FileText, LayoutDashboard, PersonStanding, ReceiptIndianRupee, UserPlus, Users, Variable } from "lucide-react";
+import {
+  Building2,
+  CalendarCheck,
+  CalendarDays,
+  CheckCircle2,
+  FileSpreadsheet,
+  FileText,
+  LayoutDashboard,
 
- export const employeeNavigation = [
-    { label: "Dashboard",  path: "/EmployeeManagement",            icon: LayoutDashboard },
-    { label: "Employees",  path: "/EmployeeManagement/employee",   icon: Users },
-    { label: "Attendance", path: "/EmployeeManagement/attendance", icon: CalendarCheck },
-    { label: "Leaves",     path: "/EmployeeManagement/leaves",     icon: FileSpreadsheet },
-    { label: "Event",      path: "/EmployeeManagement/events",     icon: CalendarDays },
-    { label: "Payroll",    path: "/EmployeeManagement/payroll",    icon: ReceiptIndianRupee },
-    { label: "Department", path: "/EmployeeManagement/department", icon: Building2 },
-  ];
+  PackageCheck,
+  PersonStanding,
+  ReceiptIndianRupee,
+  Repeat,
+  ShieldOff,
+  UserMinus,
+  UserPlus,
+  Users,
+  Users2Icon,
+  Wallet,
+} from "lucide-react";
 
-  export const onboardNavigation = [
-    { label: "Dashboard", path: "/onboard", icon: LayoutDashboard },
-    { label: "Candidates", path: "/onboard/candidates", icon: UserPlus },
-    { label: "Interviews", path: "/onboard/interviews", icon: Users },
-    { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
-    { label: "Add Employee", path: "/onboard/add-employee", icon: PersonStanding },
-  ];
+export const employeeNavigation = [
+  { label: "Dashboard", path: "/EmployeeManagement", icon: LayoutDashboard },
+  { label: "Employees", path: "/EmployeeManagement/employee", icon: Users },
+  {
+    label: "Attendance",
+    path: "/EmployeeManagement/attendance",
+    icon: CalendarCheck,
+  },
+  {
+    label: "Leaves",
+    path: "/EmployeeManagement/leaves",
+    icon: FileSpreadsheet,
+  },
+  { label: "Event", path: "/EmployeeManagement/events", icon: CalendarDays },
+  {
+    label: "Payroll",
+    path: "/EmployeeManagement/payroll",
+    icon: ReceiptIndianRupee,
+  },
+  {
+    label: "Department",
+    path: "/EmployeeManagement/department",
+    icon: Building2,
+  },
+];
 
-  export const AdminPort = [
-    {label: "Dashboard", path:"/admin" , icon: LayoutDashboard},
-    {label: "stack Values" , path:"/admin/stacks",  icon: Variable }
-  ]
+export const onboardNavigation = [
+  { label: "Dashboard", path: "/onboard", icon: LayoutDashboard },
+  { label: "Candidates", path: "/onboard/candidates", icon: UserPlus },
+  { label: "Interviews", path: "/onboard/interviews", icon: Users },
+  { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
+  {
+    label: "Add Employee",
+    path: "/onboard/add-employee",
+    icon: PersonStanding,
+  },
+];
+
+export const AdminPort = [
+  { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
+  { label: "Department", path: "admin/departmentstacks", icon: Building2 },
+  { label: "Employee Updates", path: "admin/employeestacks", icon: Users2Icon },
+];
+
+export const OffboardNavigation = [
+  { label: "Dashboard", path: "/offboard", icon: LayoutDashboard },
+
+  { label: "Exit Requests", path: "/offboard/requests", icon: UserMinus },
+
+  { label: "Asset Return", path: "/offboard/assets", icon: PackageCheck },
+
+  { label: "Access Deactivation", path: "/offboard/access", icon: ShieldOff },
+
+  { label: "Knowledge Transfer", path: "/offboard/kt", icon: Repeat },
+
+  { label: "Clearance", path: "/offboard/clearance", icon: CheckCircle2 },
+
+  { label: "Final Settlement", path: "/offboard/settlement", icon: Wallet },
+
+  { label: "Documents", path: "/offboard/documents", icon: FileText },
+];

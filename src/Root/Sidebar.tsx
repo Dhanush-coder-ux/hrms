@@ -5,16 +5,17 @@ import {
   employeeNavigation,
   onboardNavigation,
   AdminPort,
+  OffboardNavigation
 } from "./PanalSidebar";
 
 export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
-  const isEmployeeModule = location.pathname.startsWith("/EmployeeManagement");
-  const isOnboardModule = location.pathname.startsWith("/onboard");
-  const isAdminModule = location.pathname.startsWith("/Admin");
-
+ const isEmployeeModule = location.pathname.startsWith("/EmployeeManagement");
+const isOnboardModule = location.pathname.startsWith("/onboard");
+const isAdminModule = location.pathname.startsWith("/Admin");
+const isOffboardModule = location.pathname.startsWith("/offboard");
   let currentNav;
   switch (true) {
     case isEmployeeModule:
@@ -25,6 +26,9 @@ export const Sidebar = () => {
       break;
     case isAdminModule:
       currentNav = AdminPort;
+      break;
+    case isOffboardModule:
+      currentNav = OffboardNavigation;
       break;
     default:
       currentNav = AdminPort;

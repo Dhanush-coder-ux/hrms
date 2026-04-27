@@ -56,7 +56,7 @@ export const EmployeeStack = () => {
   <main className=" flex-1 h-full overflow-y-auto scrollbar-hide">
     {activeTab === "Basic Values" && <BasicValues />}
     {activeTab === "Payroll Provider" && <Payrollprovider />}
-    {activeTab === "Custom Fields" && <EmpidCustom />}
+    {activeTab === "Custom ID" && <EmpidCustom />}
   </main>
 
 </div>
