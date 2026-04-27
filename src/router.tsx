@@ -26,7 +26,7 @@ import PayrollDetails from "./OnBoard/EmployeeManagement/Payroll/PayrollDetails"
 import { DepartmentProfile } from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
 import { Interview } from "./OnBoard/InterviewProcess/Features/Interviews";
-import { OfferLetter } from "./OnBoard/InterviewProcess/Features/OfferLetter";
+import { OfferLetterPage } from "./OnBoard/InterviewProcess/Features/OfferLetter";
 
 import { DepartmentsStacks } from "./AdminPort/Features/Department/DepartmentStacks";
 import { EmployeeStack } from "./AdminPort/Features/Employee/EmployeeStack";
@@ -37,6 +37,8 @@ import { KnowledgeTransfer } from "./OffBoard/Features/KnowledgeTransfer";
 import { Clearance } from "./OffBoard/Features/Clearance";
 import { FinalSettlement } from "./OffBoard/Features/FinalSetilment";
 import { Documents } from "./OffBoard/Features/Documents";
+import { OffboardingDashboard } from "./OffBoard/Features/Dashboard";
+import { OnboardingDashboard } from "./OnBoard/InterviewProcess/Features/OnDashboard";
 
 
 export const router = createBrowserRouter([
@@ -72,14 +74,14 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <h1 className="p-6 text-xl">Onboard Dashboard</h1>,
+            element: <OnboardingDashboard />,
           },
           { path: "add-employee", element: <AddEmployee /> },
           { path: "employeeregistration", element: <EmployeeRegister /> },
           { path: "Salary", element: <Salary /> },
           { path: "Candidates", element: <Candidates /> },
           { path: "interviews", element: <Interview /> },
-          { path: "offers", element: <OfferLetter /> },
+          { path: "offers", element: <OfferLetterPage /> },
         ],
       },
       {
@@ -96,7 +98,7 @@ export const router = createBrowserRouter([
       {
         path: "offboard",
         children: [
-          { index: true, element: <h1>Offboard Dashboard</h1> },
+          { index: true, element:<OffboardingDashboard /> },
 
           { path: "requests", element: <ExitRequests /> },
           { path: "assets", element: <AssetReturn /> },
