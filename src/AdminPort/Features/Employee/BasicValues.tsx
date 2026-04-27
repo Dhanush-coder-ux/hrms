@@ -81,7 +81,7 @@ const TAG_COLORS: Record<string, any> = {
   },
 };
 
-// const API_URL = "http://localhost:3001/StackValue/1";
+
 const API_URL = `http://127.0.0.1:8000/options/`; // Update with actual API URL
 
 // ─── Sync Badge Component ─────────────────────────────────────────────────────

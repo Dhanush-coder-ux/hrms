@@ -17,7 +17,7 @@ export const EmployeeStack = () => {
     { id: "Basic Values", icon: "📊" },
     { id: "Payroll Provider", icon: "💸" },
     { id: "Bonus Type", icon: "🎁" },
-    {id: "Custom Fields", icon: "🛠️" },
+    {id: "Custom ID", icon: "🛠️" },
   ];
 
 
