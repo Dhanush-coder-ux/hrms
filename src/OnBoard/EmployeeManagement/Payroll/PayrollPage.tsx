@@ -6,8 +6,9 @@ import StatCard from "../../../Components/Common/StatCard";
 import SearchBar from "../../../Components/Common/Searchbar";
 import type { PayrollData } from "../../../Types/typesEmployeeManagement";
 import FilterBar from "../Employee/FilterBar";
+import { Api_URL } from "../../../APILINK";
 
-const API_URL = "http://127.0.0.1:8000/payroll";
+const API_URL = `${Api_URL}/payroll`;
 
 const PayrollComponents = () => {
   const navigate = useNavigate();

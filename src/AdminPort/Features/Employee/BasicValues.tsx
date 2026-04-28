@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, ChevronDown, Check, Loader2 } from "lucide-react";
 import { useCurrencies } from "../../../Hooks/CurrenciesSelect";
+import { Api_URL } from "../../../APILINK";
 
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -82,7 +83,7 @@ const TAG_COLORS: Record<string, any> = {
 };
 
 
-const API_URL = `http://127.0.0.1:8000/options/`; // Update with actual API URL
+const API_URL = `${Api_URL}/options/`; // Update with actual API URL
 
 // ─── Sync Badge Component ─────────────────────────────────────────────────────
 function SyncBadge({ state }: { state: SyncState }) {
