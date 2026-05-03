@@ -23,7 +23,7 @@ import EmployeeRegister from "./OnBoard/InterviewProcess/Features/AddEmployee/Em
 import { Salary } from "./OnBoard/InterviewProcess/Features/AddEmployee/Salary";
 import EmployeeProfile from "./OnBoard/EmployeeManagement/Employee/EmployeePfrofile";
 import PayrollDetails from "./OnBoard/EmployeeManagement/Payroll/PayrollDetails";
-import { DepartmentProfile } from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
+import DepartmentProfile, {  } from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
 import { Interview } from "./OnBoard/InterviewProcess/Features/Interviews";
 import { OfferLetterPage } from "./OnBoard/InterviewProcess/Features/OfferLetter";
