@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 
+interface OptionType {
+  label: string;
+  value: string;
+}
+
 export const useListOptions = (url: string) => {
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
+  const [options, setOptions] = useState<OptionType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(url);
         const data = await res.json();
-
-        console.log("API Response:", data);
 
         const list = Array.isArray(data)
           ? data
@@ -18,13 +21,24 @@ export const useListOptions = (url: string) => {
           : [];
 
         const formatted = list.map((item: any) => ({
-          label: item.providername || item.name,   // flexible
-          value: item.provider_id || item.id,      // flexible
+          label:
+            item.Dep_name ||
+            item.providername ||
+            item.name ||
+            "Unknown",
+
+          // ✅ FIXED: value-லயும் Dep_name போகுது
+          // இப்போ formData.Department = "Digital Marketing"
+          value:
+            item.Dep_name ||      // ← இது தான் fix
+            item.providername ||
+            item.name ||
+            "",
         }));
 
         setOptions(formatted);
       } catch (err) {
-        console.error("Error names:", err);
+        console.error("Error fetching options:", err);
         setOptions([]);
       }
     };

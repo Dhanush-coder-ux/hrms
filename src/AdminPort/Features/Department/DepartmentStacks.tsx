@@ -40,6 +40,7 @@ export const DepartmentsStacks = () => {
     Dep_id: null,
     Dep_name: "",
     Dep_head: "",
+    Total_employees:0,
     Dep_icon: "FaBuilding",
     bg_color: "#dcfce7",
     icon_color: "#16a34a"
@@ -126,6 +127,7 @@ const handleSave = async () => {
         Dep_id: null,
         Dep_name: "",
         Dep_head: "",
+        Total_employees:0,
         Dep_icon: "FaBuilding",
         bg_color: "#dcfce7",
         icon_color: "#16a34a"

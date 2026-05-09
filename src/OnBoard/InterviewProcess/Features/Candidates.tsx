@@ -9,6 +9,7 @@ import SearchBar from "../../../Components/Common/Searchbar";
 import { CandidateTable } from "./Candidate/CandidatesTable";
 import StatCard from "../../../Components/Common/StatCard";
 import type { Candidate } from "../../../Types/typesOnboarding";
+import FilterBar from "../../EmployeeManagement/Employee/FilterBar";
 
 const Api_url = "http://localhost:3001/candidates/";
 
@@ -17,6 +18,7 @@ export const Candidates = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [statusFilter, setStatusFilter] = useState("");
   
   // State for Modal and Local Changes
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
@@ -94,12 +96,23 @@ export const Candidates = () => {
     }
   };
 
-  const filteredCandidates = candidates.filter((candidate) =>
-    Object.values(candidate).some((val) =>
-      val?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+ const filteredCandidates = candidates.filter((candidate) => {
 
+  const matchesSearch =
+    Object.values(candidate).some((val) =>
+      val
+        ?.toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+
+  const matchesStatus =
+    !statusFilter ||
+    candidate.status?.toLowerCase() ===
+      statusFilter.toLowerCase();
+
+  return matchesSearch && matchesStatus;
+});
   const rejectedCount = candidates.filter(c => c.status?.toLowerCase() === "rejected").length;
   const selectedCount = candidates.filter(c => c.status?.toLowerCase() === "selected").length;
 
@@ -140,9 +153,13 @@ export const Candidates = () => {
         {/* SEARCH */}
         <div className="mb-8 max-w-md">
           <SearchBar value={searchTerm} onChange={(value) => setSearchTerm(value)} />
+            <FilterBar
+  departments={["Selected", "Rejected"]}
+  value={statusFilter}
+  onChange={(value: string) => setStatusFilter(value)}
+/>
         
         </div>
-
         {/* TABLE */}
         {loading ? (
           <div className="flex justify-center py-20 text-slate-400 font-bold animate-pulse uppercase tracking-widest">Loading Pipeline...</div>
