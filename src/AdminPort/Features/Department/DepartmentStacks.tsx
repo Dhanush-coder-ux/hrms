@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Plus, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import SearchBar from "../../../Components/Common/Searchbar";
-import { DepartmentTable } from "./DepartmentTable";
+import { DepartmentList } from "./DepartmentCard";
 import { Backbutton } from "../../../Components/Common/Backbutton";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 import { HexColorPicker } from "react-colorful";
@@ -67,49 +67,35 @@ export const DepartmentsStacks = () => {
 const handleSave = async () => {
   try {
     if (!selectedDept.Dep_name || !selectedDept.Dep_head) {
-      alert("Fill all required fields");
+      alert("Please enter both Department Name and Head");
       return;
     }
 
     const isEdit = !!selectedDept.Dep_id;
-    // Remove the trailing slash for the base POST if your router is sensitive, 
-    // or ensure consistency.
+    // Ensure the ID is appended correctly for PUT
     const url = isEdit 
       ? `${Api_URL}/departments/${selectedDept.Dep_id}` 
       : `${Api_URL}/departments/`; 
 
     const method = isEdit ? "PUT" : "POST";
 
-    const payload = {
-      Dep_name: selectedDept.Dep_name,
-      Dep_head: selectedDept.Dep_head,
-      Dep_icon: selectedDept.Dep_icon,
-      bg_color: selectedDept.bg_color,
-      icon_color: selectedDept.icon_color,
-    };
-
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(selectedDept), // Sending the whole object is safer if keys match
     });
 
-    if (res.status === 422) {
+    if (res.ok) {
+      fetchDepartments();
+      setShowModal(false);
+    } else {
       const errorData = await res.json();
-      console.error("Validation Error Details:", errorData.detail);
-      alert("Check the console for validation errors (422)");
-      return;
+      console.error("Server Error:", errorData);
     }
-
-    if (!res.ok) throw new Error("Save failed");
-
-    fetchDepartments();
-    setShowModal(false);
   } catch (error) {
     console.error("Save error:", error);
   }
 };
-
   // ✅ DELETE
   const handleDelete = async (row: any) => {
     if (!confirm("Are you sure?")) return;
@@ -166,22 +152,25 @@ const handleSave = async () => {
             <Plus size={20} /> ADD NEW
           </button>
         </div>
+    <div className="mb-6">
+    <SearchBar value={searchTerm} onChange={(e: any) => setSearchTerm(e.target.value)} />
+    </div>
+        
 
-        <SearchBar value={searchTerm} onChange={(e: any) => setSearchTerm(e.target.value)} />
 
-        {isLoading ? (
-          <div className="flex justify-center p-20"><Loader2 className="animate-spin text-indigo-600" /></div>
-        ) : (
-          <DepartmentTable
-            columns={[
-              { header: "Dept", accessor: "Dep_name" }, // Adjusted accessor
-              { header: "Head", accessor: "Dep_head" }, // Adjusted accessor
-            ]}
-            departmentsData={departments.filter(d => d.Dep_name?.toLowerCase().includes(searchTerm.toLowerCase()))}
-            onEdit={(row: any) => openModal(row)}
-            onDelete={handleDelete}
-          />
-        )}
+{isLoading ? (
+  <div className="flex justify-center p-20">
+    <Loader2 className="animate-spin text-indigo-600" />
+  </div>
+) : (
+  <DepartmentList
+    departmentsData={departments.filter(d => 
+      d.Dep_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    )}
+    onEdit={(row: any) => openModal(row)}
+    onDelete={handleDelete}
+  />
+)}
       </div>
 
       <AnimatePresence>

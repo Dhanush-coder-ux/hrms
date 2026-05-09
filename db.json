@@ -2443,5 +2443,46 @@
         }
       ]
     }
-  ]
+  ],
+  "CustomID": {
+    "EMP": [
+      {
+        "id": "1",
+        "prefix": "EMP",
+        "separator": "-",
+        "degit": 4,
+        "isActive": false
+      },
+      {
+        "id": "2",
+        "prefix": "EMP",
+        "separator": "-",
+        "degit": 4,
+        "isActive": false
+      },
+      {
+        "id": "1778310309603",
+        "prefix": "EMP",
+        "separator": "-",
+        "degit": 6,
+        "isActive": true
+      }
+    ],
+    "DEP": [
+      {
+        "id": "1",
+        "prefix": "DEP",
+        "separator": "/",
+        "degit": 3,
+        "isActive": false
+      },
+      {
+        "id": "2",
+        "prefix": "DEP",
+        "separator": "/",
+        "degit": 3,
+        "isActive": true
+      }
+    ]
+  }
 }
