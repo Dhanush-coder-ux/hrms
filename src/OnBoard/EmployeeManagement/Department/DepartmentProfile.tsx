@@ -4,8 +4,6 @@ import StatCard from "../../../Components/Common/StatCard";
 import {
   ChevronLeftCircle,
   DollarSign,
-  DownloadIcon,
-  Locate,
   PersonStandingIcon,
 } from "lucide-react";
 

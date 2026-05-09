@@ -1,129 +1,24 @@
 import { useState, useEffect } from "react";
-import { FormFiled } from "../../../Components/Common/FormFiled";
+import { Trash2 } from "lucide-react";
+import { FormFiled } from "../../../../Components/Common/FormFiled";
 import type {
   IDConfig,
   IDCategory,
   CustomIDStore,
   IDSectionProps,
-  EditModalProps,
-  ConfirmModalProps,
-} from "../../../Types/customid";
+} from "../../../../Types/customid";
 
 // --- API Helper ---
 const API_URL = "http://localhost:3001/CustomID";
 
 // --- Preview Generator ---
-function generatePreview(prefix: string, separator: string, degit: number): string {
-  const padded = String(1).padStart(degit, "0");
+function generatePreview(prefix: string, separator: string, digit: number): string {
+  const padded = String(1).padStart(digit, "0");
   if (!prefix) return padded;
   return `${prefix}${separator}${padded}`;
 }
 
-function generatePreview(prefix: string, separator: string, degit: number): string {
-  if (!prefix) return String(1).padStart(degit, "0");
-  return `${prefix}${separator}${String(1).padStart(degit, "0")}`;
-}
 
-// ─── Confirm Modal ────────────────────────────────────────────────────────────
-function ConfirmModal({ message, onConfirm, onCancel }: ConfirmModalProps) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="bg-white rounded-2xl shadow-xl p-6 w-80 space-y-4">
-        <p className="text-sm font-semibold text-slate-700">{message}</p>
-        <div className="flex gap-3 justify-end">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 text-xs font-bold rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 text-xs font-bold rounded-lg bg-red-500 text-white hover:bg-red-600"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Edit Modal ───────────────────────────────────────────────────────────────
-function EditModal({ item, onSave, onClose }: EditModalProps) {
-  const [prefix, setPrefix] = useState(item.prefix);
-  const [separator, setSeparator] = useState(item.separator);
-  const [degit, setDegit] = useState(item.degit);
-  const [error, setError] = useState("");
-
-  const preview = generatePreview(prefix, separator, degit);
-
-  function handleSave() {
-    if (!prefix.trim()) return setError("Prefix cannot be empty.");
-    if (degit < 1) return setError("Digit must be at least 1.");
-    setError("");
-    onSave({ ...item, prefix: prefix.trim(), separator, degit });
-  }
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="bg-white rounded-2xl shadow-xl p-6 w-96 space-y-4">
-        <h3 className="text-sm font-bold text-slate-800">Edit Configuration</h3>
-        <div className="space-y-3">
-          <div>
-            <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Prefix</p>
-            <input
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              value={prefix}
-              onChange={(e) => setPrefix(e.target.value)}
-            />
-          </div>
-          <div>
-            <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Separator</p>
-            <input
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              value={separator}
-              onChange={(e) => setSeparator(e.target.value)}
-            />
-          </div>
-          <div>
-            <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Digit Count</p>
-            <input
-              type="number"
-              min={1}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              value={degit}
-              onChange={(e) => setDegit(Math.max(1, Number(e.target.value) || 1))}
-            />
-          </div>
-        </div>
-
-        {/* Preview */}
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3">
-          <p className="text-[10px] text-indigo-400 font-bold uppercase mb-1">Preview</p>
-          <p className="text-xl font-black font-mono text-slate-800">{preview}</p>
-        </div>
-
-        {error && <p className="text-xs text-red-500">{error}</p>}
-
-        <div className="flex gap-3 justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-xs font-bold rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 text-xs font-bold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 
 
@@ -135,31 +30,25 @@ function IDSection({
   category,
   items,
   onAdd,
-  onUpdate,
   onDelete,
   onActivate,
 }: IDSectionProps) {
   const [prefix, setPrefix] = useState(category === "EMP" ? "EMP" : "DEP");
   const [separator, setSeparator] = useState(category === "EMP" ? "-" : "/");
-  const [degit, setDegit] = useState(category === "EMP" ? 4 : 3);
-  const [addError, setAddError] = useState("");
-  const [editItem, setEditItem] = useState<IDConfig | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [digit, setDigit] = useState(category === "EMP" ? 4 : 3);
 
-  const activeItem = items.find((i) => i.isActive);
-  const preview = generatePreview(prefix, separator, degit);
+  const activeItem = items.find((i: IDConfig) => i.isActive);
+  const preview = generatePreview(prefix, separator, digit);
 
   function handleAdd() {
-    if (!prefix.trim()) return setAddError("Prefix cannot be empty.");
     const newItem: IDConfig = {
       id: String(Date.now()),
       prefix: prefix.trim(),
       separator,
-      degit,
+      digit,
       isActive: items.length === 0, // First item active-ah irukum
     };
     onAdd(category, newItem);
-    setAddError("");
   }
 
   return (
@@ -185,7 +74,7 @@ function IDSection({
                 </div>
                 <div className="w-20">
                    <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Digit</p>
-                   <FormFiled type="number" in_PlaceHolder="4" value={String(degit)} onChange={(e: any) => setDegit(Number(e.target.value))} />
+                   <FormFiled  in_PlaceHolder="4" value={String(digit)} onChange={(e: any) => setDigit(Number(e.target.value))} />
                 </div>
               </div>
               <button onClick={handleAdd} className="w-full py-2 bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-900 transition">
@@ -200,7 +89,7 @@ function IDSection({
                  <span className="bg-indigo-600 text-white text-[9px] font-black px-2 py-0.5 rounded tracking-tighter">ACTIVE</span>
                </div>
                <p className="text-3xl font-black font-mono text-slate-800 tracking-tighter">
-                 {activeItem ? generatePreview(activeItem.prefix, activeItem.separator, activeItem.degit) : preview}
+                 {activeItem ? generatePreview(activeItem.prefix, activeItem.separator, activeItem.digit) : preview}
                </p>
             </div>
           </div>
@@ -209,9 +98,9 @@ function IDSection({
           <div className="pt-4 border-t border-slate-50">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">Saved Formats</p>
             <div className="grid gap-2">
-              {items.map((item) => (
+              {items.map((item: IDConfig) => (
                 <div key={item.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${item.isActive ? 'bg-white border-indigo-200 shadow-sm' : 'bg-slate-50 border-slate-100 opacity-70'}`}>
-                   <span className="font-mono font-bold text-slate-700">{generatePreview(item.prefix, item.separator, item.degit)}</span>
+                   <span className="font-mono font-bold text-slate-700">{generatePreview(item.prefix, item.separator, item.digit)}</span>
                    <div className="flex gap-2">
                      {!item.isActive && (
                        <button onClick={() => onActivate(category, item.id)} className="text-[10px] font-bold px-3 py-1.5 bg-white border border-slate-200 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">Activate</button>
@@ -262,7 +151,7 @@ export default function EmpidCustom() {
   const handleUpdate = (category: IDCategory, updatedItem: IDConfig) => {
     const updatedStore = {
       ...store,
-      [category]: store[category].map(i => i.id === updatedItem.id ? updatedItem : i)
+      [category]: store[category].map((i: IDConfig) => i.id === updatedItem.id ? updatedItem : i)
     };
     syncWithBackend(updatedStore);
   };
@@ -270,7 +159,7 @@ export default function EmpidCustom() {
   const handleDelete = (category: IDCategory, id: string) => {
     const updatedStore = {
       ...store,
-      [category]: store[category].filter(i => i.id !== id)
+      [category]: store[category].filter((i: IDConfig) => i.id !== id)
     };
     syncWithBackend(updatedStore);
   };
@@ -278,7 +167,7 @@ export default function EmpidCustom() {
   const handleActivate = (category: IDCategory, selectedId: string) => {
     const updatedStore = {
       ...store,
-      [category]: store[category].map(i => ({ ...i, isActive: i.id === selectedId }))
+      [category]: store[category].map((i: IDConfig) => ({ ...i, isActive: i.id === selectedId }))
     };
     syncWithBackend(updatedStore);
   };

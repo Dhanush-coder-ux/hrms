@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import { 
-  FileText, 
+import { useState } from "react";
+import {
   Send, 
   Download, 
-  CheckCircle, 
   User, 
   Briefcase, 
   Calendar, 
@@ -13,10 +11,10 @@ import {
 } from "lucide-react";
 
 export const OfferLetterPage = () => {
-  const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+  // const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
 
   // Mock Offer Data
-  const [offerData, setOfferData] = useState({
+  const [offerData] = useState({
     candidateName: "Rithika Sen",
     role: "Senior Product Designer",
     joiningDate: "2026-06-15",

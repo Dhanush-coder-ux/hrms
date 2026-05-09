@@ -1,4 +1,3 @@
-import React from "react";
 import { 
   Users, 
   PackageCheck, 
@@ -7,7 +6,6 @@ import {
   ChevronRight, 
   ArrowUpRight, 
   Clock, 
-  CheckCircle2, 
   AlertCircle 
 } from "lucide-react";
 

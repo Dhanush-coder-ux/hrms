@@ -14,8 +14,8 @@ import { Api_URL } from "../../../APILINK";
 const API_URL = `${Api_URL}/CustomID/store`;
 
 // --- Preview Generator ---
-function generatePreview(prefix: string, separator: string, degit: number): string {
-  const padded = String(1).padStart(degit, "0");
+function generatePreview(prefix: string, separator: string, digit: number): string {
+  const padded = String(1).padStart(digit, "0");
   if (!prefix) return padded;
   return `${prefix}${separator}${padded}`;
 }
@@ -32,24 +32,22 @@ function IDSection({
 }: IDSectionProps) {
   const [prefix, setPrefix] = useState(category === "EMP" ? "EMP" : "DEP");
   const [separator, setSeparator] = useState(category === "EMP" ? "-" : "/");
-  const [degit, setDegit] = useState(category === "EMP" ? 4 : 3);
-  const [addError, setAddError] = useState("");
+  const [digit, setDigit] = useState(category === "EMP" ? 4 : 3);
 
 
-  const activeItem = items.find((i) => i.isActive);
-  const preview = generatePreview(prefix, separator, degit);
+  const activeItem = items.find((i: IDConfig) => i.isActive);
+  const preview = generatePreview(prefix, separator, digit);
 
   function handleAdd() {
-    if (!prefix.trim()) return setAddError("Prefix cannot be empty.");
+    if (!prefix.trim()) return;
     const newItem: IDConfig = {
       id: String(Date.now()),
   prefix: prefix.trim(),
   separator,
-  digit: degit,
+  digit,
   isActive: items.length === 0, // First item active-ah irukum
     };
     onAdd(category, newItem);
-    setAddError("");
   }
 
   return (
@@ -75,7 +73,7 @@ function IDSection({
                 </div>
                 <div className="w-20">
                    <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Digit</p>
-                   <FormFiled in_PlaceHolder="4" value={String(degit)} onChange={(e: any) => setDegit(Number(e.target.value))} />
+                   <FormFiled in_PlaceHolder="4" value={String(digit)} onChange={(e: any) => setDigit(Number(e.target.value))} />
                 </div>
               </div>
               <button onClick={handleAdd} className="w-full py-2 bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-900 transition">
@@ -90,7 +88,7 @@ function IDSection({
                  <span className="bg-indigo-600 text-white text-[9px] font-black px-2 py-0.5 rounded tracking-tighter">ACTIVE</span>
                </div>
                <p className="text-3xl font-black font-mono text-slate-800 tracking-tighter">
-                 {activeItem ? generatePreview(activeItem.prefix, activeItem.separator, activeItem. digit) : preview}
+                 {activeItem ? generatePreview(activeItem.prefix, activeItem.separator, activeItem.digit) : preview}
                </p>
             </div>
           </div>
