@@ -1,15 +1,7 @@
 import EmployeeRow from "./EmployeeRow";
 
-interface Employee {
-  Emp_id: string;
-  name: string;
-  email: string;
-  phone: string;
-  Department: string;
-  designation: string;
-  Status: "Active" | "Inactive";
-  dateOfJoining: string;
-}
+import type { Employee } from "../../../Types/typesEmployeeManagement";
+
 
 const HEADERS = [
   { label: "Name", width: "w-[22%]" },

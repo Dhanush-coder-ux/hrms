@@ -6,16 +6,17 @@ import FilterBar from "../Employee/FilterBar";
 import EmployeeTable from "../Employee/EmployeeTable.tsx";
 import { Building, Check, User, X } from "lucide-react";
 import type { Employee } from "../../../Types/typesEmployeeManagement.tsx";
+import { Api_URL } from "../../../APILINK.tsx";
 
 // employee get endopint
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = Api_URL
 
-export const GET_API_URL = `${BASE_URL}/employee/`;
+const EMPLOYEE_API = `${BASE_URL}/employee/`;
+const DEPARTMENT_API = `${BASE_URL}/departments/`;
 
 
 
-/* ── Page ── */
 export default function Employee() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,22 +24,46 @@ export default function Employee() {
   const [filterDept, setFilterDept] = useState("All");
   console.log({BASE_URL})
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(GET_API_URL);
-        const data = await res.json();
-        console.log("Full API data:", data);
-        
-        console.log("First item:", JSON.stringify(data[0], null, 2)); // 👈 paste the output here
-        setEmployees(data.map((item: any) => item.Employee));
-      } catch {
-        console.error("Failed to fetch employees");
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+
+ useEffect(() => {
+  (async () => {
+    try {
+      const [empRes, deptRes] = await Promise.all([
+        fetch(EMPLOYEE_API),
+        fetch(DEPARTMENT_API),
+      ]);
+
+      const empData = await empRes.json();
+      const deptData = await deptRes.json();
+
+      console.log("EMP:", empData);
+      console.log("DEPT:", deptData);
+
+      /* Create Department Map */
+      const deptMap = new Map(
+        deptData.map((dept: any) => [
+          dept.Dep_name,
+          dept,
+        ])
+      );
+
+      /* Merge Employee + Department */
+     const mergedEmployees = empData.map((item: any) => ({
+  ...item.Employee,
+  departmentData:
+    deptMap.get(item.Employee.Department) || null,
+}));
+
+      console.log("Merged:", mergedEmployees);
+
+      setEmployees(mergedEmployees);
+    } catch (error) {
+      console.error("Failed to fetch employees", error);
+    } finally {
+      setLoading(false);
+    }
+  })();
+}, []);
 
   const departments = useMemo(
     () => ["All", ...Array.from(new Set(employees.map((e) => e.Department)))],

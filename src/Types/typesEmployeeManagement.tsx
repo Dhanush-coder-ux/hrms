@@ -8,6 +8,12 @@ export interface AttendanceRecord {
   status: string;
 }
 
+export interface DepartmentData {
+  Dep_name: string;
+  bg_color: string;
+  icon_color: string;
+}
+
 export interface Employee {
   Emp_id: string;
   name: string;
@@ -17,6 +23,8 @@ export interface Employee {
   designation: string;
   Status: "Active" | "Inactive";
   dateOfJoining: string;
+
+  departmentData?: DepartmentData | null;
 }
 
 export interface EventFormData {

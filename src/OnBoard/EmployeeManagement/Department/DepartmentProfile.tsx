@@ -26,8 +26,8 @@ type DepartmentAPI = {
 };
 
 export default function DepartmentProfile() {
-  const params = useParams();
-  const id = params["*"];
+
+  const { id } = useParams();
   const [dept, setDept] = useState<DepartmentAPI | null>(null);
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +35,7 @@ export default function DepartmentProfile() {
 
   useEffect(() => {
     if (!id) return;
-    
+
     // Encode the ID to handle slashes correctly
     const encodedId = encodeURIComponent(id);
 
@@ -55,7 +55,15 @@ export default function DepartmentProfile() {
     fetch(`${Api_URL}/departments/${encodedId}/employees`)
       .then((res) => res.json())
       .then((data) => {
-        setEmployees(Array.isArray(data) ? data : []);
+        console.log("EMP DATA:", data);
+
+        if (Array.isArray(data)) {
+          setEmployees(data);
+        } else if (data.employees) {
+          setEmployees(data.employees);
+        } else {
+          setEmployees([]);
+        }
       })
       .catch((err) => console.error("Error fetching employees:", err));
   }, [id]);
@@ -106,7 +114,7 @@ export default function DepartmentProfile() {
         <div className="flex-1">
           <header className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-5">
-              <div 
+              <div
                 className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-xl text-2xl font-bold"
                 style={{ backgroundColor: dept.bg_color, color: dept.icon_color }}
               >
@@ -133,22 +141,21 @@ export default function DepartmentProfile() {
                 icon={stat.icon}
                 label={stat.label}
                 value={stat.value}
-                iconBg={stat.iconBg} 
-                iconColor={stat.iconColor} 
-                valueSize={stat.valueSize} 
+                iconBg={stat.iconBg}
+                iconColor={stat.iconColor}
+                valueSize={stat.valueSize}
               />
             ))}
           </div>
 
           {/* Tabs */}
           <div className="flex gap-8 border-b border-slate-200 mb-6">
-            {["team","overview", "settings"].map((t) => (
+            {["team", "overview", "settings"].map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`pb-4 text-sm font-semibold capitalize relative ${
-                  tab === t ? "text-indigo-600" : "text-slate-400"
-                }`}
+                className={`pb-4 text-sm font-semibold capitalize relative ${tab === t ? "text-indigo-600" : "text-slate-400"
+                  }`}
               >
                 {t}
                 {tab === t && (
@@ -160,33 +167,48 @@ export default function DepartmentProfile() {
 
           {/* Tab Content */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm min-h-[200px]">
-           
-                       {tab === "team" && (
+
+            {tab === "team" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
-                   <h3 className="font-bold text-lg">Department Team</h3>
-                   <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase">
-                      {employees.length} Members
-                   </span>
+                  <h3 className="font-bold text-lg">Department Team</h3>
+                  <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase">
+                    {employees.length} Members
+                  </span>
                 </div>
                 {employees.length === 0 ? (
-                   <p className="text-slate-400 text-sm italic py-10 text-center">No employees assigned to this department yet.</p>
+                  <p className="text-slate-400 text-sm italic py-10 text-center">No employees assigned to this department yet.</p>
                 ) : (
                   <div className="grid gap-3">
-                    {employees.map((emp) => (
-                      <div key={emp.Emp_id} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-slate-50 transition-all group">
+                    {employees.map((emp, index) => (
+                      <div
+                        key={emp.Emp_id || index}
+                        className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-slate-50 transition-all group"
+                      >
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                            {emp.name.charAt(0)}
+                            {(emp.name || "U").charAt(0)}
                           </div>
+
                           <div>
-                            <p className="text-sm font-bold text-slate-800">{emp.name}</p>
-                            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">{emp.designation}</p>
+                            <p className="text-sm font-bold text-slate-800">
+                              {emp.name || "Unknown Employee"}
+                            </p>
+
+                            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+                              {emp.designation || "No Designation"}
+                            </p>
                           </div>
                         </div>
+
                         <div className="text-right">
-                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{emp.Emp_id}</p>
-                           <p className="text-[10px] font-bold text-indigo-500 mt-0.5">{emp.email}</p>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                            {emp.Emp_id}
+                          </p>
+
+                          <p className="text-[10px] font-bold text-indigo-500 mt-0.5">
+                            {emp.email || "No Email"}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -194,7 +216,7 @@ export default function DepartmentProfile() {
                 )}
               </div>
             )}
-           
+
             {tab === "overview" && (
               <div>
                 <h3 className="font-bold text-lg mb-2">Department Note</h3>

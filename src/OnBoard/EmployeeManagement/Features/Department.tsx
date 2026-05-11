@@ -145,7 +145,7 @@ export const Department = () => {
             }
           }}
           onEdit={(row: any) =>
-            navigate(`/EmployeeManagement/departmentProfile/${row.Dep_id || row.id}`)
+            navigate(`/EmployeeManagement/departmentProfile/${row.Dep_id}`)
           }
         />
       </div>
