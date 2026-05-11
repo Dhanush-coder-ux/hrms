@@ -8,8 +8,8 @@ import { Api_URL } from "../../../APILINK";
 
 type Variable = {
   name: string;
-  type: "";
-  value?: number;
+  type: string;
+  value: number;
 };
 
 type PayrollProvider = {
@@ -100,21 +100,32 @@ export const Payrollprovider = () => {
   };
   // ➕ Submit
   const handleAddProvider = async () => {
+    // 1. Basic Validation
+    if (!newProvider.providername.trim()) {
+      alert("Please enter a provider name.");
+      return;
+    }
+
     try {
       const payload = {
         ...newProvider,
         // Ensure strings match backend Enums and numbers are valid
-        earnings: newProvider.earnings.map((e) => ({
-          name: e.name,
-          type: e.type.toLowerCase(), // Force lowercase
-          value: Number(e.value || 0),
-        })),
-        deductions: newProvider.deductions.map((d) => ({
-          name: d.name,
-          type: d.type.toLowerCase(), // Force lowercase
-          value: Number(d.value || 0),
-        })),
+        earnings: newProvider.earnings
+          .filter(e => e.name.trim() && e.type) // Only valid entries
+          .map((e) => ({
+            name: e.name.trim(),
+            type: e.type.toLowerCase(), 
+            value: Number(e.value || 0),
+          })),
+        deductions: newProvider.deductions
+          .filter(d => d.name.trim() && d.type)
+          .map((d) => ({
+            name: d.name.trim(),
+            type: d.type.toLowerCase(),
+            value: Number(d.value || 0),
+          })),
       };
+
       const res = await fetch(CreateProviderList_Url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -124,9 +135,11 @@ export const Payrollprovider = () => {
       if (!res.ok) {
         const errorData = await res.json();
         console.error("POST FAILED:", errorData);
+        alert(`Failed to save provider: ${errorData.detail || "Unknown error"}`);
         return;
       }
 
+      alert("Payroll Provider saved successfully!");
       await fetchData();
       setShowModal(false);
       setNewProvider({
@@ -137,6 +150,7 @@ export const Payrollprovider = () => {
       });
     } catch (error) {
       console.error("POST ERROR:", error);
+      alert("A network error occurred while saving.");
     }
   };
 

@@ -7,6 +7,8 @@ import { DepTable } from "../Components/table/DepartmentTable";
 import PageLoading from "../../../Components/Common/PageLoading";
 import type { Department as IDepartment } from "../Department/types";
 import SearchBar from "../../../Components/Common/Searchbar";
+import { Api_URL } from "../../../APILINK";
+
 
 export const Department = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +21,7 @@ export const Department = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:3001/departments");
+        const response = await fetch(`${Api_URL}/departments/`);
         if (!response.ok) throw new Error("Server connection failed");
 
         const data = await response.json();
@@ -35,11 +37,11 @@ export const Department = () => {
   }, []);
 
   const filtered = departments.filter((d) =>
-    d.dep_name?.toLowerCase().includes(searchQuery.toLowerCase()),
+    (d.Dep_name || d.dep_name)?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const totalEmployees = departments.reduce(
-    (acc, curr) => acc + (Number(curr.emp_count) || 0),
+    (acc, curr) => acc + (Number(curr.Total_employees || curr.emp_count) || 0),
     0,
   );
   const avgSize =
@@ -48,11 +50,10 @@ export const Department = () => {
       : 0;
 
   const Column = [
-    { header: "Department Name", accessor: "dep_name" },
-    { header: "Head of Dept.", accessor: "head_of_dep" },
-    { header: "Employees", accessor: "emp_count" },
-    { header: "Status", accessor: "Task_status" },
-    { header: "Actions", type: "action" },
+    { header: "Department Name", accessor: "Dep_name" },
+    { header: "Head of Dept.", accessor: "Dep_head" },
+    { header: "Employees", accessor: "Total_employees" },
+    { header: "Profile", type: "action" },
   ];
 
   if (loading) return <PageLoading />;
@@ -74,7 +75,7 @@ export const Department = () => {
           </div>
           <Button
             B_name="+ Create"
-            ClickToAction={() => alert("Modal functionality needed")}
+            ClickToAction={() => navigate("/Admin/departmentstacks")}
           />
         </div>
       </div>
@@ -144,7 +145,7 @@ export const Department = () => {
             }
           }}
           onEdit={(row: any) =>
-            navigate(`/EmployeeManagement/departmentProfile/${row.id}`)
+            navigate(`/EmployeeManagement/departmentProfile/${row.Dep_id || row.id}`)
           }
         />
       </div>

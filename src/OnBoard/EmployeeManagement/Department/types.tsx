@@ -1,4 +1,8 @@
 export interface Department {
+  Dep_id: string;
+  Dep_name: string;
+  Dep_head: string;
+  Total_employees: number;
   id: string | number;
   dep_name: string;
   head_of_dep: string;

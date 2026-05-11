@@ -30,7 +30,8 @@ export const useListOptions = (url: string) => {
           // ✅ FIXED: value-லயும் Dep_name போகுது
           // இப்போ formData.Department = "Digital Marketing"
           value:
-            item.Dep_name ||      // ← இது தான் fix
+            item.provider_id ||    // ✅ Added provider_id
+            item.Dep_name ||      
             item.providername ||
             item.name ||
             "",
