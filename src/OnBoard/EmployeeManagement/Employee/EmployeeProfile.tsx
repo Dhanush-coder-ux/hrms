@@ -139,6 +139,11 @@ export default function EmployeeProfile() {
     earnings_breakdown: [] as any[],
     deductions_breakdown: [] as any[],
 
+    annualSalary: 0,
+    bonus_Type: "",
+    bonus_CalculationMode: "",
+    bonus_Value: 0,
+
     // Bank
     bankName: "",
     accountNumber: "",
