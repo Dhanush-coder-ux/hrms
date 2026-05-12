@@ -1,57 +1,56 @@
 import EmployeeRow from "./EmployeeRow";
-
 import type { Employee } from "../../../Types/typesEmployeeManagement";
 
-
 const HEADERS = [
-  { label: "Name", width: "w-[22%]" },
+  { label: "Personnel", width: "w-[25%]" },
   { label: "Department", width: "w-[15%]" },
-  { label: "designation", width: "w-[17%]" },
-  { label: "Email", width: "w-[22%]" },
-  { label: "Phone", width: "w-[14%]" },
+  { label: "Designation", width: "w-[17%]" },
+  { label: "Contact Info", width: "w-[28%]" },
   { label: "Status", width: "w-[10%]" },
+  { label: "", width: "w-[5%]" },
 ];
 
 export default function EmployeeTable({
   employees,
+  onRowClick,
 }: {
   employees: Employee[];
+  onRowClick: (emp: Employee) => void;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              {HEADERS.map((h) => (
-                <th
-                  key={h.label}
-                  className={`${h.width} px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider`}
-                >
-                  {h.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
+    <div className="w-full overflow-x-auto custom-scrollbar">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="bg-slate-50/50 border-b border-slate-100">
+            {HEADERS.map((h) => (
+              <th
+                key={h.label}
+                className={`${h.width} px-6 py-4 text-left text-[11px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap`}
+              >
+                {h.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
 
-          <tbody>
-            {employees.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={6}
-                  className="py-16 text-center text-sm text-gray-400"
-                >
-                  No employees found.
-                </td>
-              </tr>
-            ) : (
-              employees.map((emp) => (
-                <EmployeeRow key={emp.Emp_id} employee={emp} />
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+        <tbody>
+          {employees.length === 0 ? (
+            <tr>
+              <td
+                colSpan={HEADERS.length}
+                className="px-8 py-20 text-center text-slate-300 text-[11px] font-bold uppercase tracking-widest"
+              >
+                No personnel records found.
+              </td>
+            </tr>
+          ) : (
+            employees.map((emp) => (
+              <EmployeeRow key={emp.Emp_id} employee={emp} onRowClick={onRowClick} />
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }
+

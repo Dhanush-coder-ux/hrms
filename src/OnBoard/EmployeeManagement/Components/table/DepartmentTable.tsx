@@ -1,4 +1,4 @@
-import {ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { 
   FaFireExtinguisher, 
   FaUserTie, 
@@ -17,85 +17,121 @@ const ICON_MAP: any = {
   FaStethoscope: FaStethoscope,
 };
 
-export const DepTable = ({ columns, TB, getStatusColor, onEdit }: any) => {
+export type Column =
+  | { header: string; accessor: string; type?: "text" | "badge" | "date" }
+  | { header: string; type: "action" };
+
+export type TableProps = {
+  columns: Column[];
+  TB: any[];
+  onEdit?: (row: any) => void;
+};
+
+export const DepTable = ({ columns, TB, onEdit }: TableProps) => {
   return (
-    <div className="w-full overflow-x-auto">
-      <table className="w-full">
+    <div className="w-full overflow-x-auto custom-scrollbar">
+      <table className="w-full border-collapse">
         <thead>
-          <tr className="bg-gray-50/50 border-b border-gray-100">
-            {columns.map((col: any, i: number) => (
-              <th 
-                key={i} 
-                className={`px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 
-                  ${col.type === "action" ? "text-right" : 
-                    col.accessor === "Total_employees" ? "text-center" : "text-left"}`}
+          <tr className="bg-slate-50/50 border-b border-slate-100">
+            {columns.map((col, i) => (
+              <th
+                key={i}
+                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap ${
+                  col.type === "action" ? "text-right" : "text-left"
+                }`}
               >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-50">
+
+        <tbody>
           {TB.length > 0 ? (
-            TB.map((row: any) => (
-              <tr 
-                key={row.Dep_id || row.id} 
-                onClick={() => onEdit(row)}
-                className="hover:bg-indigo-50/50 transition-all cursor-pointer group"
+            TB.map((row, ri) => (
+              <tr
+                key={row.Dep_id || ri}
+                onClick={() => onEdit?.(row)}
+                className="group border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
               >
-                {columns.map((col: any, i: number) => (
-                  <td 
-                    key={i} 
-                    className={`px-8 py-5 whitespace-nowrap 
-                      ${col.accessor === "Total_employees" ? "text-center" : ""}`}
-                  >
-                    {col.accessor === "Dep_name" || col.accessor === "dep_name" ? (
-                      <div className="flex items-center gap-4">
-                        <div 
-                          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110"
-                          style={{ backgroundColor: row.bg_color || "#f8fafc" }}
-                        >
-                          {(() => {
-                            const IconObj = ICON_MAP[row.Dep_icon] || FaBuilding;
-                            return <IconObj style={{ color: row.icon_color || "#64748b" }} size={18} />;
-                          })()}
-                        </div>
-                        <div>
-                          <p className="text-sm font-black text-gray-800 uppercase tracking-tight group-hover:text-indigo-600 transition-colors">
-                            {row.Dep_name || row.dep_name}
-                          </p>
-                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-                            ID: {row.Dep_id || row.id}
-                          </p>
-                        </div>
-                      </div>
-                    ) : col.type === "action" ? (
-                      <div className="flex justify-end">
+                {columns.map((col, ci) => {
+                  if (col.type === "action") {
+                    return (
+                      <td key={ci} className="px-6 py-4 text-right">
                         <button
-                          onClick={(e) => { e.stopPropagation(); onEdit(row); }}
-                          className="flex items-center gap-2 text-xs font-black text-indigo-600 bg-indigo-50 px-5 py-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm active:scale-95 border border-indigo-100"
+                          onClick={(e) => { e.stopPropagation(); onEdit?.(row); }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-100 bg-indigo-50 text-indigo-600 text-[11px] font-bold cursor-pointer transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-600 active:scale-95"
                         >
-                          <ExternalLink size={14} /> Profile
+                          <ExternalLink size={13} /> Profile
                         </button>
-                      </div>
-                    ) : col.accessor === "Task_status" ? (
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border ${getStatusColor(row.Task_status)}`}>
-                        {row.Task_status}
+                      </td>
+                    );
+                  }
+
+                  if (!("accessor" in col)) return null;
+
+                  const val = row[col.accessor];
+
+                  /* Department name + icon */
+                  if (col.accessor === "Dep_name" || col.accessor === "dep_name") {
+                    const IconObj = ICON_MAP[row.Dep_icon] || FaBuilding;
+                    return (
+                      <td key={ci} className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110"
+                            style={{ backgroundColor: row.bg_color || "#f1f5f9" }}
+                          >
+                            <IconObj style={{ color: row.icon_color || "#64748b" }} size={18} />
+                          </div>
+                          <div>
+                            <p className="text-[13px] font-bold text-slate-800 tracking-tight m-0">
+                              {val}
+                            </p>
+                            <p className="text-[10px] font-bold text-slate-400 tracking-wider m-0 mt-0.5">
+                              ID: {row.Dep_id || row.id}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    );
+                  }
+
+                  /* Employees count badge */
+                  if (col.accessor === "Total_employees" || col.accessor === "emp_count") {
+                    return (
+                      <td key={ci} className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-50 text-slate-600 border border-slate-100">
+                          {val || 0} Staff
+                        </span>
+                      </td>
+                    );
+                  }
+
+                  /* Default cell */
+                  return (
+                    <td key={ci} className="px-6 py-4">
+                      <span className="text-[13px] font-semibold text-slate-600">
+                        {val || "—"}
                       </span>
-                    ) : (
-                      <span className="text-sm text-gray-700 font-bold">
-                        {row[col.accessor] || "—"}
-                      </span>
-                    )}
-                  </td>
-                ))}
+                    </td>
+                  );
+                })}
               </tr>
             ))
           ) : (
-            <tr><td colSpan={columns.length} className="py-20 text-center text-gray-400 font-bold">No Records Found</td></tr>
+            <tr>
+              <td
+                colSpan={columns.length}
+                className="px-8 py-20 text-center text-slate-300 text-[11px] font-bold uppercase tracking-widest"
+              >
+                No departments found.
+              </td>
+            </tr>
           )}
         </tbody>
       </table>
     </div>
   );
-};
+};
+

@@ -7,6 +7,7 @@ interface StageFilterProps {
   counts: Record<string, number>;
   totalCount: number;
   showClear?: boolean;
+  className?: string;
 }
 
 const StageFilter = ({
@@ -15,10 +16,11 @@ const StageFilter = ({
   onStageChange,
   counts,
   totalCount,
-  showClear = true
+  showClear = true,
+  className = "mb-6"
 }: StageFilterProps) => {
   return (
-    <div className="flex items-center gap-2 mb-6 flex-wrap">
+    <div className={`flex items-center gap-2 flex-wrap ${className}`}>
       {/* ALL Button */}
       <button
         onClick={() => onStageChange("")}

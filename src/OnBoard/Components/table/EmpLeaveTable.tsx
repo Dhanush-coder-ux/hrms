@@ -1,6 +1,6 @@
 import { ChevronRight} from "lucide-react";
 
-type Column =
+export type Column =
   | { header: string; accessor: string; type?: "text" | "badge" | "date" }
   | { header: string; type: "action" };
 

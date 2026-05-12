@@ -1,31 +1,46 @@
-import { Calendar, Info } from "lucide-react";
+import { Calendar, Info, History } from "lucide-react";
 import type { Empleaves } from "../../../Types/typesEmployeeManagement";
 
 interface HistoryTableProps {
   history: Empleaves["leave_history"];
-  getStatusStyle: (status: string) => string;
 }
 
-export const LeaveHistoryTable = ({ history, getStatusStyle }: HistoryTableProps) => {
+const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string; border: string }> = {
+  approved: { bg: "bg-emerald-50", text: "text-emerald-600", dot: "bg-emerald-500", border: "border-emerald-100" },
+  pending:  { bg: "bg-amber-50", text: "text-amber-600", dot: "bg-amber-500", border: "border-amber-100" },
+  rejected: { bg: "bg-rose-50", text: "text-rose-600", dot: "bg-rose-500", border: "border-rose-100" },
+  cancelled:{ bg: "bg-slate-100", text: "text-slate-600", dot: "bg-slate-400", border: "border-slate-200" },
+  default:  { bg: "bg-slate-50", text: "text-slate-500", dot: "bg-slate-400", border: "border-slate-100" },
+};
+
+const getStatusStyle = (val: string) =>
+  STATUS_STYLES[val?.toLowerCase()] ?? STATUS_STYLES.default;
+
+export const LeaveHistoryTable = ({ history }: HistoryTableProps) => {
   return (
-    <div className=" rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-white rounded-[24px] border-[1.5px] border-slate-100 overflow-hidden shadow-sm">
       {/* Table Header Section */}
-      <div className="px-8 py-6 border-b border-slate-50 flex items-center justify-between">
-        <h3 className="text-xl font-bold text-slate-800">Detailed History</h3>
-        <span className="bg-slate-100 text-slate-500 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+      <div className="px-8 py-6 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+             <History size={18} />
+          </div>
+          <h3 className="text-lg font-extrabold text-slate-800 tracking-tight">Leave History</h3>
+        </div>
+        <span className="bg-white border border-slate-100 text-slate-400 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest">
           {history?.length || 0} Records
         </span>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50/50 text-slate-400 uppercase text-[11px] font-black tracking-widest">
-              <th className="px-8 py-4">Applied On</th>
-              <th className="px-8 py-4">Duration</th>
-              <th className="px-8 py-4 text-center">Days</th>
-              <th className="px-8 py-4">Status</th>
-              <th className="px-8 py-4">Reason</th>
+            <tr className="bg-slate-50/50 border-b border-slate-100">
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Applied On</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Duration</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 text-center">Days</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Status</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Reason</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
@@ -34,13 +49,15 @@ export const LeaveHistoryTable = ({ history, getStatusStyle }: HistoryTableProps
                 <LeaveHistoryRow 
                   key={index} 
                   leave={leave} 
-                  statusClass={getStatusStyle(leave.status)} 
                 />
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="px-8 py-12 text-center text-slate-400 italic">
-                  No leave history available for this record.
+                <td colSpan={5} className="px-8 py-20 text-center">
+                   <div className="flex flex-col items-center gap-2 opacity-30">
+                      <History size={40} />
+                      <p className="text-[11px] font-bold uppercase tracking-widest">No history records</p>
+                   </div>
                 </td>
               </tr>
             )}
@@ -51,45 +68,49 @@ export const LeaveHistoryTable = ({ history, getStatusStyle }: HistoryTableProps
   );
 };
 
-// Sub-component for individual rows to keep things tidy
-const LeaveHistoryRow = ({ leave, statusClass }: { leave: any; statusClass: string }) => {
+const LeaveHistoryRow = ({ leave }: { leave: any }) => {
+  const s = getStatusStyle(leave.status);
+  
   return (
-    <tr className="hover:bg-slate-50/80 transition-colors group">
+    <tr className="hover:bg-indigo-50/30 transition-colors group">
       <td className="px-8 py-5">
-        <p className="text-sm font-semibold text-slate-600">{leave.applayDate}</p>
+        <p className="text-[13px] font-bold text-slate-600 tracking-tight">{leave.applayDate}</p>
       </td>
       
       <td className="px-8 py-5">
-        <div className="flex items-center gap-3 text-sm">
-          <div className="p-1.5 bg-blue-50 text-blue-500 rounded-md">
+        <div className="flex items-center gap-2.5 text-[13px]">
+          <div className="w-7 h-7 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center shrink-0">
             <Calendar size={14} />
           </div>
-          <span className="font-bold text-slate-700">{leave.from_date}</span>
-          <span className="text-slate-300">→</span>
-          <span className="font-bold text-slate-700">{leave.to_date}</span>
+          <div className="flex items-center gap-1.5 font-bold text-slate-700">
+            <span>{leave.from_date}</span>
+            <span className="text-slate-300 font-normal">→</span>
+            <span>{leave.to_date}</span>
+          </div>
         </div>
       </td>
 
       <td className="px-8 py-5 text-center">
-        <span className="text-sm font-black text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-slate-100 text-slate-600 border border-slate-200">
           {leave.Days}d
         </span>
       </td>
 
       <td className="px-8 py-5">
-        <span className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tighter border shadow-sm ${statusClass}`}>
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide border ${s.bg} ${s.text} ${s.border}`}>
+          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${s.dot}`} />
           {leave.status}
         </span>
       </td>
 
       <td className="px-8 py-5">
-        <div className="flex items-center gap-2 group/reason">
-          <Info size={14} className="text-slate-300 group-hover/reason:text-blue-400 transition-colors" />
-          <p className="text-sm text-slate-500 italic max-w-[200px] truncate group-hover:whitespace-normal group-hover:overflow-visible group-hover:z-10 bg-transparent transition-all">
-            {leave.Reason || "N/A"}
+        <div className="flex items-start gap-2.5">
+          <Info size={14} className="text-slate-300 mt-0.5 shrink-0" />
+          <p className="text-[12px] font-medium text-slate-500 leading-relaxed max-w-[250px]">
+            {leave.Reason || "No reason provided"}
           </p>
         </div>
       </td>
     </tr>
   );
-};
+};

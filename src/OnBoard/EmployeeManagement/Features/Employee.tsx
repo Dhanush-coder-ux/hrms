@@ -1,74 +1,73 @@
 import { useEffect, useState, useMemo } from "react";
 import StatCard from "../../../Components/Common/StatCard.tsx";
-
+import StageFilter from "../../../Components/Common/StageFilter.tsx";
 import SearchBar from "../../../Components/Common/Searchbar.tsx";
-import FilterBar from "../Employee/FilterBar";
 import EmployeeTable from "../Employee/EmployeeTable.tsx";
-import { Building, Check, User, X } from "lucide-react";
+import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer.tsx";
+import { Building, Check, User, X, TrendingUp } from "lucide-react";
 import type { Employee } from "../../../Types/typesEmployeeManagement.tsx";
 import { Api_URL } from "../../../APILINK.tsx";
 
-// employee get endopint
-
-const BASE_URL = Api_URL
-
+const BASE_URL = Api_URL;
 const EMPLOYEE_API = `${BASE_URL}/employee/`;
 const DEPARTMENT_API = `${BASE_URL}/departments/`;
-
-
 
 export default function Employee() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterDept, setFilterDept] = useState("All");
-  console.log({BASE_URL})
+  const [filterDept, setFilterDept] = useState("");
+  
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const [empRes, deptRes] = await Promise.all([
+          fetch(EMPLOYEE_API),
+          fetch(DEPARTMENT_API),
+        ]);
 
- useEffect(() => {
-  (async () => {
-    try {
-      const [empRes, deptRes] = await Promise.all([
-        fetch(EMPLOYEE_API),
-        fetch(DEPARTMENT_API),
-      ]);
+        const empData = await empRes.json();
+        const deptData = await deptRes.json();
 
-      const empData = await empRes.json();
-      const deptData = await deptRes.json();
+        const deptMap = new Map(
+          deptData.map((dept: any) => [
+            dept.Dep_name,
+            dept,
+          ])
+        );
 
-      console.log("EMP:", empData);
-      console.log("DEPT:", deptData);
+        const mergedEmployees = empData.map((item: any) => ({
+          ...item.Employee,
+          departmentData:
+            deptMap.get(item.Employee.Department) || null,
+        }));
 
-      /* Create Department Map */
-      const deptMap = new Map(
-        deptData.map((dept: any) => [
-          dept.Dep_name,
-          dept,
-        ])
-      );
-
-      /* Merge Employee + Department */
-     const mergedEmployees = empData.map((item: any) => ({
-  ...item.Employee,
-  departmentData:
-    deptMap.get(item.Employee.Department) || null,
-}));
-
-      console.log("Merged:", mergedEmployees);
-
-      setEmployees(mergedEmployees);
-    } catch (error) {
-      console.error("Failed to fetch employees", error);
-    } finally {
-      setLoading(false);
-    }
-  })();
-}, []);
+        setEmployees(mergedEmployees);
+      } catch (error) {
+        console.error("Failed to fetch employees", error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const departments = useMemo(
-    () => ["All", ...Array.from(new Set(employees.map((e) => e.Department)))],
+    () => Array.from(new Set(employees.map((e) => e.Department))),
     [employees],
   );
+
+  const deptCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    employees.forEach(emp => {
+      if (emp.Department) {
+        counts[emp.Department] = (counts[emp.Department] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [employees]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -79,7 +78,7 @@ export default function Employee() {
         !emp.Emp_id.toLowerCase().includes(q)
       )
         return false;
-      if (filterDept !== "All" && emp.Department !== filterDept) return false;
+      if (filterDept && emp.Department !== filterDept) return false;
       return true;
     });
   }, [employees, search, filterDept]);
@@ -87,74 +86,120 @@ export default function Employee() {
   const activeCount = employees.filter((e) => e.Status === "Active").length;
   const inactiveCount = employees.filter((e) => e.Status === "Inactive").length;
 
+  const handleRowClick = (emp: Employee) => {
+    setSelectedEmployee(emp);
+    setShowDetails(true);
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full bg-slate-50">
-        <p className="text-sm text-gray-400">Loading employees…</p>
+      <div className="flex flex-col items-center justify-center h-full bg-slate-50 gap-4">
+        <div className="w-8 h-8 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
+        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Loading employees…</p>
       </div>
     );
   }
 
   return (
-    <div className="h-full overflow-y-auto custom-scrollbar pb-12">
-      {/* ── Page Header ── */}
-      <div className="px-8 pt-8">
-        <h1 className="text-xl font-bold text-gray-900 tracking-tight">
-          Employee Directory
-        </h1>
-        <p className="text-sm text-gray-400 mt-1">Manage company workforce</p>
+    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar">
+      {/* HEADER */}
+      <div className="flex items-start justify-between gap-6 mb-10 flex-wrap">
+        <div className="flex flex-col">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+            <TrendingUp size={12} />
+            <span>Personnel Hub</span>
+          </div>
+          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Employee Directory</h1>
+          <p className="text-sm text-slate-400 font-medium">
+            Manage and monitor company workforce of {employees.length} members
+          </p>
+        </div>
       </div>
 
-      {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-8 mt-6">
+
+      {/* DEPARTMENT FILTER */}
+      {/* STATS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
           label="Total Employees"
           value={employees.length}
           icon={User}
-          iconBg="#EFF6FF"
-          iconColor="#23a1a1"
-          valueSize="2xl"
+          iconBgClass="bg-blue-50"
+          iconColorClass="text-blue-500"
+          valueColorClass="text-blue-600"
+          subText="Active personnel"
         />
         <StatCard
           label="Active"
           value={activeCount}
           icon={Check}
-          iconBg="#DCFCE7"
-          iconColor="#2dc24d"
-          valueSize="2xl"
+          iconBgClass="bg-emerald-50"
+          iconColorClass="text-emerald-500"
+          valueColorClass="text-emerald-600"
+          subText="Currently on-duty"
         />
         <StatCard
           label="Inactive"
           value={inactiveCount}
           icon={X}
-          iconBg="#FEE2E2"
-          iconColor="#f51625"
-          valueSize="2xl"
+          iconBgClass="bg-rose-50"
+          iconColorClass="text-rose-500"
+          valueColorClass="text-rose-600"
+          subText="Offboarded/Away"
         />
         <StatCard
           label="Departments"
           value={departments.length - 1}
           icon={Building}
-          iconBg="#F0FDF4"
-          iconColor="#04498a"
-          valueSize="2xl"
+          iconBgClass="bg-violet-50"
+          iconColorClass="text-violet-500"
+          valueColorClass="text-violet-600"
+          subText="Functional units"
         />
       </div>
-
-      {/* ── Toolbar: Search + Filter on same line ── */}
-      <div className="flex items-center gap-3 px-8 mt-5">
-        <SearchBar value={search} onChange={setSearch} />
-        <FilterBar
-          departments={departments}
-          value={filterDept}
-          onChange={setFilterDept}
+      <div className="flex justify-between gap-4 mb-6 items-center">
+        <StageFilter
+          stages={departments}
+          selectedStage={filterDept}
+          onStageChange={setFilterDept}
+          counts={deptCounts}
+          totalCount={employees.length}
+          className=""
         />
+        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+          <SearchBar value={search} onChange={setSearch} />
+        </div>
       </div>
 
-      {/* ── Table ── */}
-      <div className="px-8 mt-4">
-        <EmployeeTable employees={filtered} />
+
+      {/* TABLE CARD */}
+      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 ">
+        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
+          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+            Personnel List
+          </div>
+          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+            {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+
+        <EmployeeTable employees={filtered} onRowClick={handleRowClick} />
       </div>
+
+      <EmployeeDetailsDrawer
+        employee={selectedEmployee}
+        isOpen={showDetails}
+        onClose={() => setShowDetails(false)}
+      />
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+      `}</style>
     </div>
   );
 }
+

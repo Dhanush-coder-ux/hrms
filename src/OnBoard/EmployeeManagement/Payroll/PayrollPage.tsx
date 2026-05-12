@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import PayrollTable from "../Components/table/PayRollTable";
 import { useEffect, useState, useMemo } from "react";
-import { CreditCard, Users, PieChart } from "lucide-react";
+import { CreditCard, Users, PieChart, TrendingUp } from "lucide-react";
+import PayrollTable, { type Column } from "../Components/table/PayRollTable";
 import StatCard from "../../../Components/Common/StatCard";
+import StageFilter from "../../../Components/Common/StageFilter";
 import SearchBar from "../../../Components/Common/Searchbar";
+import { PayrollDetailsDrawer } from "./PayrollDetailsDrawer";
 import type { PayrollData } from "../../../Types/typesEmployeeManagement";
-import FilterBar from "../Employee/FilterBar";
 import { Api_URL } from "../../../APILINK";
 import PageLoading from "../../../Components/Common/PageLoading";
 import { MdPayment } from "react-icons/md";
@@ -13,20 +13,20 @@ import { MdPayment } from "react-icons/md";
 const API_URL = `${Api_URL}/payroll`;
 
 const PayrollComponents = () => {
-  const navigate = useNavigate();
-
   const [payrollData, setPayrollData] = useState<PayrollData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterDept, setFilterDept] = useState("All");
+  const [filterDept, setFilterDept] = useState("");
+  
+  const [selectedEmpId, setSelectedEmpId] = useState<string | null>(null);
+  const [selectedEmpName, setSelectedEmpName] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
-  // ✅ FETCH ALL EMPLOYEES
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
-        console.log("PAYROLL LIST:", data);
         setPayrollData(data);
       } catch (err) {
         console.error("Fetch Error:", err);
@@ -34,25 +34,20 @@ const PayrollComponents = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // ✅ FILTER
   const filteredData = useMemo(() => {
     return payrollData.filter((item) => {
       const matchesSearch = (item.employee || "")
-  .toLowerCase()
-  .includes(searchTerm.toLowerCase());
-
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
       const matchesDept =
-        filterDept === "All" || item.department === filterDept;
-
+        !filterDept || item.department === filterDept;
       return matchesSearch && matchesDept;
     });
   }, [payrollData, searchTerm, filterDept]);
 
-  // ✅ STATS
   const stats = useMemo(() => {
     const totalNet = filteredData.reduce((acc, curr) => acc + curr.net, 0);
     const pendingCount = filteredData.filter(
@@ -66,91 +61,131 @@ const PayrollComponents = () => {
     };
   }, [filteredData]);
 
-  const departments = ["All", ...new Set(payrollData.map((d) => d.department))];
+  const departments = Array.from(new Set(payrollData.map((d) => d.department)));
 
-  // ✅ TABLE
-  const columns = [
+  const deptCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    payrollData.forEach(item => {
+      if (item.department) {
+        counts[item.department] = (counts[item.department] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [payrollData]);
+
+  const columns: Column[] = [
     { header: "Employee", accessor: "employee" },
-    {header:"provider", accessor:"provider_name"},
+    { header: "Provider", accessor: "provider_name" },
     { header: "Dept.", accessor: "department" },
-    {
-      header: "Net Pay",
-      accessor: "net",
-      render: (row: PayrollData) => (
-        <span>${row.net.toLocaleString()}</span>
-      ),
-    },
+    { header: "Net Pay", accessor: "net" },
     { header: "Status", accessor: "status" },
+    { header: "", type: "action" },
   ];
 
-  // ✅ CLICK ROW
   const ActionToClickRow = (row: PayrollData) => {
-    console.log("Clicked:", row.emp_id);
-    navigate(`/EmployeeManagement/payrollDetails/${row.emp_id}`);
+    setSelectedEmpId(row.emp_id);
+    setSelectedEmpName(row.employee);
+    setShowDetails(true);
   };
 
-  if (loading) return <PageLoading/>;
+  if (loading) return <PageLoading />;
 
   return (
-    <div className="h-full overflow-auto text-slate-900">
-      <div className="max-w-7xl mx-auto px-4 py-10">
-
-        <div>
-            <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
-              <MdPayment className="w-8 h-8 text-indigo-600" />
-              Payroll Management
-            </h1>
-
-            <p className="text-slate-500 mt-1">
-              Real-time salary breakdown
-            </p>
+    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar">
+      {/* HEADER */}
+      <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
+        <div className="flex flex-col">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+            <TrendingUp size={12} />
+            <span>Finance Hub</span>
           </div>
+          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none flex items-center gap-3">
+            <MdPayment className="w-8 h-8 text-indigo-600" />
+            Payroll Management
+          </h1>
+          <p className="text-sm text-slate-400 font-medium">
+            Real-time salary breakdown and disbursement tracking
+          </p>
+        </div>
+      </div>
 
-        {/* STATS */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5 mb-10">
-          <StatCard
-            icon={CreditCard}
-            label="Total Disbursement"
-            value={`$${stats.totalNet.toLocaleString()}`}
-            iconBg="#eef2ff"
-            iconColor="#4f46e5"
-            valueSize="2xl"
-          />
-          <StatCard
-            icon={Users} //"text-emerald-600"
-            label="Total Employees"
-            iconBg="#ecfdf5"
-            iconColor="#059669"
-            valueSize="2xl"
-            value={stats.totalEmployees.toString()}
-          />
-          <StatCard
-            icon={PieChart} //className="text-amber-600"
-            label="Pending Approvals"
-            value={stats.pendingCount.toString()}
-            iconBg="#fffbeb"
-            iconColor="#d97706"
-            valueSize="2xl"
-          />
+      {/* STATS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <StatCard
+          label="Total Disbursement"
+          value={`₹${stats.totalNet.toLocaleString()}`}
+          icon={CreditCard}
+          iconBgClass="bg-indigo-50"
+          iconColorClass="text-indigo-500"
+          valueColorClass="text-indigo-600"
+          subText="Current month"
+        />
+        <StatCard
+          label="Total Employees"
+          value={stats.totalEmployees}
+          icon={Users}
+          iconBgClass="bg-emerald-50"
+          iconColorClass="text-emerald-500"
+          valueColorClass="text-emerald-600"
+          subText="On payroll"
+        />
+        <StatCard
+          label="Pending Approvals"
+          value={stats.pendingCount}
+          icon={PieChart}
+          iconBgClass="bg-amber-50"
+          iconColorClass="text-amber-500"
+          valueColorClass="text-amber-600"
+          subText="Needs review"
+        />
+      </div>
+
+      <div className="flex justify-between gap-4 mb-6 items-center">
+        <StageFilter
+          stages={departments}
+          selectedStage={filterDept}
+          onStageChange={setFilterDept}
+          counts={deptCounts}
+          totalCount={payrollData.length}
+          className=""
+        />
+        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+          <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search employee..." />
+        </div>
+      </div>
+
+      {/* TABLE CARD */}
+      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden shadow-sm">
+        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
+          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+            Salary Roll
+          </div>
+          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+            {filteredData.length} result{filteredData.length !== 1 ? "s" : ""}
+          </span>
         </div>
 
-        {/* FILTER */}
-        <div className="mb-6 flex gap-4">
-          <SearchBar value={searchTerm} onChange={(v) => setSearchTerm(String(v))} />
-          <FilterBar
-                    departments={departments}
-                    value={filterDept}
-                    onChange={setFilterDept}
-                  />
-        </div>
-
-        {/* TABLE */}
         <PayrollTable
           data={filteredData}
           columns={columns}
           onRowClick={ActionToClickRow}
         />
       </div>
+
+      <PayrollDetailsDrawer
+        empId={selectedEmpId}
+        employeeName={selectedEmpName}
+        isOpen={showDetails}
+        onClose={() => setShowDetails(false)}
+      />
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+      `}</style>
     </div>
   );
 };

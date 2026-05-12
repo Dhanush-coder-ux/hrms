@@ -1,3 +1,4 @@
+import React from "react";
 
 interface Column<T> {
   header: string;
@@ -8,9 +9,17 @@ interface ExportButtonProps<T> {
   data: T[];
   columns: Column<T>[];
   filename?: string;
+  children?: React.ReactNode;
+  className?: string;
 }
 
-export const ExportCSVButton = <T,>({ data, columns, filename = "export.csv" }: ExportButtonProps<T>) => {
+export const ExportCSVButton = <T,>({ 
+  data, 
+  columns, 
+  filename = "export.csv",
+  children,
+  className
+}: ExportButtonProps<T>) => {
   const exportToCSV = () => {
     if (!data.length) return;
 
@@ -40,9 +49,9 @@ export const ExportCSVButton = <T,>({ data, columns, filename = "export.csv" }: 
   return (
     <button
       onClick={exportToCSV}
-      className="flex justify-end bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all"
+      className={className || "flex justify-end bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all"}
     >
-      Export CSV
+      {children || "Export CSV"}
     </button>
   );
 };

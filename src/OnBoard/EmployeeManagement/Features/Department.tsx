@@ -1,13 +1,11 @@
-import { Users, LayoutGrid, List, ArrowUpRight } from "lucide-react";
-
-import { Button } from "../../../Components/Common/Button";
+import { Users, LayoutGrid, List, ArrowUpRight, TrendingUp, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DepTable } from "../Components/table/DepartmentTable";
+import { DepTable, type Column } from "../Components/table/DepartmentTable";
 import PageLoading from "../../../Components/Common/PageLoading";
 import type { Department as IDepartment } from "../Department/types";
-import SearchBar from "../../../Components/Common/Searchbar";
 import { Api_URL } from "../../../APILINK";
+import StatCard from "../../../Components/Common/StatCard";
 
 
 export const Department = () => {
@@ -25,7 +23,6 @@ export const Department = () => {
         if (!response.ok) throw new Error("Server connection failed");
 
         const data = await response.json();
-        // Since your data is a raw array: [{}, {}]
         setDepartments(Array.isArray(data) ? data : []);
       } catch (err: any) {
         setError(err.message);
@@ -49,106 +46,119 @@ export const Department = () => {
       ? Math.round(totalEmployees / departments.length)
       : 0;
 
-  const Column = [
+  const columns: Column[] = [
     { header: "Department Name", accessor: "Dep_name" },
     { header: "Head of Dept.", accessor: "Dep_head" },
     { header: "Employees", accessor: "Total_employees" },
-    { header: "Profile", type: "action" },
+    { header: "", type: "action" },
   ];
 
   if (loading) return <PageLoading />;
 
   return (
-    <div className="p-8 h-full overflow-y-auto custom-scrollbar">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6">
-        <div>
-          <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">
-            Department Hub
-          </h2>
-          <p className="text-sm text-gray-500">
-            Managing {departments.length} functional organizational units.
+    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar">
+      {/* HEADER */}
+      <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
+        <div className="flex flex-col">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+            <TrendingUp size={12} />
+            <span>Organization Hub</span>
+          </div>
+          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Departments</h1>
+          <p className="text-sm text-slate-400 font-medium">
+            Managing {departments.length} functional organizational units
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div>
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Search */}
+          <div className="relative">
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <input
+              className="h-[42px] w-[240px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-4 focus:ring-indigo-500/10 placeholder:text-slate-300"
+              placeholder="Search departments..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-          <Button
-            B_name="+ Create"
-            ClickToAction={() => navigate("/Admin/departmentstacks")}
-          />
+
+          <button
+            className="inline-flex items-center gap-2 h-[42px] px-[18px] bg-indigo-600 text-white border-none rounded-xl text-sm font-bold tracking-tight cursor-pointer transition-all hover:bg-indigo-700 active:scale-95 shadow-lg shadow-indigo-100"
+            onClick={() => navigate("/Admin/departmentstacks")}
+          >
+            + Create Dept
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {[
-          {
-            label: "Total Depts",
-            value: departments.length,
-            icon: <LayoutGrid size={20} />,
-            color: "text-blue-600",
-          },
-          {
-            label: "Total Staff",
-            value: totalEmployees,
-            icon: <Users size={20} />,
-            color: "text-emerald-600",
-          },
-          {
-            label: "Avg. Size",
-            value: avgSize,
-            icon: <List size={20} />,
-            color: "text-violet-600",
-          },
-          {
-            label: "Budget Used",
-            value: "72%",
-            icon: <ArrowUpRight size={20} />,
-            color: "text-amber-600",
-          },
-        ].map((stat, i) => (
-          <div
-            key={i}
-            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between"
-          >
-            <div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                {stat.label}
-              </p>
-              <p className={`text-2xl font-black mt-1 ${stat.color}`}>
-                {stat.value}
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 rounded-2xl text-gray-400">
-              {stat.icon}
-            </div>
-          </div>
-        ))}
+      {/* STATS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard
+          label="Total Depts"
+          value={departments.length}
+          icon={LayoutGrid}
+          iconBgClass="bg-blue-50"
+          iconColorClass="text-blue-500"
+          valueColorClass="text-blue-600"
+          subText="Active units"
+        />
+        <StatCard
+          label="Total Staff"
+          value={totalEmployees}
+          icon={Users}
+          iconBgClass="bg-emerald-50"
+          iconColorClass="text-emerald-500"
+          valueColorClass="text-emerald-600"
+          subText="Across all depts"
+        />
+        <StatCard
+          label="Avg. Size"
+          value={avgSize}
+          icon={List}
+          iconBgClass="bg-violet-50"
+          iconColorClass="text-violet-500"
+          valueColorClass="text-violet-600"
+          subText="Staff per dept"
+        />
+        <StatCard
+          label="Growth"
+          value="12%"
+          icon={ArrowUpRight}
+          iconBgClass="bg-amber-50"
+          iconColorClass="text-amber-500"
+          valueColorClass="text-amber-600"
+          subText="Vs last quarter"
+        />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      {/* TABLE CARD */}
+      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden">
+        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
+          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+            All Departments
+          </div>
+          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+            {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+
         <DepTable
-          columns={Column}
+          columns={columns}
           TB={filtered}
-          getStatusColor={(status: string) => {
-            switch (status) {
-              case "Active":
-                return "text-emerald-600 bg-emerald-50 border-emerald-100";
-              case "In Progress":
-                return "text-blue-600 bg-blue-50 border-blue-100";
-              case "On Hold":
-                return "text-amber-600 bg-amber-50 border-amber-100";
-              case "Completed":
-                return "text-violet-600 bg-violet-50 border-violet-100";
-              default:
-                return "text-gray-400 bg-gray-50 border-gray-100";
-            }
-          }}
           onEdit={(row: any) =>
             navigate(`/EmployeeManagement/departmentProfile/${row.Dep_id}`)
           }
         />
       </div>
+      
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+      `}</style>
     </div>
   );
 };
+

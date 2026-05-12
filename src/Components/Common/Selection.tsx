@@ -4,12 +4,13 @@ import { createPortal } from "react-dom";
 type Option = { label: string; value: string | number };
 
 type SelectionProps = {
-  label: string;
+  label?: string;
   name: string;
-  value: string;
+  value: string | number;
   options: Option[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
+  compact?: boolean;
 };
 
 export const Selection = ({
@@ -19,6 +20,7 @@ export const Selection = ({
   options,
   onChange,
   placeholder,
+  compact = false,
 }: SelectionProps) => {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -60,7 +62,9 @@ export const Selection = ({
     el.style.top = `${rect.bottom + 6}px`;
     el.style.left = `${rect.left}px`;
     el.style.width = `${rect.width}px`;
-  }, []);
+    if (compact) el.style.width = "auto";
+    if (compact) el.style.minWidth = "120px";
+  }, [compact]);
 
   useEffect(() => {
     if (open) {
@@ -93,22 +97,12 @@ export const Selection = ({
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
-  /**
-   * KEY FIX:
-   * Build a synthetic event with the correct `name` and `value`,
-   * then call parent onChange — no hidden <select> or native dispatch needed.
-   * This is 100% controlled React behaviour.
-   *
-   * When user selects "Digital Marketing" (value = "DEP-003"):
-   *   syntheticEvent.target.name  = "Department"
-   *   syntheticEvent.target.value = "DEP-003"   ← stored in formData.Department
-   */
   const handleSelect = useCallback(
     (opt: Option) => {
       const syntheticEvent = {
         target: {
-          name,                     // e.g. "Department"
-          value: String(opt.value), // e.g. "DEP-003"
+          name,                     
+          value: String(opt.value), 
         },
       } as React.ChangeEvent<HTMLSelectElement>;
 
@@ -123,7 +117,7 @@ export const Selection = ({
   const dropdown = createPortal(
     <div
       ref={dropdownRef}
-      className={`sel-portal-dropdown ${open ? "is-open" : ""}`}
+      className={`sel-portal-dropdown ${open ? "is-open" : ""} ${compact ? "compact" : ""}`}
       style={{
         position: "fixed",
         zIndex: 9999,
@@ -131,7 +125,6 @@ export const Selection = ({
         pointerEvents: open ? "auto" : "none",
       }}
     >
-      {/* Search box inside dropdown */}
       <div className="sel-search-wrap">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="sel-search-icon">
           <circle cx="6" cy="6" r="4.5" stroke="#94a3b8" strokeWidth="1.4" />
@@ -156,7 +149,6 @@ export const Selection = ({
       <div className="sel-divider" />
 
       <div className="sel-options">
-        {/* Optional clear / placeholder row */}
         {placeholder && (
           <div
             className={`sel-option ${!value ? "selected" : ""}`}
@@ -222,6 +214,9 @@ export const Selection = ({
           cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
           outline: none;
         }
+        .sel-trigger.compact {
+           padding: 4px 8px; border-radius: 8px; border-color: #cbd5e1;
+        }
         .sel-trigger:hover { border-color: #a5b4fc; }
         .sel-trigger.open {
           border-color: #6366f1;
@@ -233,6 +228,7 @@ export const Selection = ({
           text-align: left; overflow: hidden;
           white-space: nowrap; text-overflow: ellipsis;
         }
+        .sel-trigger.compact .sel-display { font-size: 13px; font-weight: 600; color: #1e293b; }
         .sel-display.placeholder-text { color: #94a3b8; }
 
         .sel-chevron { color: #64748b; flex-shrink: 0; transition: transform 0.22s, color 0.18s; }
@@ -282,16 +278,18 @@ export const Selection = ({
       `}</style>
 
       <div className="sel-wrapper">
-        <label
-          className={`sel-label ${focused || open ? "focused" : ""} ${hasValue ? "has-value" : ""}`}
-        >
-          {label}
-        </label>
+        {label && (
+          <label
+            className={`sel-label ${focused || open ? "focused" : ""} ${hasValue ? "has-value" : ""}`}
+          >
+            {label}
+          </label>
+        )}
 
         {/* Trigger — shows selected label (e.g. "Digital Marketing"), NOT raw value (DEP-003) */}
         <div
           ref={triggerRef}
-          className={`sel-trigger ${open ? "open" : ""}`}
+          className={`sel-trigger ${open ? "open" : ""} ${compact ? "compact" : ""}`}
           role="combobox"
           aria-expanded={open}
           aria-haspopup="listbox"
