@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, type SetStateAction } from "react";
-import { Table } from "../../EmployeeManagement/Components/table/AttendanceTable";
+import { Table, type Column } from "../../EmployeeManagement/Components/table/AttendanceTable";
 import { Button } from "../../../Components/Common/Button";
 import { Selection } from "../../../Components/Common/Selection";
 import {
@@ -164,7 +164,7 @@ export const Attendance = () => {
 
   /* ---------------- Table Columns ---------------- */
 
-  const columns = useMemo(
+  const columns: Column[] = useMemo(
     () => [
       { header: "Employee", accessor: "employee_name" },
       { header: "Date", accessor: "attendance_date" },

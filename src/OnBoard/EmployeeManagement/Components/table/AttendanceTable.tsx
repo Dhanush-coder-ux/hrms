@@ -1,4 +1,4 @@
-import { Edit2, ExternalLink } from "lucide-react";
+import { Edit2 } from "lucide-react";
 
 export type Column =
   | { header: string; accessor: string; type?: string }
