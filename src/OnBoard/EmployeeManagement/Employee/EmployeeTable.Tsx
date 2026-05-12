@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, Mail, Phone } from "lucide-react";
-=======
-import React from "react"; // Ensure React is imported
-
->>>>>>> a8dd954463d982654787173085920419e48c8421
 import { UserAvatar } from "../../../Components/Common/UserAvatar";
 import type { Employee } from "../../../Types/typesEmployeeManagement";
 
@@ -19,6 +14,7 @@ interface EmployeeTableProps {
 }
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({ employees, onRowClick }) => {
+  const navigate = useNavigate();
 
   const columns: Column[] = [
     { header: "Personnel", accessor: "name" },
