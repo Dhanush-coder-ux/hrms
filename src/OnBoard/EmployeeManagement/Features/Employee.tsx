@@ -185,7 +185,10 @@ export default function Employee() {
           </span>
         </div>
 
-        <EmployeeTable employees={filtered} onRowClick={handleRowClick} />
+        <EmployeeTable 
+  employees={filtered} 
+  onRowClick={handleRowClick} 
+/>
       </div>
 
       <EmployeeDetailsDrawer
