@@ -1,5 +1,5 @@
 import React from "react"; // Ensure React is imported
-import { useNavigate } from "react-router-dom";
+
 import { UserAvatar } from "../../../Components/Common/UserAvatar";
 import type { Employee } from "../../../Types/typesEmployeeManagement";
 
@@ -16,7 +16,6 @@ interface EmployeeTableProps {
 
 // Using React.FC explicitly helps some IDEs resolve prop mismatches faster
 const EmployeeTable: React.FC<EmployeeTableProps> = ({ employees, onRowClick }) => {
-  const navigate = useNavigate();
 
   const COLUMNS: TableColumn<Employee>[] = [
     // ... keep your COLUMNS array logic exactly as it is ...
