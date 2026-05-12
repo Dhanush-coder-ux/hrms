@@ -1,8 +1,15 @@
-import { ChevronRight} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export type Column =
-  | { header: string; accessor: string; type?: "text" | "badge" | "date" }
-  | { header: string; type: "action" };
+  | {
+      header: string;
+      accessor: string;
+      type?: "text" | "badge" | "date";
+    }
+  | {
+      header: string;
+      type: "action";
+    };
 
 type TableProps = {
   columns: Column[];
@@ -10,11 +17,15 @@ type TableProps = {
   onRowClick?: (row: any) => void;
 };
 
-export const EmpLeaveTable = ({ columns, data, onRowClick }: TableProps) => {
+export const EmpLeaveTable = ({
+  columns,
+  data,
+  onRowClick,
+}: TableProps) => {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       <table className="w-full border-separate border-spacing-0">
-        {/* Google-Style Header */}
+        {/* Header */}
         <thead className="bg-gray-50/80">
           <tr>
             {columns.map((col, index) => (
@@ -41,12 +52,18 @@ export const EmpLeaveTable = ({ columns, data, onRowClick }: TableProps) => {
                   <td key={colIndex} className="px-6 py-4">
                     {"accessor" in col ? (
                       <div className="flex items-center">
-                        {/* Special styling for specific accessors */}
+                        {/* Status Badge */}
                         {col.accessor === "status" ? (
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border 
-                            ${row[col.accessor] === 'Approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
-                              row[col.accessor] === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-100' : 
-                              'bg-rose-50 text-rose-700 border-rose-100'}`}>
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border
+                              ${
+                                row[col.accessor] === "Approved"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                  : row[col.accessor] === "Pending"
+                                  ? "bg-amber-50 text-amber-700 border-amber-100"
+                                  : "bg-rose-50 text-rose-700 border-rose-100"
+                              }`}
+                          >
                             {row[col.accessor]}
                           </span>
                         ) : col.accessor === "employee_name" ? (
@@ -62,9 +79,9 @@ export const EmpLeaveTable = ({ columns, data, onRowClick }: TableProps) => {
                     ) : (
                       /* Action Column */
                       <div className="flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                         <button className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">
-                            <ChevronRight size={18} />
-                         </button>
+                        <button className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">
+                          <ChevronRight size={18} />
+                        </button>
                       </div>
                     )}
                   </td>
@@ -73,7 +90,10 @@ export const EmpLeaveTable = ({ columns, data, onRowClick }: TableProps) => {
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length} className="px-6 py-10 text-center text-gray-400 text-sm italic">
+              <td
+                colSpan={columns.length}
+                className="px-6 py-10 text-center text-gray-400 text-sm italic"
+              >
                 No leave requests found.
               </td>
             </tr>
