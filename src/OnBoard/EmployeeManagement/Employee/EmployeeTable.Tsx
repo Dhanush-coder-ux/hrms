@@ -10,13 +10,12 @@ const HEADERS = [
   { label: "", width: "w-[5%]" },
 ];
 
-export default function EmployeeTable({
-  employees,
-  onRowClick,
-}: {
+interface EmployeeTableProps {
   employees: Employee[];
   onRowClick: (emp: Employee) => void;
-}) {
+}
+
+export default function EmployeeTable({ employees, onRowClick }: EmployeeTableProps) {
   return (
     <div className="w-full overflow-x-auto custom-scrollbar">
       <table className="w-full border-collapse">

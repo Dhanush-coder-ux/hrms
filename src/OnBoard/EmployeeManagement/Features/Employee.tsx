@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
-import StatCard from "../../../Components/Common/StatCard.tsx";
-import StageFilter from "../../../Components/Common/StageFilter.tsx";
-import SearchBar from "../../../Components/Common/Searchbar.tsx";
-import EmployeeTable from "../Employee/EmployeeTable.tsx";
-import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer.tsx";
+import StatCard from "../../../Components/Common/StatCard";
+import StageFilter from "../../../Components/Common/StageFilter";
+import SearchBar from "../../../Components/Common/Searchbar";
+import EmployeeTable from "../Employee/EmployeeTable";
+import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer";
 import { Building, Check, User, X, TrendingUp } from "lucide-react";
-import type { Employee } from "../../../Types/typesEmployeeManagement.tsx";
-import { Api_URL } from "../../../APILINK.tsx";
+import type { Employee } from "../../../Types/typesEmployeeManagement";
+import { Api_URL } from "../../../APILINK";
 
 const BASE_URL = Api_URL;
 const EMPLOYEE_API = `${BASE_URL}/employee/`;
