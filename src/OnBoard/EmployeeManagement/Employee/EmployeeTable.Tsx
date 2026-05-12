@@ -1,43 +1,25 @@
 import { Mail, Phone } from "lucide-react";
 import { UserAvatar } from "../../../Components/Common/UserAvatar";
+import type { Employee } from "../../../Types/typesEmployeeManagement";
 
-type DeptData = { bg_color: string; icon_color: string } | null | undefined;
+interface EmployeeTableProps {
+  employees: Employee[];
+  onRowClick: (emp: Employee) => void;
+}
 
-type EmpRow = {
-  Emp_id: string;
-  name: string;
-  email: string;
-  phone: string;
-  Department: string;
-  designation: string;
-  Status: string;
-  departmentData?: DeptData;
-  [key: string]: unknown;
-};
+const HEADERS = ["Personnel", "Department", "Designation", "Contact Info", "Status"];
 
-interface TableProps {
-  employees: EmpRow[];
-  onRowClick: (emp: EmpRow) => void;
-};
-
-export default function EmployeeTable({ employees, onRowClick }: TableProps) {
-  const headers = [
-    "Personnel",
-    "Department",
-    "Designation",
-    "Contact Info",
-    "Status",
-  ];
-
+export default function EmployeeTable({ employees, onRowClick }: EmployeeTableProps) {
   return (
     <div className="w-full overflow-x-auto custom-scrollbar">
       <table className="w-full border-collapse">
+        {/* ── HEADER ── */}
         <thead>
           <tr className="bg-slate-50/50 border-b border-slate-100">
-            {headers.map((h, i) => (
+            {HEADERS.map((h) => (
               <th
-                key={i}
-                className="px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap text-left"
+                key={h}
+                className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap"
               >
                 {h}
               </th>
@@ -45,16 +27,26 @@ export default function EmployeeTable({ employees, onRowClick }: TableProps) {
           </tr>
         </thead>
 
+        {/* ── BODY ── */}
         <tbody>
-          {employees.length > 0 ? (
-            employees.map((emp, ri) => {
-              const deptBg = emp.departmentData?.bg_color ?? "#f1f5f9";
+          {employees.length === 0 ? (
+            <tr>
+              <td
+                colSpan={HEADERS.length}
+                className="px-8 py-20 text-center text-slate-300 text-[11px] font-bold uppercase tracking-widest"
+              >
+                No personnel records found.
+              </td>
+            </tr>
+          ) : (
+            employees.map((emp, idx) => {
+              const deptBg   = emp.departmentData?.bg_color   ?? "#f1f5f9";
               const deptText = emp.departmentData?.icon_color ?? "#64748b";
               const isActive = emp.Status?.toLowerCase() === "active";
 
               return (
                 <tr
-                  key={emp.Emp_id || ri}
+                  key={emp.Emp_id ?? idx}
                   onClick={() => onRowClick(emp)}
                   className="border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
                 >
@@ -63,10 +55,10 @@ export default function EmployeeTable({ employees, onRowClick }: TableProps) {
                     <div className="flex items-center gap-3">
                       <UserAvatar name={emp.name || "E"} variant="table" />
                       <div>
-                        <p className="text-[13px] font-bold text-slate-800 tracking-tight m-0 uppercase">
+                        <p className="m-0 text-[13px] font-bold text-slate-800 tracking-tight uppercase">
                           {emp.name}
                         </p>
-                        <p className="text-[10px] font-bold text-slate-400 tracking-wider m-0 mt-0.5">
+                        <p className="m-0 mt-0.5 text-[10px] font-bold text-slate-400 tracking-wider">
                           #{emp.Emp_id}
                         </p>
                       </div>
@@ -95,15 +87,11 @@ export default function EmployeeTable({ employees, onRowClick }: TableProps) {
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <Mail size={12} />
-                        <span className="text-[12px] font-medium text-slate-600">
-                          {emp.email}
-                        </span>
+                        <span className="text-[12px] font-medium text-slate-600">{emp.email}</span>
                       </div>
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <Phone size={12} />
-                        <span className="text-[12px] font-medium text-slate-600">
-                          {emp.phone}
-                        </span>
+                        <span className="text-[12px] font-medium text-slate-600">{emp.phone}</span>
                       </div>
                     </div>
                   </td>
@@ -128,15 +116,6 @@ export default function EmployeeTable({ employees, onRowClick }: TableProps) {
                 </tr>
               );
             })
-          ) : (
-            <tr>
-              <td
-                colSpan={5}
-                className="px-8 py-20 text-center text-slate-300 text-[11px] font-bold uppercase tracking-widest"
-              >
-                No personnel records found.
-              </td>
-            </tr>
           )}
         </tbody>
       </table>

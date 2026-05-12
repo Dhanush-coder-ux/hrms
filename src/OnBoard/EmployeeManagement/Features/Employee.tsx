@@ -3,17 +3,19 @@ import { useNavigate } from "react-router-dom";
 import StatCard from "../../../Components/Common/StatCard";
 import StageFilter from "../../../Components/Common/StageFilter";
 import SearchBar from "../../../Components/Common/Searchbar";
-import EmployeeTable from "../Employee/EmployeeTable";
+
 import { Building, Check, User, X, TrendingUp } from "lucide-react";
 import { Api_URL } from "../../../APILINK";
+import EmployeeTable from "../Employee/EmployeeTable";
+import type { Employee } from "../../../Types/typesEmployeeManagement";
 
 const BASE_URL = Api_URL;
 const EMPLOYEE_API = `${BASE_URL}/employee/`;
 const DEPARTMENT_API = `${BASE_URL}/departments/`;
 
-export default function Employee() {
+export default function EmployeeComponent() {
   const navigate = useNavigate();
-  const [employees, setEmployees] = useState<any[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterDept, setFilterDept] = useState("");
@@ -26,6 +28,10 @@ export default function Employee() {
           fetch(DEPARTMENT_API),
         ]);
 
+        if (!empRes.ok || !deptRes.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
         const empData = await empRes.json();
         const deptData = await deptRes.json();
 
@@ -33,14 +39,22 @@ export default function Employee() {
           deptData.map((dept: any) => [dept.Dep_name, dept])
         );
 
-        const mergedEmployees = empData.map((item: any) => ({
-          ...item.Employee,
-          departmentData: deptMap.get(item.Employee.Department) || null,
+        const mergedEmployees: Employee[] = empData.map((item: any) => ({
+          Emp_id: item.Employee?.Emp_id || "",
+          name: item.Employee?.name || "",
+          email: item.Employee?.email || "",
+          phone: item.Employee?.phone || "",
+          Department: item.Employee?.Department || "",
+          designation: item.Employee?.designation || "",
+          Status: (item.Employee?.Status || "Inactive") as "Active" | "Inactive",
+          dateOfJoining: item.Employee?.dateOfJoining || "",
+          departmentData: deptMap.get(item.Employee?.Department) || null,
         }));
 
         setEmployees(mergedEmployees);
       } catch (error) {
         console.error("Failed to fetch employees", error);
+        setEmployees([]);
       } finally {
         setLoading(false);
       }
@@ -48,7 +62,7 @@ export default function Employee() {
   }, []);
 
   const departments = useMemo(
-    () => Array.from(new Set(employees.map((e) => e.Department))),
+    () => Array.from(new Set(employees.map((e) => e.Department).filter(Boolean))),
     [employees]
   );
 
@@ -83,7 +97,7 @@ export default function Employee() {
     (e) => e.Status?.toLowerCase() === "inactive"
   ).length;
 
-  const handleRowClick = (emp: any) => {
+  const handleRowClick = (emp: Employee) => {
     navigate(`/EmployeeManagement/employee/${emp.Emp_id}`);
   };
 
@@ -147,7 +161,7 @@ export default function Employee() {
         />
         <StatCard
           label="Departments"
-          value={departments.length - 1}
+          value={departments.length > 0 ? departments.length - 1 : 0}
           icon={Building}
           iconBgClass="bg-violet-50"
           iconColorClass="text-violet-500"

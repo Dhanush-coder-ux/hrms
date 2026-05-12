@@ -1,4 +1,3 @@
-
 export interface AttendanceRecord {
   Emp_id: string;
   employee_name: string;
