@@ -12,6 +12,7 @@ const BASE_URL = Api_URL;
 const EMPLOYEE_API = `${BASE_URL}/employee/`;
 const DEPARTMENT_API = `${BASE_URL}/departments/`;
 
+
 export default function Employee() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
