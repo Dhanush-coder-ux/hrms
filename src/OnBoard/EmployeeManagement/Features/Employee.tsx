@@ -5,7 +5,7 @@ import SearchBar from "../../../Components/Common/Searchbar";
 
 import { Building, Check, User, X, TrendingUp } from "lucide-react";
 import { Api_URL } from "../../../APILINK";
-import EmployeeTable from "../Employee/EmployeeTable";
+import EmployeeTable from "../Components/table/EmployeeTable";
 import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer";
 import type { Employee } from "../../../Types/typesEmployeeManagement";
 

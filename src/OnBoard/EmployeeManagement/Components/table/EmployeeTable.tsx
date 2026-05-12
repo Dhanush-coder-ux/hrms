@@ -1,6 +1,6 @@
 import { Mail, Phone } from "lucide-react";
-import { UserAvatar } from "../../../Components/Common/UserAvatar";
-import type { Employee } from "../../../Types/typesEmployeeManagement";
+import { UserAvatar } from "../../../../Components/Common/UserAvatar";
+import type { Employee } from "../../../../Types/typesEmployeeManagement";
 
 interface EmployeeTableProps {
   employees: Employee[];
@@ -40,7 +40,7 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
             </tr>
           ) : (
             employees.map((emp, idx) => {
-              const deptBg   = emp.departmentData?.bg_color   ?? "#f1f5f9";
+              const deptBg = emp.departmentData?.bg_color ?? "#f1f5f9";
               const deptText = emp.departmentData?.icon_color ?? "#64748b";
               const isActive = emp.Status?.toLowerCase() === "active";
 
@@ -99,16 +99,14 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
                   {/* Status */}
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide border ${
-                        isActive
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide border ${isActive
                           ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                           : "bg-rose-50 text-rose-600 border-rose-100"
-                      }`}
+                        }`}
                     >
                       <span
-                        className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                          isActive ? "bg-emerald-500" : "bg-rose-500"
-                        }`}
+                        className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isActive ? "bg-emerald-500" : "bg-rose-500"
+                          }`}
                       />
                       {emp.Status}
                     </span>
