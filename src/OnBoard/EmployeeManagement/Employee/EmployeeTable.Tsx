@@ -1,6 +1,5 @@
 import React from "react"; // Ensure React is imported
 import { useNavigate } from "react-router-dom";
-import { ExternalLink, Mail, Phone } from "lucide-react";
 import { UserAvatar } from "../../../Components/Common/UserAvatar";
 import type { Employee } from "../../../Types/typesEmployeeManagement";
 
