@@ -13,7 +13,7 @@ interface EmployeeTableProps {
   onRowClick: (emp: Employee) => void;
 }
 
-const EmployeeTable: React.FC<EmployeeTableProps> = ({ employees, onRowClick }) => {
+export default function EmployeeTable({ employees, onRowClick }: EmployeeTableProps) {
   const navigate = useNavigate();
 
   const columns: Column[] = [
@@ -174,5 +174,3 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ employees, onRowClick }) 
     </div>
   );
 };
-
-export default EmployeeTable;
