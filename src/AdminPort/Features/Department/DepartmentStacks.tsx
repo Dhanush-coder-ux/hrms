@@ -154,9 +154,9 @@ const handleSave = async () => {
             <Plus size={20} /> ADD NEW
           </button>
         </div>
-    <div className="mb-6">
-    <SearchBar value={searchTerm} onChange={(e: any) => setSearchTerm(e.target.value)} />
-    </div>
+      <div className="mb-6">
+        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+      </div>
         
 
 

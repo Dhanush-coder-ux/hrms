@@ -9,6 +9,7 @@ const range = (start: number, end: number) => Array.from({ length: end - start +
 interface CustomDatePickerProps {
   name: string; value: string; Lable?: string;
   onChange: (e: { target: { name: string; value: string } }) => void;
+  border?: boolean;
 }
 
 function ensurePortalRoot() {
@@ -19,7 +20,7 @@ function ensurePortalRoot() {
   document.body.appendChild(el);
 }
 
-export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ name, value, Lable, onChange }) => {
+export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ name, value, Lable, onChange, border = true }) => {
   const [isFocused, setIsFocused] = useState(false);
   const hasValue = !!value;
   const years = range(1950, getYear(new Date()) + 5);
@@ -59,7 +60,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ name, value,
           width: 100%; padding: 11px 14px 11px 42px;
           font-family: 'DM Sans', sans-serif;
           font-size: 14px; font-weight: 400; color: #0f172a;
-          background: #fff; border: 1.5px solid #868687; border-radius: 10px;
+          background: #fff; border: ${border ? "1.5px solid #868687" : "none"}; border-radius: 10px;
           outline: none; transition: border-color 0.2s cubic-bezier(0.4,0,0.2,1),
                                      box-shadow 0.2s cubic-bezier(0.4,0,0.2,1);
           /* FIX: always reserve shadow space with a transparent shadow — prevents layout shift */

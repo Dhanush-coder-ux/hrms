@@ -170,7 +170,7 @@ const updateStatus = async () => {
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3 mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button onClick={() => shiftDate(-1)} className="p-2 hover:bg-gray-100 rounded-lg"><ChevronLeft size={18} /></button>
-          <CustomDatePicker name="attendanceDate" value={selectedDate} Lable="" onChange={(e) => setSelectedDate(e.target.value)} />
+          <CustomDatePicker border={false} name="attendanceDate" value={selectedDate} Lable="" onChange={(e) => setSelectedDate(e.target.value)} />
           <button onClick={() => shiftDate(1)} className="p-2 hover:bg-gray-100 rounded-lg"><ChevronRight size={18} /></button>
         </div>
         <button onClick={() => setSelectedDate(todayStr())} className={`text-xs font-semibold px-3 py-1.5 rounded-lg ${isToday ? 'bg-blue-50 text-blue-600' : 'bg-blue-600 text-white'}`}>
