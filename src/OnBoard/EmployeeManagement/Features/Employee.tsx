@@ -5,21 +5,19 @@ import SearchBar from "../../../Components/Common/Searchbar";
 import EmployeeTable from "../Employee/EmployeeTable";
 import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer";
 import { Building, Check, User, X, TrendingUp } from "lucide-react";
-import type { Employee } from "../../../Types/typesEmployeeManagement";
 import { Api_URL } from "../../../APILINK";
 
 const BASE_URL = Api_URL;
 const EMPLOYEE_API = `${BASE_URL}/employee/`;
 const DEPARTMENT_API = `${BASE_URL}/departments/`;
 
-
 export default function Employee() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterDept, setFilterDept] = useState("");
-  
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+
+  const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
@@ -34,16 +32,12 @@ export default function Employee() {
         const deptData = await deptRes.json();
 
         const deptMap = new Map(
-          deptData.map((dept: any) => [
-            dept.Dep_name,
-            dept,
-          ])
+          deptData.map((dept: any) => [dept.Dep_name, dept])
         );
 
         const mergedEmployees = empData.map((item: any) => ({
           ...item.Employee,
-          departmentData:
-            deptMap.get(item.Employee.Department) || null,
+          departmentData: deptMap.get(item.Employee.Department) || null,
         }));
 
         setEmployees(mergedEmployees);
@@ -57,12 +51,12 @@ export default function Employee() {
 
   const departments = useMemo(
     () => Array.from(new Set(employees.map((e) => e.Department))),
-    [employees],
+    [employees]
   );
 
   const deptCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    employees.forEach(emp => {
+    employees.forEach((emp) => {
       if (emp.Department) {
         counts[emp.Department] = (counts[emp.Department] || 0) + 1;
       }
@@ -75,8 +69,8 @@ export default function Employee() {
     return employees.filter((emp) => {
       if (
         q &&
-        !emp.name.toLowerCase().includes(q) &&
-        !emp.Emp_id.toLowerCase().includes(q)
+        !emp.name?.toLowerCase().includes(q) &&
+        !emp.Emp_id?.toLowerCase().includes(q)
       )
         return false;
       if (filterDept && emp.Department !== filterDept) return false;
@@ -84,10 +78,14 @@ export default function Employee() {
     });
   }, [employees, search, filterDept]);
 
-  const activeCount = employees.filter((e) => e.Status === "Active").length;
-  const inactiveCount = employees.filter((e) => e.Status === "Inactive").length;
+  const activeCount = employees.filter(
+    (e) => e.Status?.toLowerCase() === "active"
+  ).length;
+  const inactiveCount = employees.filter(
+    (e) => e.Status?.toLowerCase() === "inactive"
+  ).length;
 
-  const handleRowClick = (emp: Employee) => {
+  const handleRowClick = (emp: any) => {
     setSelectedEmployee(emp);
     setShowDetails(true);
   };
@@ -96,7 +94,9 @@ export default function Employee() {
     return (
       <div className="flex flex-col items-center justify-center h-full bg-slate-50 gap-4">
         <div className="w-8 h-8 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Loading employees…</p>
+        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">
+          Loading employees…
+        </p>
       </div>
     );
   }
@@ -110,15 +110,15 @@ export default function Employee() {
             <TrendingUp size={12} />
             <span>Personnel Hub</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Employee Directory</h1>
+          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">
+            Employee Directory
+          </h1>
           <p className="text-sm text-slate-400 font-medium">
             Manage and monitor company workforce of {employees.length} members
           </p>
         </div>
       </div>
 
-
-      {/* DEPARTMENT FILTER */}
       {/* STATS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
@@ -158,6 +158,7 @@ export default function Employee() {
           subText="Functional units"
         />
       </div>
+
       <div className="flex justify-between gap-4 mb-6 items-center">
         <StageFilter
           stages={departments}
@@ -172,9 +173,8 @@ export default function Employee() {
         </div>
       </div>
 
-
       {/* TABLE CARD */}
-      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 ">
+      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100">
         <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
           <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
@@ -185,10 +185,7 @@ export default function Employee() {
           </span>
         </div>
 
-        <EmployeeTable 
-  employees={filtered} 
-  onRowClick={handleRowClick} 
-/>
+        <EmployeeTable employees={filtered} onRowClick={handleRowClick} />
       </div>
 
       <EmployeeDetailsDrawer
@@ -206,4 +203,3 @@ export default function Employee() {
     </div>
   );
 }
-
