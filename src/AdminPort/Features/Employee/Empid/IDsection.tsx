@@ -13,7 +13,6 @@ function generatePreview(prefix: string, separator: string, digit: number): stri
 
 export default function IDSection({
   label,
-  configLabel,
   category,
   items,
   onAdd,

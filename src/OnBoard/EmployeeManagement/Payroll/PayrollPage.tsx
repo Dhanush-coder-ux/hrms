@@ -92,7 +92,7 @@ const PayrollComponents = () => {
   if (loading) return <PageLoading/>;
 
   return (
-    <div className="h-full overflow-auto  text-slate-900">
+    <div className="h-full overflow-auto text-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-10">
 
         <div>

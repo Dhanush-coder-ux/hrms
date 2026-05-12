@@ -10,6 +10,7 @@ type Form = {
   icon?: React.ReactNode;
   PrivacyInput?: boolean;
   disabled?: boolean;
+  type?: string;
 };
 
 export const FormFiled = ({
@@ -21,10 +22,11 @@ export const FormFiled = ({
   in_PlaceHolder,
   PrivacyInput,
   disabled,
+  type = "text",
 }: Form) => {
   const [showValue, setShowValue] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const inputType = PrivacyInput && !showValue ? "password" : "text";
+  const inputType = PrivacyInput && !showValue ? "password" : type;
   const hasValue = value !== "" && value !== undefined && value !== null;
 
   return (

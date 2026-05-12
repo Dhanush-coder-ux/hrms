@@ -50,12 +50,25 @@ export interface PayrollData {
 }
 
 export interface Candidate {
-  c_id: string;
-  name: string;
-  phone: string;
-  email: string;
-  reference: string;
-  role: string;
-  status: string;
-  resumeUrl?: string;
+  Candidate_id: string;
+  Candidate_name: string;
+  Job_title: string;
+  Candidate_Phone: string;
+  Candidate_Email: string;
+  Candidate_Skills: string;
+  Candidate_Source: string;
+  Resume_path: string;
+  Status: string;
+}
+
+export interface Interview {
+  Interview_id: string;
+  Candidate_id: string;
+  Interview_date: string;
+  Interview_time: string;
+  Interview_status: string;
+  Candidate_feedback: string;
+  // UI Helper fields (mapped in frontend)
+  candidate_name?: string;
+  candidate_role?: string;
 }
