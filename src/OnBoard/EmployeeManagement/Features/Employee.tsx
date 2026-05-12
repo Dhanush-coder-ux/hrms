@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import StatCard from "../../../Components/Common/StatCard";
 import StageFilter from "../../../Components/Common/StageFilter";
 import SearchBar from "../../../Components/Common/Searchbar";
