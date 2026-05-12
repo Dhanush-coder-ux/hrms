@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { UserAvatar } from "../../../Components/Common/UserAvatar";
 
 type DeptData = { bg_color: string; icon_color: string } | null | undefined;
@@ -16,22 +15,18 @@ type EmpRow = {
   [key: string]: unknown;
 };
 
-type TableProps = {
+interface TableProps {
   employees: EmpRow[];
   onRowClick: (emp: EmpRow) => void;
 };
 
-export default function EmployeeTable(props: TableProps) {
-  const navigate = useNavigate();
-  const { employees, onRowClick } = props;
-
+export default function EmployeeTable({ employees, onRowClick }: TableProps) {
   const headers = [
     "Personnel",
     "Department",
     "Designation",
     "Contact Info",
     "Status",
-    "Action",
   ];
 
   return (
@@ -42,9 +37,7 @@ export default function EmployeeTable(props: TableProps) {
             {headers.map((h, i) => (
               <th
                 key={i}
-                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap ${
-                  h === "Action" ? "text-right" : "text-left"
-                }`}
+                className="px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap text-left"
               >
                 {h}
               </th>
@@ -63,7 +56,7 @@ export default function EmployeeTable(props: TableProps) {
                 <tr
                   key={emp.Emp_id || ri}
                   onClick={() => onRowClick(emp)}
-                  className="group border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
+                  className="border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
                 >
                   {/* Personnel */}
                   <td className="px-6 py-4">
@@ -102,11 +95,15 @@ export default function EmployeeTable(props: TableProps) {
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <Mail size={12} />
-                        <span className="text-[12px] font-medium text-slate-600">{emp.email}</span>
+                        <span className="text-[12px] font-medium text-slate-600">
+                          {emp.email}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <Phone size={12} />
-                        <span className="text-[12px] font-medium text-slate-600">{emp.phone}</span>
+                        <span className="text-[12px] font-medium text-slate-600">
+                          {emp.phone}
+                        </span>
                       </div>
                     </div>
                   </td>
@@ -128,26 +125,13 @@ export default function EmployeeTable(props: TableProps) {
                       {emp.Status}
                     </span>
                   </td>
-
-                  {/* Action */}
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/EmployeeManagement/employee/${emp.Emp_id}`);
-                      }}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-100 bg-indigo-50 text-indigo-600 text-[11px] font-bold cursor-pointer transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-600 active:scale-95"
-                    >
-                      <ExternalLink size={13} /> View
-                    </button>
-                  </td>
                 </tr>
               );
             })
           ) : (
             <tr>
               <td
-                colSpan={6}
+                colSpan={5}
                 className="px-8 py-20 text-center text-slate-300 text-[11px] font-bold uppercase tracking-widest"
               >
                 No personnel records found.

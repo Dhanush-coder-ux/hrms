@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import StatCard from "../../../Components/Common/StatCard";
 import StageFilter from "../../../Components/Common/StageFilter";
 import SearchBar from "../../../Components/Common/Searchbar";
 import EmployeeTable from "../Employee/EmployeeTable";
-import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer";
 import { Building, Check, User, X, TrendingUp } from "lucide-react";
 import { Api_URL } from "../../../APILINK";
 
@@ -12,13 +12,11 @@ const EMPLOYEE_API = `${BASE_URL}/employee/`;
 const DEPARTMENT_API = `${BASE_URL}/departments/`;
 
 export default function Employee() {
+  const navigate = useNavigate();
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterDept, setFilterDept] = useState("");
-
-  const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
-  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -86,8 +84,7 @@ export default function Employee() {
   ).length;
 
   const handleRowClick = (emp: any) => {
-    setSelectedEmployee(emp);
-    setShowDetails(true);
+    navigate(`/EmployeeManagement/employee/${emp.Emp_id}`);
   };
 
   if (loading) {
@@ -188,11 +185,6 @@ export default function Employee() {
         <EmployeeTable employees={filtered} onRowClick={handleRowClick} />
       </div>
 
-      <EmployeeDetailsDrawer
-        employee={selectedEmployee}
-        isOpen={showDetails}
-        onClose={() => setShowDetails(false)}
-      />
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
