@@ -45,7 +45,7 @@ export const EmpLeaveTable = ({
             data.map((row, rowIndex) => (
               <tr
                 key={row.id || rowIndex}
-                onClick={() => onRowClick?.(row)}
+                onClick={(row) => onRowClick?.(row)}
                 className="group cursor-pointer hover:bg-blue-50/40 transition-all duration-150"
               >
                 {columns.map((col, colIndex) => (
