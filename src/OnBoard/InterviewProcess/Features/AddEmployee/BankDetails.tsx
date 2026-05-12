@@ -94,7 +94,7 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
         }
       `}</style>
 
-      <div className="bank-page">
+      <div className="bank-page h-full overflow-auto">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
             <FaPiggyBank className="text-[26px] text-indigo-500 shrink-0" />

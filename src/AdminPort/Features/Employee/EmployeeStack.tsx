@@ -22,7 +22,7 @@ export const EmployeeStack = () => {
 
 
   return (
-<div className="flex h-screen text-slate-800 font-sans antialiased">
+<div className="flex h-full text-slate-800 font-sans antialiased">
   
   {/* Sidebar (fixed, no scroll) */}
   <aside className="w-64 h-full border-r border-slate-100 flex flex-col p-4 bg-slate-50/30 overflow-hidden  ">
@@ -53,7 +53,7 @@ export const EmployeeStack = () => {
   </aside>
 
   {/* Main Content (scrollable) */}
-  <main className=" flex-1 h-full overflow-y-auto scrollbar-hide">
+  <main className=" flex-1 h-full overflow-hidden">
     {activeTab === "Basic Values" && <BasicValues />}
     {activeTab === "Payroll Provider" && <Payrollprovider />}
     {activeTab === "Custom ID" && <EmpidCustom />}

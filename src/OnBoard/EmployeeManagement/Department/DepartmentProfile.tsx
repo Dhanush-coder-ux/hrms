@@ -105,7 +105,7 @@ export default function DepartmentProfile() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-8 bg-slate-50 min-h-screen font-sans text-slate-900">
+    <div className="max-w-6xl mx-auto p-8 bg-slate-50 h-full overflow-y-auto custom-scrollbar font-sans text-slate-900">
       {/* Sidebar/Selector (Optional: to switch between depts) */}
       <div className="flex gap-2 overflow-x-auto">
         <Backbutton />

@@ -31,7 +31,7 @@ const formatDisplayDate = (dateStr: string) => {
 
 const todayStr = () => toDateString(new Date());
 
-const API_URL =`${Api_URL}/attendance`;
+const API_URL = `${Api_URL}/attendance`;
 
 export const Attendance = () => {
   const [showEdit, setShowEdit] = useState(false);
@@ -76,27 +76,27 @@ export const Attendance = () => {
     fetchAttendance(selectedDate);
   }, [selectedDate, fetchAttendance]);
 
-const updateStatus = async () => {
-  if (selectedId === null) return;
-  try {
-    const res = await fetch(`${API_URL}/${selectedId}?attendance_date=${selectedDate}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        status: selection,
-        check_in: checkIn,
-        check_out: checkOut
-      }),
-    });
+  const updateStatus = async () => {
+    if (selectedId === null) return;
+    try {
+      const res = await fetch(`${API_URL}/${selectedId}?attendance_date=${selectedDate}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: selection,
+          check_in: checkIn,
+          check_out: checkOut
+        }),
+      });
 
-    if (res.ok) {
-      await fetchAttendance(selectedDate);
-      setShowEdit(false);
+      if (res.ok) {
+        await fetchAttendance(selectedDate);
+        setShowEdit(false);
+      }
+    } catch (err) {
+      console.error("Update error:", err);
     }
-  } catch (err) {
-    console.error("Update error:", err);
-  }
-};
+  };
   const shiftDate = (days: number) => {
     const d = new Date(selectedDate);
     d.setDate(d.getDate() + days);
@@ -142,7 +142,7 @@ const updateStatus = async () => {
   const isToday = selectedDate === todayStr();
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8  min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 h-full overflow-y-auto custom-scrollbar">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
@@ -190,66 +190,66 @@ const updateStatus = async () => {
             TB={data}
             getStatusColor={getStatusColor}
             onEdit={(row: AttendanceRecord) => {
-  setSelectedId(row.Emp_id);
-  setSelection(row.status);
-  setCheckIn(row.check_in || ""); // Load existing check-in
-  setCheckOut(row.check_out || ""); // Load existing check-out
-  setShowEdit(true);
-}}
+              setSelectedId(row.Emp_id);
+              setSelection(row.status);
+              setCheckIn(row.check_in || ""); // Load existing check-in
+              setCheckOut(row.check_out || ""); // Load existing check-out
+              setShowEdit(true);
+            }}
 
           />
         )}
       </div>
 
       {/* Edit Modal */}
-{showEdit && (
-  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div className="bg-white w-full max-w-md p-6 rounded-2xl shadow-xl">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">Update Attendance</h3>
-      
-      <div className="space-y-4">
-        <Selection
-          label="Status"
-          value={selection}
-          name="status"
-          options={[
-            { label: "Present", value: "Present" },
-            { label: "Absent", value: "Absent" },
-            { label: "Late", value: "Late" },
-            { label: "Leave", value: "Leave" },
-          ]}
-          onChange={(e) => setSelection(e.target.value)}
-        />
+      {showEdit && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md p-6 rounded-2xl shadow-xl">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">Update Attendance</h3>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Check-In</label>
-            <input 
-              type="time" 
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Check-Out</label>
-            <input 
-              type="time" 
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
+            <div className="space-y-4">
+              <Selection
+                label="Status"
+                value={selection}
+                name="status"
+                options={[
+                  { label: "Present", value: "Present" },
+                  { label: "Absent", value: "Absent" },
+                  { label: "Late", value: "Late" },
+                  { label: "Leave", value: "Leave" },
+                ]}
+                onChange={(e) => setSelection(e.target.value)}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Check-In</label>
+                  <input
+                    type="time"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Check-Out</label>
+                  <input
+                    type="time"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-8">
+              <button onClick={() => setShowEdit(false)} className="px-4 py-2 text-sm text-gray-500">Cancel</button>
+              <Button B_name="Save Changes" ClickToAction={updateStatus} />
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-end gap-3 mt-8">
-        <button onClick={() => setShowEdit(false)} className="px-4 py-2 text-sm text-gray-500">Cancel</button>
-        <Button B_name="Save Changes" ClickToAction={updateStatus} />
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };

@@ -10,18 +10,16 @@ export const RootLayout = () => {
   return (
     // 1. Change to flex-col so Navbar stays at the top
     <div className="h-screen w-full flex flex-col overflow-hidden">
-      
+
       <Navbar />
 
       {/* 2. This container holds the Sidebar and Main content side-by-side */}
       <div className="flex flex-1 overflow-hidden">
-        
+
         {!isSelectionPage && <Sidebar />}
 
-        <main className="flex-1 h-full overflow-y-auto custom-scrollbar">
-          <div className=" bg-slate-50 p-4 lg:p-6 min-h-full">
-            <Outlet />
-          </div>
+        <main className="flex-1 h-full overflow-hidden">
+          <Outlet />
         </main>
 
       </div>

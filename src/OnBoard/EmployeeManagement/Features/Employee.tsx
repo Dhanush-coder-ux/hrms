@@ -89,14 +89,14 @@ export default function Employee() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+      <div className="flex items-center justify-center h-full bg-slate-50">
         <p className="text-sm text-gray-400">Loading employees…</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen  pb-12">
+    <div className="h-full overflow-y-auto custom-scrollbar pb-12">
       {/* ── Page Header ── */}
       <div className="px-8 pt-8">
         <h1 className="text-xl font-bold text-gray-900 tracking-tight">

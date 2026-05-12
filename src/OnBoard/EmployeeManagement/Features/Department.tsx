@@ -59,7 +59,7 @@ export const Department = () => {
   if (loading) return <PageLoading />;
 
   return (
-    <div className="p-8  min-h-screen">
+    <div className="p-8 h-full overflow-y-auto custom-scrollbar">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6">
         <div>
           <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">

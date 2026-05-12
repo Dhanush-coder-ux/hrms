@@ -380,7 +380,7 @@ export default function EmployeeProfile() {
 
   if (fetching)
     return (
-      <div className="flex h-screen items-center justify-center bg-white">
+      <div className="flex h-full items-center justify-center bg-white">
         <Loader2 className="animate-spin text-indigo-600" size={48} />
       </div>
     );
@@ -388,7 +388,7 @@ export default function EmployeeProfile() {
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="h-full overflow-y-auto custom-scrollbar pb-20">
       {/* Top Nav */}
       <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">

@@ -109,7 +109,7 @@ console.log("Employee Data:", empId);
         .vfy-badge { padding: 2px 8px; border-radius: 6px; background: #f1f5f9; font-size: 11px; }
       `}`</style>
 
-      <div className="vfy-page">
+      <div className="vfy-page h-full overflow-auto">
         <AnimCard delay={0}>
           <div className="flex items-center gap-3 mb-8">
             <FaCheckCircle className="text-[26px] text-green-600" />

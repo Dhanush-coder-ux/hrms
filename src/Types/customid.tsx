@@ -11,9 +11,11 @@ export interface IDConfig {
 export interface CustomIDStore {
   EMP: IDConfig[];
   DEP: IDConfig[];
+  CAN: IDConfig[];
+  INT: IDConfig[];
 }
 
-export type IDCategory = "EMP" | "DEP";
+export type IDCategory = "EMP" | "DEP" | "CAN" | "INT";
 
 export interface IDSectionProps {
   label: string;

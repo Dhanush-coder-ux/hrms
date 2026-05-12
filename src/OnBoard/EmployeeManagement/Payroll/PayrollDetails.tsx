@@ -56,7 +56,7 @@ const PayrollDetails = () => {
   if (!data) return <div className="p-10 text-center text-red-500 font-medium">No Data Found</div>;
 
   return (
-    <div className="p-6 min-h-screen bg-slate-50 text-slate-800">
+    <div className="p-6 h-full overflow-auto bg-slate-50 text-slate-800">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <Backbutton />

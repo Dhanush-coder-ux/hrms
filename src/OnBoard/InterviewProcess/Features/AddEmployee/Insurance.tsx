@@ -230,7 +230,7 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         }
       `}</style>
 
-      <div className="emp-page">
+      <div className="emp-page h-full overflow-auto">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
             <FaShieldAlt className="shield-icon text-[26px] text-indigo-500 shrink-0" />

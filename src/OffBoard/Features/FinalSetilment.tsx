@@ -76,7 +76,7 @@ export const FinalSettlement = () => {
   };
 
   return (
-    <div className="p-8 bg-[#F8FAFC] min-h-screen text-slate-900 font-sans">
+    <div className="p-8 bg-[#F8FAFC] h-full overflow-auto text-slate-900 font-sans">
       {/* Header */}
       <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>

@@ -40,7 +40,7 @@ export const Interview = () => {
     <motion.div 
       initial={{ opacity: 0, y: 5 }} 
       animate={{ opacity: 1, y: 0 }} 
-      className="p-4 lg:p-8  min-h-screen"
+      className="p-4 lg:p-8 h-full overflow-auto"
     >
       <div className="max-w-7xl mx-auto">
         

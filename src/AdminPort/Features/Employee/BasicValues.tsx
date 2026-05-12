@@ -218,7 +218,7 @@ export const BasicValues = () => {
 
   if (loading || currencyLoading) {
     return (
-      <main className="flex-1 min-h-screen flex items-center justify-center bg-slate-50">
+      <main className="flex-1 h-full flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
           <Loader2 size={28} className="animate-spin text-indigo-500" />
           <p className="text-sm text-slate-400 font-medium">
@@ -232,15 +232,15 @@ export const BasicValues = () => {
   const currentCurrency = data.currency?.[0];
 
   return (
-    <main className="flex-1 min-h-screen bg-slate-50 p-6 lg:p-10">
+    <main className="flex-1 h-full bg-slate-50 p-6 lg:p-10 overflow-hidden flex flex-col">
        
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto"
+        className="max-w-4xl mx-auto w-full flex flex-col h-full"
       >
        
-        <header className="mb-8 flex items-start justify-between">
+        <header className="mb-8 flex items-start justify-between flex-shrink-0">
           
           <div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
@@ -253,169 +253,171 @@ export const BasicValues = () => {
           <SyncBadge state={syncState} />
         </header>
 
-        <div className="space-y-6">
-          {/* SECTION 1 — System Defaults */}
-          <section className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
-              <span className="w-1.5 h-5 rounded-full bg-indigo-500 block" />
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-                System Defaults
-              </h2>
-            </div>
+        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-10">
+          <div className="space-y-6">
+            {/* SECTION 1 — System Defaults */}
+            <section className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
+                <span className="w-1.5 h-5 rounded-full bg-indigo-500 block" />
+                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                  System Defaults
+                </h2>
+              </div>
 
-            <div className="divide-y divide-slate-100">
-              <div className="px-6 py-5 flex items-center justify-between gap-6">
-                <div>
-                  <p className="text-sm font-semibold text-slate-800">
-                    Currency
-                  </p>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Global currency used across all records
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-4 shrink-0">
-                  <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-base">
-                    {currentCurrency?.symbol ||
-                      currencySymbolMap[currentCurrency?.value || ""] ||
-                      "—"}
+              <div className="divide-y divide-slate-100">
+                <div className="px-6 py-5 flex items-center justify-between gap-6">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-800">
+                      Currency
+                    </p>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Global currency used across all records
+                    </p>
                   </div>
 
-                  <div className="relative">
-                    <select
-                      value={currentCurrency?.value || ""}
-                      onChange={(e) => {
-                        const opt = currencyOptions.find(
-                          (o) => o.value === e.target.value,
-                        );
-                        if (opt) handleUpdateCurrency(opt);
-                      }}
-                      className="appearance-none bg-slate-50 border border-slate-200 hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 rounded-xl px-3 py-2 pr-8 text-sm font-medium text-slate-700 outline-none transition-all cursor-pointer min-w-45"
-                    >
-                      <option value="" disabled>
-                        Select Currency
-                      </option>
-                      {currencyOptions.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
+                  <div className="flex items-center gap-4 shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-base">
+                      {currentCurrency?.symbol ||
+                        currencySymbolMap[currentCurrency?.value || ""] ||
+                        "—"}
+                    </div>
+
+                    <div className="relative">
+                      <select
+                        value={currentCurrency?.value || ""}
+                        onChange={(e) => {
+                          const opt = currencyOptions.find(
+                            (o) => o.value === e.target.value,
+                          );
+                          if (opt) handleUpdateCurrency(opt);
+                        }}
+                        className="appearance-none bg-slate-50 border border-slate-200 hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 rounded-xl px-3 py-2 pr-8 text-sm font-medium text-slate-700 outline-none transition-all cursor-pointer min-w-45"
+                      >
+                        <option value="" disabled>
+                          Select Currency
                         </option>
-                      ))}
-                    </select>
-                    <ChevronDown
-                      size={14}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
-                    />
+                        {currencyOptions.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown
+                        size={14}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          {/* SECTION 2 — Dropdown Configurations */}
-          <section className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
-              <span className="w-1.5 h-5 rounded-full bg-blue-500 block" />
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-                Dropdown Configurations
-              </h2>
-            </div>
+            {/* SECTION 2 — Dropdown Configurations */}
+            <section className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
+                <span className="w-1.5 h-5 rounded-full bg-blue-500 block" />
+                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                  Dropdown Configurations
+                </h2>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 divide-y divide-slate-100 md:divide-y-0 md:border-b-0">
-              {FIELD_CONFIGS.filter((f) => !f.isDefault).map((config, idx) => {
-                const colors = TAG_COLORS[config.key] || TAG_COLORS["gender"];
-                const fieldItems = data[config.key] || [];
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y divide-slate-100 md:divide-y-0 md:border-b-0">
+                {FIELD_CONFIGS.filter((f) => !f.isDefault).map((config, idx) => {
+                  const colors = TAG_COLORS[config.key] || TAG_COLORS["gender"];
+                  const fieldItems = data[config.key] || [];
 
-                // Logic to handle border bottom for the grid items properly
-                const isLastTwo =
-                  idx >= FIELD_CONFIGS.filter((f) => !f.isDefault).length - 2;
+                  // Logic to handle border bottom for the grid items properly
+                  const isLastTwo =
+                    idx >= FIELD_CONFIGS.filter((f) => !f.isDefault).length - 2;
 
-                return (
-                  <div
-                    key={config.key}
-                    className={`p-6 flex flex-col gap-4 border-slate-100 
-                      ${idx % 2 === 0 ? "md:border-r" : ""} 
-                      ${!isLastTwo ? "md:border-b" : ""}`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-800">
-                          {config.label}
-                        </h3>
-                        <p className="text-[11px] text-slate-400 mt-0.5 uppercase tracking-wider font-medium">
-                          {fieldItems.length} option
-                          {fieldItems.length !== 1 ? "s" : ""}
-                        </p>
+                  return (
+                    <div
+                      key={config.key}
+                      className={`p-6 flex flex-col gap-4 border-slate-100 
+                        ${idx % 2 === 0 ? "md:border-r" : ""} 
+                        ${!isLastTwo ? "md:border-b" : ""}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-sm font-semibold text-slate-800">
+                            {config.label}
+                          </h3>
+                          <p className="text-[11px] text-slate-400 mt-0.5 uppercase tracking-wider font-medium">
+                            {fieldItems.length} option
+                            {fieldItems.length !== 1 ? "s" : ""}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setActiveInput(config.key);
+                            setNewVal("");
+                          }}
+                          className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-white hover:bg-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg transition-all"
+                        >
+                          <Plus size={12} /> Add
+                        </button>
                       </div>
-                      <button
-                        onClick={() => {
-                          setActiveInput(config.key);
-                          setNewVal("");
-                        }}
-                        className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-white hover:bg-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg transition-all"
-                      >
-                        <Plus size={12} /> Add
-                      </button>
-                    </div>
 
-                    <div className="flex flex-wrap gap-2 min-h-9 content-start">
-                      <AnimatePresence>
-                        {fieldItems.map((item) => (
-                          <motion.span
-                            key={item.value}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.75 }}
-                            className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${colors.bg} ${colors.text} ${colors.border} ${colors.hoverBg} ${colors.hoverText} ${colors.hoverBorder}`}
-                          >
-                            {item.label}
-                            <button
-                              onClick={() =>
-                                handleRemove(config.key, item.value)
-                              }
-                              className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-red-100 -mr-0.5"
+                      <div className="flex flex-wrap gap-2 min-h-9 content-start">
+                        <AnimatePresence>
+                          {fieldItems.map((item) => (
+                            <motion.span
+                              key={item.value}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.75 }}
+                              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${colors.bg} ${colors.text} ${colors.border} ${colors.hoverBg} ${colors.hoverText} ${colors.hoverBorder}`}
                             >
-                              <X size={10} />
-                            </button>
-                          </motion.span>
-                        ))}
-                      </AnimatePresence>
-
-                      <AnimatePresence>
-                        {activeInput === config.key && (
-                          <motion.div
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: "auto" }}
-                            exit={{ opacity: 0, width: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <input
-                              autoFocus
-                              value={newVal}
-                              onChange={(e) => setNewVal(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") handleAdd(config.key);
-                                if (e.key === "Escape") {
-                                  setActiveInput(null);
-                                  setNewVal("");
+                              {item.label}
+                              <button
+                                onClick={() =>
+                                  handleRemove(config.key, item.value)
                                 }
-                              }}
-                              onBlur={() =>
-                                newVal.trim()
-                                  ? handleAdd(config.key)
-                                  : setActiveInput(null)
-                              }
-                              placeholder="Type & enter…"
-                              className="text-xs border border-blue-300 bg-blue-50 px-3 py-1.5 rounded-lg outline-none w-32"
-                            />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                                className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-red-100 -mr-0.5"
+                              >
+                                <X size={10} />
+                              </button>
+                            </motion.span>
+                          ))}
+                        </AnimatePresence>
+
+                        <AnimatePresence>
+                          {activeInput === config.key && (
+                            <motion.div
+                              initial={{ opacity: 0, width: 0 }}
+                              animate={{ opacity: 1, width: "auto" }}
+                              exit={{ opacity: 0, width: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <input
+                                autoFocus
+                                value={newVal}
+                                onChange={(e) => setNewVal(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") handleAdd(config.key);
+                                  if (e.key === "Escape") {
+                                    setActiveInput(null);
+                                    setNewVal("");
+                                  }
+                                }}
+                                onBlur={() =>
+                                  newVal.trim()
+                                    ? handleAdd(config.key)
+                                    : setActiveInput(null)
+                                }
+                                placeholder="Type & enter…"
+                                className="text-xs border border-blue-300 bg-blue-50 px-3 py-1.5 rounded-lg outline-none w-32"
+                              />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
         </div>
       </motion.div>
     </main>

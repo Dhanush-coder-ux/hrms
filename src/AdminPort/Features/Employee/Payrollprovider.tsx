@@ -114,7 +114,7 @@ export const Payrollprovider = () => {
           .filter(e => e.name.trim() && e.type) // Only valid entries
           .map((e) => ({
             name: e.name.trim(),
-            type: e.type.toLowerCase(), 
+            type: e.type.toLowerCase(),
             value: Number(e.value || 0),
           })),
         deductions: newProvider.deductions

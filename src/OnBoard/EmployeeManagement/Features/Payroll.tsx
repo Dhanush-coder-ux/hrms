@@ -12,10 +12,12 @@ const Payroll = () => {
   ];
 
   return (
-    <div>
+    <div className="h-full flex flex-col overflow-hidden">
       <MenuButtons menus={menuList} active={activeMenu} onClick={setActiveMenu} />
-      {activeMenu === "Employees" && <PayrollComponents />}
-      {activeMenu === "PayrollCalculation" && <PayRollCalculate />}
+      <div className="flex-1 min-h-0">
+        {activeMenu === "Employees" && <PayrollComponents />}
+        {activeMenu === "PayrollCalculation" && <PayRollCalculate />}
+      </div>
     </div>
   );
 };

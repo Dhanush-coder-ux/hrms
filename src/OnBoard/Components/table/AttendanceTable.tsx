@@ -198,7 +198,7 @@ export const Attendance = () => {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="p-6 bg-[#f8f9fa] min-h-screen">
+    <div className="p-6 bg-[#f8f9fa] h-full overflow-auto">
 
       {/* Header */}
 

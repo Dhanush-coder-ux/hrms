@@ -58,7 +58,7 @@ export const AssetReturn = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50 text-gray-800">
+    <div className="p-6 h-full overflow-auto bg-gray-50 text-gray-800">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-blue-600">

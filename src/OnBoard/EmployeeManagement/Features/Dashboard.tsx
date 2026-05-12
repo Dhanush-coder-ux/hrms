@@ -7,7 +7,7 @@ import { WorkforceSummary } from "../Dashboard/WorkforceSummary";
 
 export const Dashboard = () => {
   return (
-    <section className="min-h-screen  p-6">
+    <section className="h-full overflow-y-auto custom-scrollbar p-6">
       <div className="max-w-7xl mx-auto space-y-8">
 
         <Header />

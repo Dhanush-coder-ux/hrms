@@ -60,7 +60,7 @@ export const KnowledgeTransfer = () => {
   };
 
   return (
-    <div className="p-8 bg-[#F8FAFC] min-h-screen text-slate-900">
+    <div className="p-8 bg-[#F8FAFC] h-full overflow-auto text-slate-900">
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">

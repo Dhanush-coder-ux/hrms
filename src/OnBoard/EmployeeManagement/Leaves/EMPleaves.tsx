@@ -46,7 +46,7 @@ const columns = [
     <motion.section
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6  min-h-screen"
+      className="h-full overflow-y-auto custom-scrollbar p-6"
     >
       <header className="mb-8 flex justify-between items-center">
         <div>

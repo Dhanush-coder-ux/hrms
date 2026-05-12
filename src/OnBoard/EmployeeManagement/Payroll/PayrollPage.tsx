@@ -7,6 +7,8 @@ import SearchBar from "../../../Components/Common/Searchbar";
 import type { PayrollData } from "../../../Types/typesEmployeeManagement";
 import FilterBar from "../Employee/FilterBar";
 import { Api_URL } from "../../../APILINK";
+import PageLoading from "../../../Components/Common/PageLoading";
+import { MdPayment } from "react-icons/md";
 
 const API_URL = `${Api_URL}/payroll`;
 
@@ -87,14 +89,25 @@ const PayrollComponents = () => {
     navigate(`/EmployeeManagement/payrollDetails/${row.emp_id}`);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <PageLoading/>;
 
   return (
-    <div className="p-8 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <div className="h-full overflow-auto  text-slate-900">
+      <div className="max-w-7xl mx-auto px-4 py-10">
+
+        <div>
+            <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
+              <MdPayment className="w-8 h-8 text-indigo-600" />
+              Payroll Management
+            </h1>
+
+            <p className="text-slate-500 mt-1">
+              Real-time salary breakdown
+            </p>
+          </div>
 
         {/* STATS */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5 mb-10">
           <StatCard
             icon={CreditCard}
             label="Total Disbursement"

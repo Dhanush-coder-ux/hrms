@@ -138,7 +138,7 @@ const handleSave = async () => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 lg:p-10 min-h-screen bg-slate-50/50">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 lg:p-10 h-full overflow-auto bg-slate-50/50">
       <div className="max-w-7xl mx-auto">
         <Backbutton />
 
