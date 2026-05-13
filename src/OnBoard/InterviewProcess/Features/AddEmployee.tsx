@@ -150,7 +150,7 @@ const App = () => {
   };
 
   return (
-    <div className="h-full overflow-auto max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+    <div className="min-h-full max-w-6xl mx-auto p-4 md:p-8 space-y-8">
       <StepButton
         menus={steps}
         active={currentStep}

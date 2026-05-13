@@ -285,7 +285,7 @@ const EmployeeRegister = ({
         .emp-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
       `}</style>
 
-      <div className="emp-page h-full overflow-auto">
+      <div className="emp-page min-h-full">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
             <FaUser className="text-[26px] text-indigo-500 shrink-0" />

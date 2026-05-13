@@ -28,7 +28,7 @@ export const OnboardingDashboard = () => {
   ];
 
   return (
-    <div className="p-8 bg-[#F8FAFC] h-full overflow-y-auto custom-scrollbar text-slate-900">
+    <div className="p-8 bg-[#F8FAFC] min-h-full custom-scrollbar text-slate-900">
       {/* Header */}
       <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>

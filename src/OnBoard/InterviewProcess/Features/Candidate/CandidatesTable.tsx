@@ -37,14 +37,14 @@ const getAvatarColor = (name: string) => {
 
 export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
   return (
-    <div className="w-full overflow-x-auto custom-scrollbar">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-slate-50/50 border-b border-slate-100">
+    <div className="w-full max-h-[520px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100">
+      <table className="w-full border-collapse relative">
+        <thead className="sticky top-0 z-20">
+          <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
             {columns.map((col, i) => (
               <th
                 key={i}
-                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap ${
+                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50 ${
                   col.type === "action" ? "text-right" : "text-left"
                 }`}
               >
@@ -54,11 +54,11 @@ export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
           </tr>
         </thead>
 
-        <tbody>
+        <tbody className="divide-y divide-slate-50">
           {data.length > 0 ? (
             data.map((row, ri) => (
               <tr
-                key={row.Candidate_id || ri}
+                key={row.id || ri}
                 onClick={() => onRowClick?.(row)}
                 className="group border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
               >
@@ -81,7 +81,7 @@ export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
                   const val = row[col.accessor];
 
                   /* Status badge */
-                  if (col.accessor === "Status" || col.accessor === "status") {
+                  if (col.accessor === "Candidate_status" || col.accessor === "Status") {
                     const s = getStatusStyle(val);
                     return (
                       <td key={ci} className="px-6 py-4">
@@ -113,7 +113,7 @@ export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
                               {val}
                             </p>
                             <p className="text-[10px] font-bold text-slate-400 tracking-wider m-0 mt-0.5">
-                              #{row.Candidate_id}
+                              #{row.Candidate_ID}
                             </p>
                           </div>
                         </div>

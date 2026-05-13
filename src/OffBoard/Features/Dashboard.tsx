@@ -26,7 +26,7 @@ export const OffboardingDashboard = () => {
   ];
 
   return (
-    <div className="p-8 bg-[#F8FAFC] h-full overflow-y-auto custom-scrollbar text-slate-900 font-sans">
+    <div className="p-8 bg-[#F8FAFC] min-h-full custom-scrollbar text-slate-900 font-sans">
       {/* Header */}
       <div className="mb-10 flex justify-between items-center">
         <div>

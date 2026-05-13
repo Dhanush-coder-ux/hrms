@@ -1,3 +1,4 @@
+
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Search, CheckCircle, Clock, MapPin, Link, Users, User, Send } from "lucide-react";
@@ -37,11 +38,16 @@ export const SchedulingModal = ({
   formDetails, setFormDetails, onSchedule, isEligible,
 }: SchedulingModalProps) => {
   const eligibleCandidates = candidates.filter(isEligible);
-  const filteredForSelection = candidates.filter(
-    (c) =>
-      c.Candidate_name.toLowerCase().includes(candidateSearch.toLowerCase()) ||
-      c.Job_title.toLowerCase().includes(candidateSearch.toLowerCase())
-  );
+  const filteredForSelection = candidates.filter((c) => {
+    if (mode === "Individual" && selectedIds.length > 0) {
+      return selectedIds.includes(c.id.toString());
+    }
+
+    const searchStr = candidateSearch.toLowerCase();
+    const name = c.Candidate_name?.toLowerCase() || "";
+    const cid = c.Candidate_ID?.toLowerCase() || "";
+    return name.includes(searchStr) || cid.includes(searchStr);
+  });
 
   const inputStyle: React.CSSProperties = {
     width: "100%", height: 46,
@@ -109,7 +115,7 @@ export const SchedulingModal = ({
                   </div>
                   {mode === "Group" && (
                     <button
-                      onClick={() => setSelectedIds(eligibleCandidates.map((c) => c.Candidate_id))}
+                      onClick={() => setSelectedIds(eligibleCandidates.map((c) => c.id.toString()))}
                       style={{ fontSize: 11, fontWeight: 700, color: "#6366f1", background: "#eef2ff", border: "none", padding: "5px 10px", borderRadius: 8, cursor: "pointer" }}
                     >
                       All Eligible
@@ -121,7 +127,7 @@ export const SchedulingModal = ({
                 <div style={{ position: "relative" }}>
                   <Search size={14} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "#94a3b8", pointerEvents: "none" }} />
                   <input
-                    placeholder="Search name or role…"
+                    placeholder="Search name or ID…"
                     value={candidateSearch}
                     onChange={(e) => setCandidateSearch(e.target.value)}
                     style={{ ...inputStyle, paddingLeft: 38, height: 40 }}
@@ -133,20 +139,20 @@ export const SchedulingModal = ({
               <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px" }}>
                 {filteredForSelection.map((cand) => {
                   const eligible = isEligible(cand);
-                  const isSelected = selectedIds.includes(cand.Candidate_id);
+                  const isSelected = selectedIds.includes(cand.id.toString());
                   const [bgC, fgC] = getAvatarColor(cand.Candidate_name);
                   const initials = cand.Candidate_name?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
                   return (
                     <div
-                      key={cand.Candidate_id}
+                      key={cand.id}
                       onClick={() => {
                         if (!eligible) return;
                         if (mode === "Individual") {
-                          setSelectedIds([cand.Candidate_id]);
+                          setSelectedIds([cand.id.toString()]);
                         } else {
                           setSelectedIds((prev) =>
-                            isSelected ? prev.filter((id) => id !== cand.Candidate_id) : [...prev, cand.Candidate_id]
+                            isSelected ? prev.filter((id) => id !== cand.id.toString()) : [...prev, cand.id.toString()]
                           );
                         }
                       }}
@@ -161,7 +167,6 @@ export const SchedulingModal = ({
                         boxShadow: isSelected ? "0 0 0 3px rgba(99,102,241,0.10)" : "none",
                       }}
                     >
-                      {/* Checkbox */}
                       <div style={{
                         width: 20, height: 20, borderRadius: 6, flexShrink: 0,
                         border: `2px solid ${isSelected ? "#6366f1" : "#cbd5e1"}`,
@@ -171,7 +176,6 @@ export const SchedulingModal = ({
                         {isSelected && <CheckCircle size={12} style={{ color: "#fff" }} />}
                       </div>
 
-                      {/* Avatar */}
                       <div style={{
                         width: 36, height: 36, borderRadius: 10, background: bgC, color: fgC,
                         display: "flex", alignItems: "center", justifyContent: "center",
@@ -185,7 +189,7 @@ export const SchedulingModal = ({
                           {cand.Candidate_name}
                         </p>
                         <p style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#94a3b8" }}>
-                          {cand.Job_title}
+                          #{cand.Candidate_ID} • {cand.Job_title}
                         </p>
                       </div>
 
@@ -195,7 +199,7 @@ export const SchedulingModal = ({
                         </span>
                       ) : (
                         <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 8, background: "#f8fafc", color: "#94a3b8", flexShrink: 0 }}>
-                          {cand.Status}
+                          {cand.Candidate_status}
                         </span>
                       )}
                     </div>
@@ -206,103 +210,63 @@ export const SchedulingModal = ({
 
             {/* ── RIGHT: Form ── */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#fff" }}>
-              {/* Header */}
               <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.02em" }}>
-                    Invitation Details
-                  </h3>
-                  <p style={{ margin: "4px 0 0", fontSize: 12, fontWeight: 600, color: "#94a3b8" }}>
-                    Configure the {mode?.toLowerCase()} interview session
-                  </p>
+                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.02em" }}>Invitation Details</h3>
+                  <p style={{ margin: "4px 0 0", fontSize: 12, fontWeight: 600, color: "#94a3b8" }}>Configure the interview session</p>
                 </div>
-                <button
-                  onClick={onClose}
-                  style={{
-                    width: 34, height: 34, borderRadius: "50%",
-                    border: "1.5px solid #e2e8f0", background: "#fff",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: "pointer", color: "#94a3b8",
-                  }}
-                >
+                <button onClick={onClose} style={{ width: 34, height: 34, borderRadius: "50%", border: "1.5px solid #e2e8f0", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#94a3b8" }}>
                   <X size={15} />
                 </button>
               </div>
 
-              {/* Form body */}
-              <form
-                onSubmit={onSchedule}
-                style={{ flex: 1, overflowY: "auto", padding: "24px 28px", display: "flex", flexDirection: "column", gap: 20 }}
-              >
-                {mode === "Group" && (
-                  <div>
-                    <label style={labelStyle}>Group Name</label>
-                    <input
-                      required
-                      placeholder="e.g. Q3 Engineering Batch"
-                      value={formDetails.Group_name || ""}
-                      onChange={(e) => setFormDetails({ ...formDetails, Group_name: e.target.value })}
-                      style={inputStyle}
-                    />
-                  </div>
-                )}
-
+              <form onSubmit={onSchedule} style={{ flex: 1, overflowY: "auto", padding: "24px 28px", display: "flex", flexDirection: "column", gap: 20 }}>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                  <div>
-                    <Selection
-                      label="Interview Round"
-                      name="Interview_round"
-                      value={formDetails.Interview_round}
-                      options={[
-                        { label: "Technical",   value: "Technical" },
-                        { label: "HR Round",    value: "HR Round" },
-                        { label: "Design",      value: "Design" },
-                        { label: "Management",  value: "Management" },
-                      ]}
-                      onChange={(e: any) => setFormDetails({ ...formDetails, Interview_round: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Selection
-                      label="Interview Mode"
-                      name="Interview_mode"
-                      value={formDetails.Interview_mode}
-                      options={[
-                        { label: "Online",  value: "Online" },
-                        { label: "Offline", value: "Offline" },
-                      ]}
-                      onChange={(e: any) => setFormDetails({ ...formDetails, Interview_mode: e.target.value })}
-                    />
-                  </div>
+                  <Selection
+                    label="Interview Round"
+                    name="Interview_round"
+                    value={formDetails.Interview_round}
+                    options={[
+                      { label: "Screening",   value: "Screening" },
+                      { label: "Technical Round 1", value: "Technical Round 1" },
+                      { label: "Technical Round 2", value: "Technical Round 2" },
+                      { label: "HR Round", value: "HR Round" },
+                      { label: "Final Round", value: "Final Round" },
+                    ]}
+                    onChange={(e: any) => setFormDetails({ ...formDetails, Interview_round: e.target.value })}
+                  />
+                  <Selection
+                    label="Interview Mode"
+                    name="Interview_mode"
+                    value={formDetails.Interview_mode}
+                    options={[
+                      { label: "Online",  value: "Online" },
+                      { label: "Offline", value: "Offline" },
+                    ]}
+                    onChange={(e: any) => setFormDetails({ ...formDetails, Interview_mode: e.target.value })}
+                  />
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                  <div>
-                    <CustomDatePicker
-                      Lable="Interview Date"
-                      name="Interview_date"
-                      value={formDetails.Interview_date}
-                      onChange={(e: any) => setFormDetails({ ...formDetails, Interview_date: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <FormFiled
-                      Lable="Interview Time"
-                      type="time"
-                      in_PlaceHolder="Select time"
-                      name="Interview_time"
-                      value={formDetails.Interview_time}
-                      icon={<Clock size={15} />}
-                      onChange={(e: any) => setFormDetails({ ...formDetails, Interview_time: e.target.value })}
-                    />
-                  </div>
+                  <CustomDatePicker
+                    Lable="Interview Date"
+                    name="Interview_date"
+                    value={formDetails.Interview_date}
+                    onChange={(e: any) => setFormDetails({ ...formDetails, Interview_date: e.target.value })}
+                  />
+                  <FormFiled
+                    Lable="Interview Time"
+                    type="time"
+                    in_PlaceHolder="Select time"
+                    name="Interview_time"
+                    value={formDetails.Interview_time}
+                    icon={<Clock size={15} />}
+                    onChange={(e: any) => setFormDetails({ ...formDetails, Interview_time: e.target.value })}
+                  />
                 </div>
 
-                {/* Location / Link */}
                 <div>
-                  <label style={labelStyle}>
-                    {formDetails.Interview_mode === "Online" ? "Meeting Link" : "Venue / Location"}
-                  </label>
+                  <label style={labelStyle}>{formDetails.Interview_mode === "Online" ? "Meeting Link" : "Venue / Location"}</label>
                   <div style={{ position: "relative" }}>
                     <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#94a3b8", display: "flex" }}>
                       {formDetails.Interview_mode === "Online" ? <Link size={15} /> : <MapPin size={15} />}
@@ -312,42 +276,18 @@ export const SchedulingModal = ({
                       placeholder={formDetails.Interview_mode === "Online" ? "https://meet.google.com/…" : "Floor 4, Conference Room B"}
                       style={{ ...inputStyle, paddingLeft: 40 }}
                       value={formDetails.Interview_mode === "Online" ? (formDetails.Meeting_link || "") : (formDetails.Location || "")}
-                      onChange={(e) => setFormDetails({
-                        ...formDetails,
-                        [formDetails.Interview_mode === "Online" ? "Meeting_link" : "Location"]: e.target.value,
-                      })}
+                      onChange={(e) => setFormDetails({ ...formDetails, [formDetails.Interview_mode === "Online" ? "Meeting_link" : "Location"]: e.target.value })}
                     />
                   </div>
                 </div>
 
-                {/* Panel */}
-                <div>
-                  <label style={labelStyle}>Panel Members</label>
-                  <input
-                    placeholder="Comma separated names…"
-                    style={inputStyle}
-                    value={formDetails.Panel_members || ""}
-                    onChange={(e) => setFormDetails({ ...formDetails, Panel_members: e.target.value })}
-                  />
-                </div>
-
-                {/* Submit */}
                 <div style={{ marginTop: "auto", paddingTop: 8, borderTop: "1px solid #f1f5f9" }}>
-                  {/* Selected summary */}
                   {selectedIds.length > 0 && (
-                    <div style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      padding: "10px 14px", borderRadius: 12,
-                      background: "#eef2ff", border: "1.5px solid #c7d2fe",
-                      marginBottom: 14,
-                    }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#eef2ff", border: "1.5px solid #c7d2fe", marginBottom: 14 }}>
                       <CheckCircle size={14} style={{ color: "#6366f1", flexShrink: 0 }} />
-                      <span style={{ fontSize: 12, fontWeight: 700, color: "#4338ca" }}>
-                        {selectedIds.length} candidate{selectedIds.length > 1 ? "s" : ""} selected
-                      </span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: "#4338ca" }}>{selectedIds.length} candidate{selectedIds.length > 1 ? "s" : ""} selected</span>
                     </div>
                   )}
-
                   <button
                     type="submit"
                     disabled={isScheduling || selectedIds.length === 0}
@@ -356,29 +296,17 @@ export const SchedulingModal = ({
                       borderRadius: 16, border: "none",
                       background: selectedIds.length === 0 ? "#e2e8f0" : "linear-gradient(135deg, #6366f1, #8b5cf6)",
                       color: selectedIds.length === 0 ? "#94a3b8" : "#fff",
-                      fontSize: 14, fontWeight: 800, letterSpacing: "0.01em",
-                      cursor: selectedIds.length === 0 ? "not-allowed" : "pointer",
+                      fontSize: 14, fontWeight: 800, cursor: selectedIds.length === 0 ? "not-allowed" : "pointer",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                      transition: "opacity 0.12s, transform 0.1s",
-                      opacity: isScheduling ? 0.85 : 1,
+                      transition: "all 0.12s",
                     }}
-                    onMouseDown={(e) => { if (selectedIds.length > 0) (e.currentTarget as HTMLElement).style.transform = "scale(0.98)"; }}
-                    onMouseUp={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
                   >
-                    {isScheduling ? (
-                      <div style={{ width: 20, height: 20, borderRadius: "50%", border: "2.5px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", animation: "spin 0.7s linear infinite" }} />
-                    ) : (
-                      <>
-                        <Send size={16} />
-                        Send Invitations
-                      </>
-                    )}
+                    {isScheduling ? <div style={{ width: 20, height: 20, borderRadius: "50%", border: "2.5px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", animation: "spin 0.7s linear infinite" }} /> : <><Send size={16} /> Send Invitations</>}
                   </button>
                 </div>
               </form>
             </div>
           </motion.div>
-
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       )}

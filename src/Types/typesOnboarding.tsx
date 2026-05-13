@@ -50,25 +50,45 @@ export interface PayrollData {
 }
 
 export interface Candidate {
-  Candidate_id: string;
+  id: number;
+  Candidate_ID: string;
   Candidate_name: string;
   Job_title: string;
   Candidate_Phone: string;
   Candidate_Email: string;
-  Candidate_Skills: string;
-  Candidate_Source: string;
-  Resume_path: string;
-  Status: string;
+  Candidate_Skills?: string;
+  Candidate_Source?: string;
+  Resume_path?: string;
+  Candidate_status: string;
+  current_candidate_stage?: string;
 }
 
-export interface Interview {
-  Interview_id: string;
-  Candidate_id: string;
+export interface InterviewRecord {
+  id: number;
+  candidate_id: number;
+  Candidate_id: string; // The alphanumeric ID from backend
   Interview_date: string;
   Interview_time: string;
   Interview_status: string;
-  Candidate_feedback: string;
-  // UI Helper fields (mapped in frontend)
+  Stage_status: string;
+  Stage_name?: string;
+  Interviewer_name?: string | null;
+  Interview_score?: number | null;
+  Interviewer_feedback?: string | null;
+  Final_decision?: string | null;
+  Rejection_reason?: string | null;
+  created_at: string;
   candidate_name?: string;
   candidate_role?: string;
+  current_candidate_stage?: string;
+  completed_stages_count?: number;
+  total_stages_count?: number;
+}
+
+export interface CandidateStageRecord {
+    id: number;
+    candidate_id: number;
+    stage_id: number;
+    Stage_status: string;
+    Stage_name?: string;
 }

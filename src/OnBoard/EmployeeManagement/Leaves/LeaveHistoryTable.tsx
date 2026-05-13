@@ -32,15 +32,15 @@ export const LeaveHistoryTable = ({ history }: HistoryTableProps) => {
         </span>
       </div>
 
-      <div className="overflow-x-auto custom-scrollbar">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50/50 border-b border-slate-100">
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Applied On</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Duration</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 text-center">Days</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Status</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400">Reason</th>
+      <div className="max-h-[480px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-50">
+        <table className="w-full text-left border-collapse relative">
+          <thead className="sticky top-0 z-20">
+            <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Applied On</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Duration</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 text-center bg-slate-50">Days</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Status</th>
+              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Reason</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">

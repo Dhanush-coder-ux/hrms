@@ -11,15 +11,15 @@ const HEADERS = ["Personnel", "Department", "Designation", "Contact Info", "Stat
 
 export default function EmployeeTable({ employees, onRowClick }: EmployeeTableProps) {
   return (
-    <div className="w-full overflow-x-auto custom-scrollbar">
-      <table className="w-full border-collapse">
+    <div className="w-full max-h-[520px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100">
+      <table className="w-full border-collapse relative">
         {/* ── HEADER ── */}
-        <thead>
-          <tr className="bg-slate-50/50 border-b border-slate-100">
+        <thead className="sticky top-0 z-20">
+          <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
             {HEADERS.map((h) => (
               <th
                 key={h}
-                className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap"
+                className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50"
               >
                 {h}
               </th>
@@ -28,7 +28,7 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
         </thead>
 
         {/* ── BODY ── */}
-        <tbody>
+        <tbody className="divide-y divide-slate-50">
           {employees.length === 0 ? (
             <tr>
               <td

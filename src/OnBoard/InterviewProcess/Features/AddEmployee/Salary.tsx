@@ -155,7 +155,7 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
         .sal-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: #475569; margin-bottom: 7px; }
       `}</style>
 
-      <div className="sal-page h-full overflow-auto">
+      <div className="sal-page min-h-full">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
             <FaMoneyBill className="text-[26px] text-indigo-500" />

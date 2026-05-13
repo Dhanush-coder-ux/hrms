@@ -115,7 +115,7 @@ export default function EmployeeComponent() {
   }
 
   return (
-    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar">
+    <div className="h-full bg-slate-50/50 p-10 font-sans custom-scrollbar">
       {/* HEADER */}
       <div className="flex items-start justify-between gap-6 mb-10 flex-wrap">
         <div className="flex flex-col">

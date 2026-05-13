@@ -1,15 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Mail, Phone, Paperclip, ExternalLink,
-  CheckCircle, XCircle, Calendar, ChevronRight, User,
-} from "lucide-react";
+  CheckCircle, XCircle, Calendar} from "lucide-react";
 import type { Candidate } from "../../../../../Types/typesOnboarding";
 
 interface CandidateDrawerProps {
   candidate: Candidate | null;
   onClose: () => void;
   isSaving: boolean;
-  onUpdateStatus: (id: string, status: string) => void;
+  onUpdateStatus: (id: number, status: string) => void;
   onInvite: (c: Candidate) => void;
 }
 
@@ -28,23 +27,23 @@ const getThemeColor = (name: string) => {
 };
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string; text: string }> = {
-  selected:  { label: "Selected",  dot: "bg-white", badge: "bg-white/10", text: "text-white" },
+  recruited:  { label: "Recruited",  dot: "bg-white", badge: "bg-white/10", text: "text-white" },
   rejected:  { label: "Rejected",  dot: "bg-rose-500", badge: "bg-rose-50", text: "text-rose-600" },
-  interview: { label: "Interview", dot: "bg-blue-500", badge: "bg-blue-50", text: "text-blue-600" },
+  selected:  { label: "Selected",  dot: "bg-blue-500", badge: "bg-blue-50", text: "text-blue-600" },
   default:   { label: "Applied",   dot: "bg-slate-400", badge: "bg-slate-50", text: "text-slate-600" },
 };
 
 export const CandidateDrawer = ({
-  candidate, onClose, isSaving, onUpdateStatus, onInvite,
+  candidate, onClose, isSaving, onUpdateStatus, onInvite
 }: CandidateDrawerProps) => {
   if (!candidate) return null;
 
-  const currentStatus = candidate.Status?.toLowerCase() || "";
-  const isProcessed = ["interview", "selected", "rejected"].includes(currentStatus);
+  const currentStatus = candidate.Candidate_status?.toLowerCase() || "";
   const sc = STATUS_CONFIG[currentStatus] ?? STATUS_CONFIG.default;
   const theme = getThemeColor(candidate.Candidate_name || "");
   const initials = candidate.Candidate_name
     ?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+
 
   return (
     <AnimatePresence>
@@ -72,7 +71,6 @@ export const CandidateDrawer = ({
             </button>
 
             <div className="flex items-start gap-4">
-              {/* Avatar */}
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-xl font-extrabold flex-shrink-0 tracking-tighter border border-white/10">
                 {initials}
               </div>
@@ -84,18 +82,21 @@ export const CandidateDrawer = ({
                 <p className="text-[10px] font-bold text-white/80 m-0 mt-1 uppercase tracking-widest">
                   {candidate.Job_title}
                 </p>
-                {/* Status badge */}
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide mt-2.5 ${sc.badge} ${sc.text} border border-white/10`}>
                   <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${sc.dot}`} />
-                  {candidate.Status || "Applied"}
+                  {candidate.Candidate_status || "Applied"}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Body */}
           <div className="flex-1 overflow-y-auto p-7 pt-6 custom-scrollbar">
-            {/* Contact */}
+            <Section label="Candidate ID">
+              <div className="p-3.5 px-4 rounded-xl bg-slate-50 border border-slate-100 text-[13px] font-black text-slate-700 tracking-wider">
+                #{candidate.Candidate_ID}
+              </div>
+            </Section>
+
             <Section label="Contact Info">
               <InfoRow icon={<Mail size={14} />} value={candidate.Candidate_Email} />
               <InfoRow icon={<Phone size={14} />} value={candidate.Candidate_Phone} />
@@ -123,50 +124,93 @@ export const CandidateDrawer = ({
               </div>
             </Section>
 
-            {/* Actions */}
-            {!isProcessed ? (
-              <Section label="Decision">
-                <div className="grid grid-cols-2 gap-2.5 mb-2.5">
+            <Section label="Application Management">
+              {currentStatus === "applied" && (
+                <div className="grid grid-cols-2 gap-3">
                   <ActionButton
                     disabled={isSaving}
-                    onClick={() => onUpdateStatus(candidate.Candidate_id, "Selected")}
+                    onClick={() => onUpdateStatus(candidate.id, "Selected")}
                     className="bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-600 hover:text-white"
                     icon={<CheckCircle size={15} />} label="Select"
                   />
                   <ActionButton
                     disabled={isSaving}
-                    onClick={() => onUpdateStatus(candidate.Candidate_id, "Rejected")}
+                    onClick={() => onUpdateStatus(candidate.id, "Rejected")}
                     className="bg-rose-50 text-rose-600 border-rose-100 hover:bg-rose-600 hover:text-white"
                     icon={<XCircle size={15} />} label="Reject"
                   />
                 </div>
+              )}
 
-                {/* Invite button */}
-                <button
-                  disabled={isSaving}
-                  onClick={() => onInvite(candidate)}
-                  className={`w-full flex items-center justify-between p-4 px-5 rounded-2xl border-none ${theme.bg} text-white cursor-pointer text-[13px] font-bold transition-all hover:brightness-110 active:scale-[0.98] shadow-lg shadow-indigo-100 disabled:opacity-50`}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <Calendar size={18} />
-                    Invite to Interview
-                  </span>
-                  <ChevronRight size={18} />
-                </button>
-              </Section>
-            ) : (
-              <div className="p-4 px-5 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                <User size={18} className="text-slate-300 mx-auto mb-2" />
-                <p className="m-0 text-[13px] font-semibold text-slate-500">
-                  Candidate is in the{" "}
-                  <span className="text-indigo-600 font-extrabold">{candidate.Status}</span>{" "}
-                  stage.
-                </p>
-              </div>
-            )}
+              {currentStatus === "selected" && (
+                <div className="p-5 rounded-2xl bg-indigo-50 border border-indigo-100 flex flex-col items-center gap-3 text-center">
+                  <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center animate-pulse">
+                    <Calendar size={20} />
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-black text-indigo-900 m-0 uppercase tracking-tight">Selection Processing</p>
+                    <p className="text-[11px] font-bold text-indigo-600/70 m-0 mt-0.5">Candidate is currently in the selection workflow.</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mt-4 w-full">
+                    <ActionButton
+                      disabled={isSaving}
+                      onClick={() => onInvite(candidate)}
+                      className="bg-indigo-600 text-white border-none hover:bg-indigo-700 shadow-md"
+                      icon={<Calendar size={15} />} label="Interview"
+                    />
+                    <ActionButton
+                      disabled={isSaving}
+                      onClick={() => onUpdateStatus(candidate.id, "Rejected")}
+                      className="bg-rose-50 text-rose-600 border-rose-100 hover:bg-rose-600 hover:text-white"
+                      icon={<XCircle size={15} />} label="Reject"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStatus === "recruited" && (
+                <div className="space-y-4">
+                  <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 flex flex-col items-center gap-3 text-center">
+                    <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center">
+                      <CheckCircle size={20} />
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-black text-emerald-900 m-0 uppercase tracking-tight">Candidate Recruited</p>
+                      <p className="text-[11px] font-bold text-emerald-600/70 m-0 mt-0.5">Pipeline complete. Candidate is ready for onboarding.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1">
+                    <ActionButton
+                      disabled={isSaving}
+                      onClick={() => onUpdateStatus(candidate.id, "Rejected")}
+                      className="bg-rose-50 text-rose-600 border-rose-100 hover:bg-rose-600 hover:text-white"
+                      icon={<XCircle size={15} />} label="Set Rejected"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStatus === "rejected" && (
+                <div className="p-6 rounded-2xl bg-rose-50 border border-rose-100 flex flex-col items-center gap-2 text-center">
+                   <div className="w-10 h-10 rounded-full bg-rose-500 text-white flex items-center justify-center">
+                      <XCircle size={20} />
+                   </div>
+                   <p className="text-[13px] font-black text-rose-900 uppercase">Application Rejected</p>
+                   <p className="text-[11px] font-bold text-rose-600/70">Workflow stopped for this candidate.</p>
+                   <div className="w-full mt-4">
+                     <ActionButton
+                       disabled={isSaving}
+                       onClick={() => onUpdateStatus(candidate.id, "Selected")}
+                       className="w-full bg-white text-emerald-600 border-emerald-100 hover:bg-emerald-50"
+                       icon={<CheckCircle size={15} />} label="Reconsider"
+                     />
+                   </div>
+                </div>
+              )}
+            </Section>
           </div>
 
-          {/* Footer */}
           <div className="p-5 px-7 border-t border-slate-100 bg-white">
             <button
               onClick={onClose}
@@ -181,12 +225,9 @@ export const CandidateDrawer = ({
   );
 };
 
-/* Helpers */
 const Section = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="mb-6">
-    <p className="m-0 mb-3 text-[10px] font-extrabold tracking-widest uppercase text-slate-400">
-      {label}
-    </p>
+    <p className="m-0 mb-3 text-[10px] font-extrabold tracking-widest uppercase text-slate-400">{label}</p>
     {children}
   </div>
 );

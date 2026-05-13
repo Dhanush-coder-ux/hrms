@@ -24,14 +24,14 @@ const getStatusStyle = (val: string) =>
 const PayrollTable = ({ columns, data, onRowClick }: TableProps) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full overflow-x-auto custom-scrollbar">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-slate-50/50 border-b border-slate-100">
+    <div className="w-full max-h-[520px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100">
+      <table className="w-full border-collapse relative">
+        <thead className="sticky top-0 z-20">
+          <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
             {columns.map((col, i) => (
               <th
                 key={i}
-                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap ${
+                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50 ${
                   col.type === "action" ? "text-right" : "text-left"
                 }`}
               >
@@ -41,7 +41,7 @@ const PayrollTable = ({ columns, data, onRowClick }: TableProps) => {
           </tr>
         </thead>
 
-        <tbody>
+        <tbody className="divide-y divide-slate-50">
           {data.length > 0 ? (
             data.map((row, ri) => (
               <tr

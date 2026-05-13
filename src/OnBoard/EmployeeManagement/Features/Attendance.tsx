@@ -16,6 +16,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import StatCard from "../../../Components/Common/StatCard";
+import SearchBar from "../../../Components/Common/Searchbar";
 import { Api_URL } from "../../../APILINK";
 
 const toDateString = (d: Date) => d.toISOString().split("T")[0];
@@ -43,6 +44,7 @@ export const Attendance = () => {
   const [data, setData] = useState<AttendanceRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>(todayStr());
+  const [searchTerm, setSearchTerm] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
 
@@ -130,11 +132,19 @@ export const Attendance = () => {
     { header: "", type: "action" },
   ], []);
 
+  const filteredData = useMemo(() => {
+    if (!searchTerm.trim()) return data;
+    return data.filter((item) =>
+      item.employee_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Emp_id.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [data, searchTerm]);
+
   const isToday = selectedDate === todayStr();
 
 
   return (
-    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar relative">
+    <div className="min-h-full bg-slate-50/50 p-10 font-sans custom-scrollbar relative">
       {/* HEADER */}
       <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
         <div className="flex flex-col">
@@ -148,29 +158,7 @@ export const Attendance = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <button 
-            onClick={handleExportCSV} 
-            className="inline-flex items-center gap-2 h-[42px] px-[18px] bg-white text-slate-600 border-[1.5px] border-slate-200 rounded-xl text-sm font-bold tracking-tight cursor-pointer transition-all hover:bg-slate-50 active:scale-95"
-          >
-            <Download size={15} /> Export
-          </button>
-          
-          <div className="flex items-center gap-1.5">
-            <div className="flex items-center bg-white border-[1.5px] border-slate-200 rounded-xl px-1.5 h-[42px]">
-              <button onClick={() => shiftDate(-1)} className="p-1.5 hover:bg-slate-50 rounded-lg text-slate-400 transition-colors"><ChevronLeft size={18} /></button>
-              <CustomDatePicker border={false} name="attendanceDate" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} iconOnly={true} />
-              <button onClick={() => shiftDate(1)} className="p-1.5 hover:bg-slate-50 rounded-lg text-slate-400 transition-colors"><ChevronRight size={18} /></button>
-            </div>
-          </div>
 
-          <button 
-            onClick={() => setSelectedDate(todayStr())} 
-            className={`h-[42px] px-4 rounded-xl text-sm font-bold transition-all active:scale-95 ${isToday ? 'bg-indigo-50 text-indigo-600 border-[1.5px] border-indigo-100' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'}`}
-          >
-            {isToday ? "Today" : "Back to Today"}
-          </button>
-        </div>
       </div>
 
       {/* STATS GRID */}
@@ -213,6 +201,132 @@ export const Attendance = () => {
         />
       </div>
 
+
+      <div className="w-full mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+
+          {/* Left Actions */}
+          <div className="flex flex-wrap items-center gap-3">
+
+            {/* Export Button */}
+            <button
+              onClick={handleExportCSV}
+              className="
+          h-[44px]
+          px-5
+          inline-flex items-center justify-center gap-2
+          rounded-2xl
+          border border-slate-200
+          bg-white
+          text-slate-700
+          text-sm font-semibold
+          shadow-sm
+          transition-all duration-200
+          hover:bg-slate-50
+          hover:border-slate-300
+          active:scale-95
+        "
+            >
+              <Download size={16} />
+              Export
+            </button>
+
+            {/* Date Navigation */}
+            <div
+              className="
+          flex items-center gap-1
+          h-[44px]
+          px-2
+          rounded-2xl
+          border border-slate-200
+          bg-white
+          shadow-sm
+        "
+            >
+
+              {/* Previous */}
+              <button
+                onClick={() => shiftDate(-1)}
+                className="
+            flex items-center justify-center
+            w-8 h-8
+            rounded-xl
+            text-slate-400
+            transition-all
+            hover:bg-slate-100
+            hover:text-slate-700
+          "
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              {/* Date Picker */}
+              <div className="flex items-center justify-center min-w-[42px]">
+                <CustomDatePicker
+                  border={false}
+                  name="attendanceDate"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  iconOnly={true}
+                />
+              </div>
+
+              {/* Next */}
+              <button
+                onClick={() => shiftDate(1)}
+                className="
+            flex items-center justify-center
+            w-8 h-8
+            rounded-xl
+            text-slate-400
+            transition-all
+            hover:bg-slate-100
+            hover:text-slate-700
+          "
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+
+            {/* Today Button */}
+            <button
+              onClick={() => setSelectedDate(todayStr())}
+              className={`
+          h-[44px]
+          px-5
+          rounded-2xl
+          text-sm
+          font-semibold
+          tracking-tight
+          transition-all duration-200
+          active:scale-95
+          shadow-sm
+          ${isToday
+                  ? `
+                bg-indigo-50
+                text-indigo-600
+                border border-indigo-100
+              `
+                  : `
+                bg-indigo-600
+                text-white
+                shadow-lg shadow-indigo-100
+                hover:bg-indigo-700
+              `
+                }
+        `}
+            >
+              {isToday ? "Today" : "Back to Today"}
+            </button>
+          </div>
+
+          {/* Right Actions: Search */}
+          <div className="flex items-center gap-3">
+             <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Find employee..." className="w-[300px]" />
+          </div>
+        </div>
+      </div>
+
       {/* TABLE CARD */}
       <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden">
         <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
@@ -221,7 +335,7 @@ export const Attendance = () => {
             Attendance Records
           </div>
           <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
-            {data.length} result{data.length !== 1 ? "s" : ""}
+            {filteredData.length} result{filteredData.length !== 1 ? "s" : ""}
           </span>
         </div>
 
@@ -232,13 +346,13 @@ export const Attendance = () => {
           </div>
         ) : data.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3.5 py-20 text-slate-300">
-             <ClipboardX size={48} strokeWidth={1.5} />
-             <p className="text-xs font-bold uppercase tracking-widest">No records found</p>
+            <ClipboardX size={48} strokeWidth={1.5} />
+            <p className="text-xs font-bold uppercase tracking-widest">No records found</p>
           </div>
         ) : (
           <Table
             columns={columns}
-            TB={data}
+            TB={filteredData}
             onEdit={(row: AttendanceRecord) => {
               setSelectedId(row.Emp_id);
               setSelectedName(row.employee_name);
