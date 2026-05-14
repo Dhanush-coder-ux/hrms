@@ -89,8 +89,8 @@ export const AttendanceDrawer = ({
                   {initials}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-lg font-extrabold uppercase tracking-tight m-0">{selectedName}</h2>
-                  <p className="text-[10px] font-bold text-white/80 uppercase tracking-widest mt-1">ID: {selectedId} • {formatDisplayDate(selectedDate)}</p>
+                  <h2 className="text-lg font-extrabold uppercase tracking-tight m-0 text-white">{selectedName}</h2>
+                  <p className="text-[10px] font-bold text-white uppercase tracking-widest mt-1">ID: {selectedId} • {formatDisplayDate(selectedDate)}</p>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide mt-2.5 bg-white/10 text-white border border-white/10">
                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     Attendance Log

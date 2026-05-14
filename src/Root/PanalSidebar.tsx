@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
 
   PackageCheck,
+  Paperclip,
   PersonStanding,
   ReceiptIndianRupee,
   Repeat,
@@ -49,7 +50,9 @@ export const onboardNavigation = [
   { label: "Dashboard", path: "/onboard", icon: LayoutDashboard },
   { label: "Candidates", path: "/onboard/candidates", icon: UserPlus },
   { label: "Interviews", path: "/onboard/interviews", icon: Users },
+  { label: "Requirement", path: "/onboard/requirement", icon: Paperclip },
   { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
+
   {
     label: "Add Employee",
     path: "/onboard/add-employee",

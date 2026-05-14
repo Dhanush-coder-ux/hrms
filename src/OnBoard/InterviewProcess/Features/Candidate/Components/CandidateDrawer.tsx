@@ -3,6 +3,7 @@ import {
   X, Mail, Phone, Paperclip, ExternalLink,
   CheckCircle, XCircle, Calendar} from "lucide-react";
 import type { Candidate } from "../../../../../Types/typesOnboarding";
+import { getUserTheme } from "../../../../../Components/Common/UserAvatar";
 
 interface CandidateDrawerProps {
   candidate: Candidate | null;
@@ -12,19 +13,6 @@ interface CandidateDrawerProps {
   onInvite: (c: Candidate) => void;
 }
 
-const AVATAR_COLORS = [
-  { bg: "bg-purple-600", lightBg: "bg-purple-50", text: "text-purple-600", border: "border-purple-100", soft: "bg-purple-600/10" },
-  { bg: "bg-blue-600", lightBg: "bg-blue-50", text: "text-blue-600", border: "border-blue-100", soft: "bg-blue-600/10" },
-  { bg: "bg-emerald-600", lightBg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-100", soft: "bg-emerald-600/10" },
-  { bg: "bg-amber-600", lightBg: "bg-amber-50", text: "text-amber-600", border: "border-amber-100", soft: "bg-amber-600/10" },
-  { bg: "bg-rose-600", lightBg: "bg-rose-50", text: "text-rose-600", border: "border-rose-100", soft: "bg-rose-600/10" },
-  { bg: "bg-sky-600", lightBg: "bg-sky-50", text: "text-sky-600", border: "border-sky-100", soft: "bg-sky-600/10" },
-];
-
-const getThemeColor = (name: string) => {
-  const idx = (name?.charCodeAt(0) ?? 0) % AVATAR_COLORS.length;
-  return AVATAR_COLORS[idx];
-};
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string; text: string }> = {
   recruited:  { label: "Recruited",  dot: "bg-white", badge: "bg-white/10", text: "text-white" },
@@ -40,7 +28,7 @@ export const CandidateDrawer = ({
 
   const currentStatus = candidate.Candidate_status?.toLowerCase() || "";
   const sc = STATUS_CONFIG[currentStatus] ?? STATUS_CONFIG.default;
-  const theme = getThemeColor(candidate.Candidate_name || "");
+  const theme = getUserTheme(candidate.Candidate_name || "");
   const initials = candidate.Candidate_name
     ?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
@@ -79,7 +67,7 @@ export const CandidateDrawer = ({
                 <p className="text-lg font-extrabold tracking-tight m-0 uppercase">
                   {candidate.Candidate_name}
                 </p>
-                <p className="text-[10px] font-bold text-white/80 m-0 mt-1 uppercase tracking-widest">
+                <p className="text-[10px] font-bold text-white m-0 mt-1 uppercase tracking-widest">
                   {candidate.Job_title}
                 </p>
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide mt-2.5 ${sc.badge} ${sc.text} border border-white/10`}>

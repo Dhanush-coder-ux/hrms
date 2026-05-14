@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { getUserTheme } from "../../../../Components/Common/UserAvatar";
 
 type Column =
   | { header: string; accessor: string; type?: "text" | "badge" | "date" }
@@ -21,19 +22,6 @@ const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> =
 const getStatusStyle = (val: string) =>
   STATUS_STYLES[val?.toLowerCase()] ?? STATUS_STYLES.default;
 
-const AVATAR_COLORS = [
-  ["bg-purple-100", "text-purple-700"],
-  ["bg-blue-100", "text-blue-700"],
-  ["bg-emerald-100", "text-emerald-700"],
-  ["bg-amber-100", "text-amber-700"],
-  ["bg-rose-100", "text-rose-700"],
-  ["bg-sky-100", "text-sky-700"],
-];
-
-const getAvatarColor = (name: string) => {
-  const idx = (name?.charCodeAt(0) ?? 0) % AVATAR_COLORS.length;
-  return AVATAR_COLORS[idx];
-};
 
 export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
   return (
@@ -95,7 +83,7 @@ export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
 
                   /* Candidate name + avatar */
                   if (col.accessor === "Candidate_name" || col.accessor === "name") {
-                    const [bgC, fgC] = getAvatarColor(val);
+                    const theme = getUserTheme(val);
                     const initials = val
                       ?.split(" ")
                       .slice(0, 2)
@@ -105,7 +93,7 @@ export const CandidateTable = ({ columns, data, onRowClick }: TableProps) => {
                     return (
                       <td key={ci} className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-extrabold flex-shrink-0 tracking-tighter ${bgC} ${fgC}`}>
+                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-extrabold flex-shrink-0 tracking-tighter ${theme.tableBg} ${theme.tableText}`}>
                             {initials}
                           </div>
                           <div>

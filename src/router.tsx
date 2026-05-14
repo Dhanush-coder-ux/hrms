@@ -39,6 +39,8 @@ import { FinalSettlement } from "./OffBoard/Features/FinalSetilment";
 import { Documents } from "./OffBoard/Features/Documents";
 import { OffboardingDashboard } from "./OffBoard/Features/Dashboard";
 import { OnboardingDashboard } from "./OnBoard/InterviewProcess/Features/OnDashboard";
+import { Requirement } from "./OnBoard/InterviewProcess/Features/Requirement";
+import { RequirementProfile } from "./OnBoard/InterviewProcess/Features/Requirement/requirementProfile";
 
 
 export const router = createBrowserRouter([
@@ -82,6 +84,8 @@ export const router = createBrowserRouter([
           { path: "Candidates", element: <Candidates /> },
           { path: "interviews", element: <Interview /> },
           { path: "offers", element: <OfferLetterPage /> },
+          { path: "requirement", element: <Requirement /> },
+          { path: "requirement/:id", element: <RequirementProfile /> }
         ],
       },
       {

@@ -18,8 +18,8 @@ export const empMangeTheme = {
   table: {
     wrapper: "w-full overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100",
     head: "sticky top-0 z-20",
-    headRow: "bg-primary/5 border-b border-primary/10 shadow-sm",
-    headCell: "px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-primary whitespace-nowrap bg-primary/5",
+    headRow: "bg-[hsl(var(--bg-hsl))] border-b border-primary/10 shadow-sm",
+    headCell: "px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-primary whitespace-nowrap bg-[hsl(var(--bg-hsl))]",
     row: "group border-b border-slate-50 cursor-pointer transition-colors hover:bg-primary/5",
     cell: "px-6 py-5",
   }

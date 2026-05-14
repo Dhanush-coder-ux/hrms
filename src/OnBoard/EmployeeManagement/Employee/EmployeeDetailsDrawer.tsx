@@ -46,9 +46,9 @@ export const EmployeeDetailsDrawer = ({
 
               <div className="flex items-start gap-4">
                 <UserAvatar name={employee.name} variant="solid" size="xl" className="border-white/10" />
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-lg font-extrabold uppercase tracking-tight m-0">{employee.name}</h2>
-                  <p className="text-[10px] font-bold text-white/80 uppercase tracking-widest mt-1">ID: {employee.Emp_id}</p>
+                <div className="flex-1 min-w-0 text-white">
+                  <h2 className="text-lg font-extrabold uppercase tracking-tight m-0 text-white">{employee.name}</h2>
+                  <p className="text-[10px] font-bold text-white uppercase tracking-widest mt-1">ID: {employee.Emp_id}</p>
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide mt-2.5 ${employee.Status === "Active" ? "bg-emerald-500/20 text-emerald-100" : "bg-rose-500/20 text-rose-100"}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${employee.Status === "Active" ? "bg-emerald-400" : "bg-rose-400"} animate-pulse`} />
                     {employee.Status}

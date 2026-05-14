@@ -115,9 +115,9 @@ export const PayrollDetailsDrawer = ({
                 <div className="flex items-start gap-4">
                 <UserAvatar name={displayName} variant="solid" size="xl" className="border-white/10" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-black text-white/60 uppercase tracking-widest mb-1">Financial Statement</p>
-                    <h2 className="text-lg font-extrabold uppercase tracking-tight m-0 truncate">{data.employee_name}</h2>
-                    <p className="text-[10px] font-bold text-white/80 uppercase tracking-widest mt-1">ID: {data.employee} • {data.provider}</p>
+                    <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">Financial Statement</p>
+                    <h2 className="text-lg font-extrabold uppercase tracking-tight m-0 truncate text-white">{data.employee_name}</h2>
+                    <p className="text-[10px] font-bold text-white uppercase tracking-widest mt-1">ID: {data.employee} • {data.provider}</p>
                   </div>
                 </div>
 
