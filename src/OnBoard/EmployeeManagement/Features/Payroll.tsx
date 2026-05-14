@@ -3,6 +3,8 @@ import PayrollComponents from "../Payroll/PayrollPage";
 import MenuButtons from "../Payroll/MenuButtons";
 import PayRollCalculate from "../Payroll/PayRollCalculate";
 
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
+
 const Payroll = () => {
   const [activeMenu, setActiveMenu] = useState("Employees");
 
@@ -12,7 +14,7 @@ const Payroll = () => {
   ];
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className={empMangeTheme.layout.mainContainer + " !p-0 flex flex-col overflow-hidden"}>
       <MenuButtons menus={menuList} active={activeMenu} onClick={setActiveMenu} />
       <div className="flex-1 min-h-0">
         {activeMenu === "Employees" && <PayrollComponents />}

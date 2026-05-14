@@ -152,7 +152,7 @@ const data = await res.json();
   ]);
 
   return (
-    <div className="h-full overflow-auto  text-slate-900">
+    <div className="h-full overflow-y-auto pb-24 text-slate-900">
 
       <div className="max-w-7xl mx-auto px-4 py-10">
 

@@ -1,5 +1,6 @@
 import { Calendar, Info, History } from "lucide-react";
 import type { Empleaves } from "../../../Types/typesEmployeeManagement";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 interface HistoryTableProps {
   history: Empleaves["leave_history"];
@@ -18,29 +19,29 @@ const getStatusStyle = (val: string) =>
 
 export const LeaveHistoryTable = ({ history }: HistoryTableProps) => {
   return (
-    <div className="bg-white rounded-[24px] border-[1.5px] border-slate-100 overflow-hidden shadow-sm">
+    <div className={empMangeTheme.section.card}>
       {/* Table Header Section */}
-      <div className="px-8 py-6 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+      <div className={empMangeTheme.section.header}>
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
              <History size={18} />
           </div>
           <h3 className="text-lg font-extrabold text-slate-800 tracking-tight">Leave History</h3>
         </div>
-        <span className="bg-white border border-slate-100 text-slate-400 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest">
+        <span className={empMangeTheme.section.countBadge}>
           {history?.length || 0} Records
         </span>
       </div>
 
-      <div className="max-h-[480px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-50">
+      <div className={empMangeTheme.table.wrapper + " max-h-[480px]"}>
         <table className="w-full text-left border-collapse relative">
-          <thead className="sticky top-0 z-20">
-            <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Applied On</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Duration</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 text-center bg-slate-50">Days</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Status</th>
-              <th className="px-8 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 bg-slate-50">Reason</th>
+          <thead className={empMangeTheme.table.head}>
+            <tr className={empMangeTheme.table.headRow}>
+              <th className={empMangeTheme.table.headCell + " px-8"}>Applied On</th>
+              <th className={empMangeTheme.table.headCell + " px-8"}>Duration</th>
+              <th className={empMangeTheme.table.headCell + " px-8 text-center"}>Days</th>
+              <th className={empMangeTheme.table.headCell + " px-8"}>Status</th>
+              <th className={empMangeTheme.table.headCell + " px-8"}>Reason</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
@@ -72,7 +73,7 @@ const LeaveHistoryRow = ({ leave }: { leave: any }) => {
   const s = getStatusStyle(leave.status);
   
   return (
-    <tr className="hover:bg-indigo-50/30 transition-colors group">
+    <tr className={empMangeTheme.table.row}>
       <td className="px-8 py-5">
         <p className="text-[13px] font-bold text-slate-600 tracking-tight">{leave.applayDate}</p>
       </td>

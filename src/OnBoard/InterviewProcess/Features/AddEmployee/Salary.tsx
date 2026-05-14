@@ -141,24 +141,25 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
     <>
       <style>{`
         .sal-page { font-family: 'DM Sans', sans-serif; padding: 24px; }
-        .sal-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
-        .sal-section-head { font-size: 15px; font-weight: 600; color: #4f46e5; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1.5px solid #e2e8f0; }
-        .sal-submit-btn { background: #6366f1; color: #fff; padding: 12px 40px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.35); }
+        .sal-heading { font-size: 28px; font-weight: 700; color: hsl(var(--text-hsl)); }
+        .sal-section-head { font-size: 15px; font-weight: 600; color: hsl(var(--primary-hsl)); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1.5px solid #e2e8f0; }
+        .sal-submit-btn { background: hsl(var(--primary-hsl)); color: #fff; padding: 12px 40px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 4px 14px hsl(var(--primary-hsl) / 0.35); }
+        .sal-submit-btn:hover { opacity: 0.9; box-shadow: 0 6px 20px hsl(var(--primary-hsl) / 0.45); }
         .sal-bonus-accordion { overflow: hidden; transition: height 0.38s ease, opacity 0.3s ease; }
         .sal-mode-pill { display: flex; padding: 4px; background: #f1f5f9; border-radius: 10px; width: fit-content; }
         .sal-mode-btn { padding: 8px 18px; border-radius: 8px; font-size: 13px; cursor: pointer; border: none; background: transparent; color: #64748b; transition: 0.2s; }
-        .sal-mode-btn.active { background: #fff; color: #4f46e5; box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-weight: 600; }
+        .sal-mode-btn.active { background: #fff; color: hsl(var(--primary-hsl)); box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-weight: 600; }
         .sal-preview { display: flex; align-items: center; gap: 12px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 12px 18px; width: fit-content; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .sal-currency-badge { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: #eef2ff; color: #4f46e5; font-weight: 700; }
+        .sal-currency-badge { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: hsl(var(--primary-hsl) / 0.1); color: hsl(var(--primary-hsl)); font-weight: 700; }
         .sal-bonus-input { width: 100%; padding: 11px 40px 11px 14px; font-size: 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; outline: none; transition: 0.2s; }
-        .sal-bonus-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3.5px rgba(99,102,241,0.15); }
+        .sal-bonus-input:focus { border-color: hsl(var(--primary-hsl)); box-shadow: 0 0 0 3.5px hsl(var(--primary-hsl) / 0.15); }
         .sal-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: #475569; margin-bottom: 7px; }
       `}</style>
 
       <div className="sal-page min-h-full">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
-            <FaMoneyBill className="text-[26px] text-indigo-500" />
+            <FaMoneyBill className="text-[26px] text-primary" />
             <h1 className="sal-heading">Payroll Setup</h1>
           </div>
         </AnimSection>

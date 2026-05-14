@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { interactiveTheme } from "../../Themes/ComponentsThems/InteractiveTheme";
 
 interface ToggleProps {
   label?: string;
@@ -15,10 +16,11 @@ const Toggle: React.FC<ToggleProps> = ({ label, initialState = false, onToggle }
     if (onToggle) onToggle(newState);
   };
 
+  const theme = interactiveTheme.toggle;
+
   return (
-    <div className="flex items-center gap-2 py-2">
-      {/* Label: matches the 'bonusEligible' style */}
-      {label && <span className="text-gray-600 text-sm font-medium">{label}</span>}
+    <div className="flex items-center gap-3 py-2">
+      {label && <span className="text-slate-600 text-[13px] font-bold">{label}</span>}
       
       <button
         type="button"
@@ -26,15 +28,15 @@ const Toggle: React.FC<ToggleProps> = ({ label, initialState = false, onToggle }
         aria-checked={enabled}
         onClick={handleToggle}
         className={`
-          relative inline-flex h-5.5 w-11 items-center rounded-full transition-colors 
+          relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300
           outline-none ring-0 border-2
-          ${enabled ? 'bg-blue-400 border-blue-400' : 'bg-white border-gray-300'}
+          ${enabled ? `${theme.on} border-primary` : `${theme.off} border-slate-200`}
         `}
       >
         <span
           className={`
-            inline-block h-4 w-4 transform rounded-full transition-transform duration-200 ease-in-out
-            ${enabled ? 'translate-x-5.5 bg-white' : 'translate-x-1 bg-blue-400'}
+            inline-block h-4 w-4 transform rounded-full transition-all duration-300 shadow-sm
+            ${enabled ? 'translate-x-6 bg-white' : 'translate-x-1 bg-white'}
           `}
         />
       </button>

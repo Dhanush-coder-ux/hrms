@@ -17,12 +17,12 @@ export const LeaveStateCard = ({
   cardName,
   value,
   icon: Icon,
-  iconColor = "text-gray-600",
-  iconBg = "bg-gray-100",
-  borderColor = "border-gray-100",
+  iconColor = "text-primary",
+  iconBg = "bg-primary/5",
+  borderColor = "border-slate-100",
   bgColor = "bg-white",
-  nameColor = "text-gray-500",
-  valueColor = "text-gray-900",
+  nameColor = "text-slate-500",
+  valueColor = "text-slate-900",
 }: LeaveStateProps) => {
   return (
     <div className={`${bgColor} ${borderColor} p-6 rounded-2xl shadow-sm border transition-all hover:shadow-md`}>

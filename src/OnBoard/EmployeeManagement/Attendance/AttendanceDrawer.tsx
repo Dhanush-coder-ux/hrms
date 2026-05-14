@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock, UserCheck } from "lucide-react";
 import { Selection } from "../../../Components/Common/Selection";
+import { CustomTimePicker } from "../../../Components/Common/CustomTimePicker";
 
 interface AttendanceDrawerProps {
   isOpen: boolean;
@@ -118,24 +119,18 @@ export const AttendanceDrawer = ({
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Check-In</label>
-                    <input
-                      type="time"
-                      value={checkIn}
-                      onChange={(e) => setCheckIn(e.target.value)}
-                      className="w-full h-[52px] px-4 rounded-xl border-[1.5px] border-slate-200 bg-slate-50 text-sm font-bold text-slate-700 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Check-Out</label>
-                    <input
-                      type="time"
-                      value={checkOut}
-                      onChange={(e) => setCheckOut(e.target.value)}
-                      className="w-full h-[52px] px-4 rounded-xl border-[1.5px] border-slate-200 bg-slate-50 text-sm font-bold text-slate-700 focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all"
-                    />
-                  </div>
+                  <CustomTimePicker
+                    label="Check-In"
+                    name="checkIn"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
+                  <CustomTimePicker
+                    label="Check-Out"
+                    name="checkOut"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                  />
                 </div>
               </div>
 

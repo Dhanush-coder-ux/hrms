@@ -8,6 +8,7 @@ import { Api_URL } from "../../../APILINK";
 import EmployeeTable from "../Components/table/EmployeeTable";
 import { EmployeeDetailsDrawer } from "../Employee/EmployeeDetailsDrawer";
 import type { Employee } from "../../../Types/typesEmployeeManagement";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 const BASE_URL = Api_URL;
 const EMPLOYEE_API = `${BASE_URL}/employee/`;
@@ -106,8 +107,8 @@ export default function EmployeeComponent() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-full bg-slate-50 gap-4">
-        <div className="w-8 h-8 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">
+        <div className="w-8 h-8 border-[3px] border-primary/20 border-t-primary rounded-full animate-spin" />
+        <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">
           Loading employees…
         </p>
       </div>
@@ -115,18 +116,18 @@ export default function EmployeeComponent() {
   }
 
   return (
-    <div className="h-full bg-slate-50/50 p-10 font-sans custom-scrollbar">
+    <div className={empMangeTheme.layout.mainContainer}>
       {/* HEADER */}
-      <div className="flex items-start justify-between gap-6 mb-10 flex-wrap">
+      <div className={empMangeTheme.header.wrapper}>
         <div className="flex flex-col">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+          <div className={empMangeTheme.header.pill}>
             <TrendingUp size={12} />
             <span>Personnel Hub</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">
+          <h1 className={empMangeTheme.header.title}>
             Employee Directory
           </h1>
-          <p className="text-sm text-slate-400 font-medium">
+          <p className={empMangeTheme.header.subtitle}>
             Manage and monitor company workforce of {employees.length} members
           </p>
         </div>
@@ -187,13 +188,13 @@ export default function EmployeeComponent() {
       </div>
 
       {/* TABLE CARD */}
-      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100">
-        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
-          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+      <div className={empMangeTheme.section.card}>
+        <div className={empMangeTheme.section.header}>
+          <div className={empMangeTheme.section.title}>
+            <span className={empMangeTheme.section.titleDot} />
             Personnel List
           </div>
-          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+          <span className={empMangeTheme.section.countBadge}>
             {filtered.length} result{filtered.length !== 1 ? "s" : ""}
           </span>
         </div>

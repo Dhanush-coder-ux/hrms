@@ -12,6 +12,7 @@ import {
   ChevronRight,
   ClipboardX,
 } from "lucide-react";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 /* ---------------- Helpers ---------------- */
 
@@ -198,23 +199,22 @@ export const Attendance = () => {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="p-6 bg-[#f8f9fa] h-full overflow-auto">
+    <div className={empMangeTheme.layout.mainContainer}>
 
       {/* Header */}
-
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between mb-8">
         <div>
-          <h2 className="text-xl font-bold">Attendance Management</h2>
-          <p className="text-sm text-gray-500">
-            Monitor daily employee logs
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Attendance Management</h2>
+          <p className="text-sm text-slate-500 font-medium">
+            Monitor daily employee logs and statuses
           </p>
         </div>
 
         <button
           onClick={handleExportCSV}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg"
+          className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20"
         >
-          <Download size={16} />
+          <Download size={18} />
           Export CSV
         </button>
       </div>
@@ -280,14 +280,12 @@ export const Attendance = () => {
       </div>
 
       {/* Table */}
-
-      <div className="bg-white rounded-lg shadow">
-
+      <div className={empMangeTheme.section.card}>
         {loading ? (
           <div className="py-20 text-center">Loading...</div>
         ) : data.length === 0 ? (
-          <div className="py-20 text-center text-gray-400">
-            <ClipboardX size={30} className="mx-auto mb-2" />
+          <div className="py-20 text-center text-slate-400">
+            <ClipboardX size={30} className="mx-auto mb-2 opacity-20" />
             No records found
           </div>
         ) : (
@@ -302,7 +300,6 @@ export const Attendance = () => {
             }}
           />
         )}
-
       </div>
 
       {/* Edit Modal */}

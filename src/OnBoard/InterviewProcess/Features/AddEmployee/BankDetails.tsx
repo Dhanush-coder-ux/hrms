@@ -62,18 +62,18 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
         .bank-page { font-family: 'DM Sans', sans-serif; padding: 24px; }
-        .bank-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .bank-heading { font-size: 28px; font-weight: 700; color: hsl(var(--text-hsl)); }
         .bank-section-head {
-          font-size: 15px; font-weight: 600; color: #4f46e5;
+          font-size: 15px; font-weight: 600; color: hsl(var(--primary-hsl));
           margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1.5px solid #e2e8f0;
         }
         .bank-submit-btn {
-          background: #6366f1; color: #fff; padding: 12px 40px;
+          background: hsl(var(--primary-hsl)); color: #fff; padding: 12px 40px;
           border-radius: 10px; font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-          box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+          box-shadow: 0 4px 14px hsl(var(--primary-hsl) / 0.35);
           transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
         }
-        .bank-submit-btn:hover { background: #4f46e5; box-shadow: 0 6px 20px rgba(99,102,241,0.45); }
+        .bank-submit-btn:hover { opacity: 0.9; box-shadow: 0 6px 20px hsl(var(--primary-hsl) / 0.45); }
         .bank-submit-btn:active { transform: scale(0.97); }
         .bank-match-msg {
           font-size: 12px; font-weight: 500; margin-top: 5px;
@@ -97,7 +97,7 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
       <div className="bank-page h-full overflow-auto">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
-            <FaPiggyBank className="text-[26px] text-indigo-500 shrink-0" />
+            <FaPiggyBank className="text-[26px] text-primary shrink-0" />
             <h1 className="bank-heading">Bank Details</h1>
           </div>
         </AnimSection>

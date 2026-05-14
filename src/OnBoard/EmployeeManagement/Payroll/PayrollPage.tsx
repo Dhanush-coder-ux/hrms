@@ -91,7 +91,7 @@ const PayrollComponents = () => {
   if (loading) return <PageLoading />;
 
   return (
-    <div className="min-h-full bg-slate-50/50 p-10 font-sans custom-scrollbar">
+    <div className="h-full overflow-y-auto bg-slate-50/50 p-10 pb-24 font-sans custom-scrollbar">
       {/* HEADER */}
       <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
         <div className="flex flex-col">

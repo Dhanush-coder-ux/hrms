@@ -1,29 +1,27 @@
+import { cardTheme } from "../../Themes/ComponentsThems/CardTheme";
+
 interface CardProps {
   CardTitle: string;
   NameOfIMG: string;
   IMG: string;
   onClick?: () => void;
-
 }
 
-export const Card = ({ IMG, CardTitle, NameOfIMG, onClick  }: CardProps) => {
+export const Card = ({ IMG, CardTitle, NameOfIMG, onClick }: CardProps) => {
   return (
-    <div className="mt-10">
-      <div
-        className="bg-white shadow-lg rounded-2xl p-6 w-80 border border-gray-200 
-                   transform transition-all duration-300 ease-in-out
-                   hover:scale-105 hover:shadow-2xl hover:-translate-y-2 
-                   cursor-pointer"
-        onClick={onClick}
-      >
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-left">
-          {CardTitle}
-        </h1>
+    <div 
+      className={`${cardTheme.wrapper} p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-slate-200 cursor-pointer group`}
+      onClick={onClick}
+    >
+      <h1 className="text-[20px] font-black text-slate-800 mb-6 group-hover:text-primary transition-colors">
+        {CardTitle}
+      </h1>
 
+      <div className="overflow-hidden rounded-2xl bg-slate-50/50 flex items-center justify-center p-4">
         <img
           src={IMG}
           alt={NameOfIMG}
-          className="object-contain rounded-lg"
+          className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110"
         />
       </div>
     </div>

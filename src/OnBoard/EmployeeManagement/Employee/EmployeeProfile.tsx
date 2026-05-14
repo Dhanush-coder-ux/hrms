@@ -390,15 +390,15 @@ export default function EmployeeProfile() {
   return (
     <div className="h-full overflow-y-auto custom-scrollbar pb-20">
       {/* Top Nav */}
-      <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-2 hover:bg-primary/5 rounded-xl transition-colors text-primary"
           >
-            <ChevronLeft size={20} className="text-slate-600" />
+            <ChevronLeft size={20} />
           </button>
-          <h1 className="text-xl font-bold text-slate-900">
+          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
             {!id ? "New Hire" : isEditing ? "Edit Profile" : "Employee Details"}
           </h1>
         </div>
@@ -424,7 +424,7 @@ export default function EmployeeProfile() {
               <button
                 onClick={handleSave}
                 disabled={loading}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-indigo-700 shadow-lg transition-all disabled:opacity-70"
+                className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/20 transition-all disabled:opacity-70 active:scale-95"
               >
                 {loading ? <Loader2 className="animate-spin" size={18} /> : <Check size={18} />}
                 {id ? "Update Employee" : "Save Record"}
@@ -438,8 +438,8 @@ export default function EmployeeProfile() {
 
         {/* ── Profile Card (left column) ─────────────────────────────────── */}
         <div className="lg:col-span-1 gap-4 space-y-6">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 gap-2 text-center">
-            <div className="w-24 h-24 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-md">
+          <div className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 text-center">
+            <div className="w-24 h-24 bg-primary/5 text-primary rounded-[20px] flex items-center justify-center mx-auto mb-5 border-4 border-white shadow-md">
               <User size={40} />
             </div>
 
@@ -512,76 +512,76 @@ export default function EmployeeProfile() {
 
               {/* Leave & Attendance */}
               <div className="flex flex-col justify-between text-sm mt-3">
-                <h1 className="text-blue-700 font-medium mt-1 border-b border-slate-200 pb-2">
+                <h1 className="text-primary font-bold mt-1 border-b border-slate-100 pb-2.5 uppercase text-[10px] tracking-widest">
                   Leave and attendance
                 </h1>
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Leave History</span>
-                  <span className="text-slate-500 inline-flex items-center gap-1 cursor-pointer hover:translate-x-1 transition-transform">
+                  <span className="text-primary font-bold inline-flex items-center gap-1 cursor-pointer hover:translate-x-1 transition-transform text-[12px]">
                     See details
-                    <ArrowRightIcon size={14} className="text-blue-500" />
+                    <ArrowRightIcon size={14} />
                   </span>
                 </div>
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Attendance</span>
-                  <span className="text-slate-500 inline-flex items-center gap-1 cursor-pointer hover:translate-x-1 transition-transform">
+                  <span className="text-primary font-bold inline-flex items-center gap-1 cursor-pointer hover:translate-x-1 transition-transform text-[12px]">
                     See details
-                    <ArrowRightIcon size={14} className="text-blue-500" />
+                    <ArrowRightIcon size={14} />
                   </span>
                 </div>
               </div>
 
               {/* Payroll Details */}
-              <div className="flex flex-col justify-between text-sm mt-3">
-                <h1 className="text-blue-700 font-medium mt-1 border-b border-slate-200 pb-2">
+              <div className="flex flex-col justify-between text-sm mt-8">
+                <h1 className="text-primary font-bold mt-1 border-b border-slate-100 pb-2.5 uppercase text-[10px] tracking-widest">
                   PayRoll Details
                 </h1>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Payroll Provider</span>
-                  <span className="font-semibold text-slate-700">
+                  <span className="font-bold text-slate-700">
                     {providerOptions.find(p => p.value === form.provider)?.label || form.provider || "—"}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">{form.payType || "Pay Type"}</span>
-                  <span className="font-semibold text-slate-700">
+                  <span className="font-bold text-slate-700">
                     {form.currency || "—"}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Annual Salary</span>
-                  <span className="font-semibold text-slate-700">
+                  <span className="font-bold text-slate-700">
                     {form.annualSalary || "—"} {form.annualSalary ? (form.currency || "") : ""}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Pay Frequency</span>
-                  <span className="font-semibold text-slate-700">
+                  <span className="font-bold text-slate-700">
                     {form.payFrequency || "—"}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Monthly Base</span>
-                  <span className="font-semibold text-slate-700">
+                  <span className="font-bold text-slate-700">
                     {form.base_salary || "—"} {form.currency || ""}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Gross Salary</span>
-                  <span className="font-semibold text-indigo-600">
+                  <span className="font-bold text-primary">
                     {form.gross_salary || "—"} {form.currency || ""}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm mt-3">
+                <div className="flex justify-between text-sm mt-4">
                   <span className="text-slate-500 font-medium">Net Salary</span>
-                  <span className="font-bold text-green-600 text-base">
+                  <span className="font-black text-emerald-600 text-base">
                     {form.net_salary || "—"} {form.currency || ""}
                   </span>
                 </div>
@@ -594,10 +594,10 @@ export default function EmployeeProfile() {
         <div className="lg:col-span-2 space-y-6">
 
           {/* Personal & Work Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <User size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Personal & Work Details</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <User size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Personal & Work Details</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -647,10 +647,10 @@ export default function EmployeeProfile() {
           </div>
 
           {/* Address */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <Building size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Address Details</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <Building size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Address Details</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -696,10 +696,10 @@ export default function EmployeeProfile() {
           </div>
 
           {/* Education */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <GraduationCap size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Education</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <GraduationCap size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Education</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -745,10 +745,10 @@ export default function EmployeeProfile() {
           </div>
 
           {/* Work Experience */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <Briefcase size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Work Experience</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <Briefcase size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Work Experience</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -796,10 +796,10 @@ export default function EmployeeProfile() {
           </div>
 
           {/* Familys */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <User size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Family Details</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <User size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Family Details</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -829,7 +829,7 @@ export default function EmployeeProfile() {
                             updated[index].nominees.push({ nominee_name: "", nominee_aadhar: "" });
                             setForm({ ...form, Familys: updated });
                           }}
-                          className="text-xs font-semibold text-indigo-500 hover:text-indigo-700"
+                          className="text-xs font-bold text-primary hover:opacity-80 transition-opacity"
                         >
                           + Add Nominee
                         </button>
@@ -847,7 +847,7 @@ export default function EmployeeProfile() {
                         ],
                       })
                     }
-                    className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 transition-colors"
+                    className="px-4 py-2 bg-primary/5 text-primary rounded-xl font-bold hover:bg-primary/10 transition-colors"
                   >
                     + Add Family Member
                   </button>
@@ -886,10 +886,10 @@ export default function EmployeeProfile() {
           </div>
 
           {/* Insurance & PF */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <FaRegBuilding size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Insurance & Provident Fund</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <FaRegBuilding size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Insurance & Provident Fund</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -929,10 +929,10 @@ export default function EmployeeProfile() {
           </div>
 
           {/* Account Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <Banknote size={18} className="text-indigo-600" />
-              <h3 className="font-bold text-slate-700">Account Details</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
+              <Banknote size={18} className="text-primary" />
+              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Account Details</h3>
             </div>
             <div className="p-6">
               {isEditing ? (
@@ -955,13 +955,13 @@ export default function EmployeeProfile() {
 
           {/* Payroll Breakdown */}
           {!isEditing && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Banknote size={18} className="text-indigo-600" />
-                  <h3 className="font-bold text-slate-700">Detailed Payroll Breakdown</h3>
+                  <Banknote size={18} className="text-primary" />
+                  <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Detailed Payroll Breakdown</h3>
                 </div>
-                <div className="text-xs font-bold text-slate-400 uppercase">Dynamic Components</div>
+                <div className="text-[10px] font-bold text-primary/50 uppercase tracking-widest">Dynamic Components</div>
               </div>
               <div className="p-6 space-y-8">
                 {/* Earnings Table */}

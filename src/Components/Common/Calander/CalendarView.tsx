@@ -26,7 +26,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   EventColor
 }) => {
   return (
-    <div className="calendar-container">
+    <div className="calendar-container bg-white rounded-[24px] shadow-sm p-4 max-w-[1000px] mx-auto">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -40,20 +40,29 @@ const CalendarView: React.FC<CalendarViewProps> = ({
         }}
         
         // Modern UI tweaks
-        dayMaxEvents={2}
-        height="600px"
+        dayMaxEvents={3}
+        height="auto"
+        aspectRatio={1.8}
         fixedWeekCount={false}
         nowIndicator={true}
-        eventColor={EventColor} // Use event-specific colors
+        handleWindowResize={true}
+        stickyHeaderDates={true}
+        eventColor={EventColor || 'hsl(var(--primary-hsl))'}
         
         // Customizing the event display
         eventClassNames="custom-event-card"
-        slotLabelFormat={{
-          hour: 'numeric',
-          minute: '2-digit',
-          omitZeroMinute: true,
-          meridiem: 'short'
-        }}
+        eventContent={(eventInfo) => (
+          <div className="flex items-center gap-1.5 px-1 py-0.5 overflow-hidden">
+            <div 
+              className="w-1.5 h-1.5 rounded-full shrink-0" 
+              style={{ backgroundColor: eventInfo.event.backgroundColor || eventInfo.backgroundColor || EventColor || 'hsl(var(--primary-hsl))' }}
+            />
+            <div className="text-[11px] font-bold truncate tracking-tight">
+              {eventInfo.timeText && <span className="opacity-60 mr-1">{eventInfo.timeText}</span>}
+              {eventInfo.event.title}
+            </div>
+          </div>
+        )}
       />
     </div>
   );

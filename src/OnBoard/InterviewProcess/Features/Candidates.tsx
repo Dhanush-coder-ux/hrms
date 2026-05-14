@@ -11,9 +11,9 @@ import { CandidateDrawer } from "./Candidate/Components/CandidateDrawer";
 import { SchedulingModal } from "./Candidate/Components/SchedulingModal";
 import StatCard from "../../../Components/Common/StatCard";
 import StageFilter from "../../../Components/Common/StageFilter";
+import { pageTheme } from "../../../Themes/PageThems/pageConfig";
 
 const CANDIDATE_API = `${Api_URL}/candidates`;
-
 const PIPELINE_STAGES = ["Applied", "Selected", "Recruited", "Rejected"];
 
 export const Candidates = () => {
@@ -78,9 +78,7 @@ export const Candidates = () => {
     setIsScheduling(true);
     const loadingToast = toast.loading(`Scheduling ${selectedIds.length} interviews...`);
     try {
-      // Backend expects integer IDs
       const numericIds = selectedIds.map(id => parseInt(id));
-
       const response = await fetch(`${CANDIDATE_API}/BulkSchedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -115,13 +113,9 @@ export const Candidates = () => {
     const name = c.Candidate_name?.toLowerCase() || "";
     const email = c.Candidate_Email?.toLowerCase() || "";
     const cid = c.Candidate_ID?.toLowerCase() || "";
-
     const matchesSearch = name.includes(searchStr) || email.includes(searchStr) || cid.includes(searchStr);
-
     if (searchTerm) return matchesSearch;
     if (statusFilter) return matchesSearch && c.Candidate_status === statusFilter;
-
-    // Default: Hide Interview candidates from the "All" list (as they are in Interview Hub)
     return matchesSearch;
   });
 
@@ -133,15 +127,15 @@ export const Candidates = () => {
   ];
 
   return (
-    <div className="h-full bg-slate-50/50 p-10 font-sans custom-scrollbar">
-      <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
+    <div className={pageTheme.layout.mainContainer}>
+      <div className={pageTheme.header.wrapper}>
         <div className="flex flex-col">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+          <div className={pageTheme.header.pill}>
             <TrendingUp size={12} />
             <span>Recruitment Hub</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Candidate Pipeline</h1>
-          <p className="text-sm text-slate-400 font-medium">
+          <h1 className={pageTheme.header.title}>Candidate Pipeline</h1>
+          <p className={pageTheme.header.subtitle}>
             {candidates.length} candidates across active recruitment rounds
           </p>
         </div>
@@ -150,7 +144,7 @@ export const Candidates = () => {
           <div className="relative">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             <input
-              className="h-[42px] w-[280px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-4 focus:ring-indigo-500/10 shadow-sm"
+              className="h-[42px] w-[280px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"
               placeholder="Search name, code, or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -159,7 +153,7 @@ export const Candidates = () => {
 
           <div className="relative">
             <button
-              className="inline-flex items-center gap-2 h-[42px] px-[18px] bg-indigo-600 text-white border-none rounded-xl text-sm font-bold tracking-tight cursor-pointer transition-all hover:bg-indigo-700 shadow-lg shadow-indigo-100"
+              className="inline-flex items-center gap-2 h-[42px] px-[18px] bg-primary text-white border-none rounded-xl text-sm font-bold tracking-tight cursor-pointer transition-all hover:brightness-110 shadow-lg shadow-primary/20"
               onClick={() => setInviteMenuOpen((p) => !p)}
             >
               <Calendar size={15} />
@@ -172,7 +166,7 @@ export const Candidates = () => {
                   className="flex items-center gap-2.5 w-full p-2.5 border-none bg-transparent rounded-xl text-[13px] font-semibold text-slate-700 cursor-pointer text-left hover:bg-slate-50"
                   onClick={() => { setSchedulingMode("Individual"); setSelectedIds([]); setInviteMenuOpen(false); }}
                 >
-                  <span className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0"><User size={13} /></span>
+                  <span className="w-7 h-7 rounded-lg bg-primary/5 text-primary flex items-center justify-center flex-shrink-0"><User size={13} /></span>
                   Individual
                 </button>
                 <button
@@ -205,20 +199,20 @@ export const Candidates = () => {
         }), {})}
       />
 
-      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden shadow-sm mb-10">
-        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50 bg-slate-50/30">
-          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+      <div className={pageTheme.section.card}>
+        <div className={pageTheme.section.header}>
+          <div className={pageTheme.section.title}>
+            <span className={pageTheme.section.titleDot} />
             {statusFilter ? `${statusFilter} Pipeline` : "All Applications"}
           </div>
-          <span className="text-[11px] font-bold text-slate-400 bg-white px-2.5 py-1 rounded-full border border-slate-100">
+          <span className={pageTheme.section.countBadge}>
             {filteredCandidates.length} Results
           </span>
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3.5 py-20 text-slate-400 text-xs font-semibold uppercase tracking-widest">
-            <div className="w-8 h-8 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-[3px] border-primary/10 border-t-primary rounded-full animate-spin" />
             <p>Syncing candidates...</p>
           </div>
         ) : (

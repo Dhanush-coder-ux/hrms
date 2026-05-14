@@ -1,4 +1,5 @@
 import React from "react";
+import { buttonTheme } from "../../Themes/ComponentsThems/ButtonTheme";
 
 interface Column<T> {
   header: string;
@@ -49,7 +50,7 @@ export const ExportCSVButton = <T,>({
   return (
     <button
       onClick={exportToCSV}
-      className={className || "flex justify-end bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all"}
+      className={className || `flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-bold transition-all active:scale-95 ${buttonTheme.primary}`}
     >
       {children || "Export CSV"}
     </button>

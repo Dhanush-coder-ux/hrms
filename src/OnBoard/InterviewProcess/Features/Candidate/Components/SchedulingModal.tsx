@@ -1,11 +1,12 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Search, CheckCircle, Clock, MapPin, Link, Users, User, Send } from "lucide-react";
+import { X, Search, CheckCircle, MapPin, Link, Users, User, Send } from "lucide-react";
 import type { Candidate } from "../../../../../Types/typesOnboarding";
 import { CustomDatePicker } from "../../../../../Components/Common/CustomDatePicker";
-import { FormFiled } from "../../../../../Components/Common/FormFiled";
 import { Selection } from "../../../../../Components/Common/Selection";
+
+import { CustomTimePicker } from "../../../../../Components/Common/CustomTimePicker";
 
 interface SchedulingModalProps {
   mode: "Individual" | "Group" | null;
@@ -254,13 +255,10 @@ export const SchedulingModal = ({
                     value={formDetails.Interview_date}
                     onChange={(e: any) => setFormDetails({ ...formDetails, Interview_date: e.target.value })}
                   />
-                  <FormFiled
-                    Lable="Interview Time"
-                    type="time"
-                    in_PlaceHolder="Select time"
+                  <CustomTimePicker
+                    label="Interview Time"
                     name="Interview_time"
                     value={formDetails.Interview_time}
-                    icon={<Clock size={15} />}
                     onChange={(e: any) => setFormDetails({ ...formDetails, Interview_time: e.target.value })}
                   />
                 </div>

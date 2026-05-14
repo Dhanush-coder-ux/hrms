@@ -1,14 +1,33 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Api_URL } from "../../../APILINK";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 import { Backbutton } from "../../../Components/Common/Backbutton";
 import StatCard from "../../../Components/Common/StatCard";
+import { UserAvatar } from "../../../Components/Common/UserAvatar";
 import {
   ChevronLeftCircle,
   DollarSign,
   PersonStandingIcon,
 } from "lucide-react";
+import { 
+  FaFireExtinguisher, 
+  FaUserTie, 
+  FaLaptopCode, 
+  FaTools, 
+  FaBuilding, 
+  FaStethoscope 
+} from "react-icons/fa";
+
+const ICON_MAP: any = {
+  FaFireExtinguisher: FaFireExtinguisher,
+  FaUserTie: FaUserTie,
+  FaLaptopCode: FaLaptopCode,
+  FaTools: FaTools,
+  FaBuilding: FaBuilding,
+  FaStethoscope: FaStethoscope,
+};
 
 // Updated type based on your API structure
 type DepartmentAPI = {
@@ -82,30 +101,27 @@ export default function DepartmentProfile() {
       label: "Headcount",
       value: (dept.Total_employees || 0).toString(),
       icon: PersonStandingIcon,
-      iconBg: "#E0E7FF",
-      iconColor: "#2786FF",
-      valueSize: "xl",
+      iconBg: "bg-primary/10",
+      iconColor: "text-primary",
     },
     {
       label: "Status",
       value: dept.Task_status || "Active",
       icon: ChevronLeftCircle,
-      iconBg: dept.Task_status === "Completed" ? "#D1FAE5" : "#FEF3C7",
-      iconColor: dept.Task_status === "Completed" ? "#059669" : "#D97706",
-      valueSize: "xl",
+      iconBg: dept.Task_status === "Completed" ? "bg-emerald-50" : "bg-amber-50",
+      iconColor: dept.Task_status === "Completed" ? "text-emerald-600" : "text-amber-600",
     },
     {
       label: "Budget Used",
       value: dept.budget_utilization || "0%",
       icon: DollarSign,
-      iconBg: "#F5F3FF",
-      iconColor: "#7C3AED",
-      valueSize: "xl",
+      iconBg: "bg-purple-50",
+      iconColor: "text-purple-600",
     }
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-8 bg-slate-50 h-full overflow-y-auto custom-scrollbar font-sans text-slate-900">
+    <div className={empMangeTheme.layout.mainContainer}>
       {/* Sidebar/Selector (Optional: to switch between depts) */}
       <div className="flex gap-2 overflow-x-auto">
         <Backbutton />
@@ -114,12 +130,17 @@ export default function DepartmentProfile() {
         <div className="flex-1">
           <header className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-5">
-              <div
-                className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-xl text-2xl font-bold"
-                style={{ backgroundColor: dept.bg_color, color: dept.icon_color }}
-              >
-                {dept.Dep_name.charAt(0)}
-              </div>
+              {(() => {
+                const IconObj = ICON_MAP[dept.Dep_icon] || FaBuilding;
+                return (
+                  <div
+                    className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-xl text-2xl font-bold"
+                    style={{ backgroundColor: dept.bg_color, color: dept.icon_color }}
+                  >
+                    <IconObj size={32} />
+                  </div>
+                );
+              })()}
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">
                   {dept.Dep_name}
@@ -141,25 +162,24 @@ export default function DepartmentProfile() {
                 icon={stat.icon}
                 label={stat.label}
                 value={stat.value}
-                iconBg={stat.iconBg}
-                iconColor={stat.iconColor}
-                valueSize={stat.valueSize}
+                iconBgClass={stat.iconBg}
+                iconColorClass={stat.iconColor}
               />
             ))}
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-8 border-b border-slate-200 mb-6">
+          <div className="flex gap-8 border-b border-slate-100 mb-8">
             {["team", "overview", "settings"].map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`pb-4 text-sm font-semibold capitalize relative ${tab === t ? "text-indigo-600" : "text-slate-400"
+                className={`pb-4 text-sm font-bold capitalize relative tracking-tight transition-all duration-200 ${tab === t ? "text-primary" : "text-slate-400"
                   }`}
               >
                 {t}
                 {tab === t && (
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-full" />
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
                 )}
               </button>
             ))}
@@ -170,9 +190,9 @@ export default function DepartmentProfile() {
 
             {tab === "team" && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-lg">Department Team</h3>
-                  <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-extrabold text-lg tracking-tight">Department Team</h3>
+                  <span className="text-[10px] font-black text-primary bg-primary/5 border border-primary/10 px-3 py-1 rounded-full uppercase tracking-widest">
                     {employees.length} Members
                   </span>
                 </div>
@@ -183,12 +203,15 @@ export default function DepartmentProfile() {
                     {employees.map((emp, index) => (
                       <div
                         key={emp.Emp_id || index}
-                        className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-slate-50 transition-all group"
+                        className="flex items-center justify-between p-4 rounded-2xl border border-slate-50 hover:bg-primary/5 hover:shadow-md transition-all group cursor-pointer"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                            {(emp.name || "U").charAt(0)}
-                          </div>
+                          <UserAvatar 
+                            name={emp.name || "Unknown"} 
+                            size="md" 
+                            variant="table"
+                            className="rounded-xl"
+                          />
 
                           <div>
                             <p className="text-sm font-bold text-slate-800">
@@ -206,7 +229,7 @@ export default function DepartmentProfile() {
                             {emp.Emp_id}
                           </p>
 
-                          <p className="text-[10px] font-bold text-indigo-500 mt-0.5">
+                          <p className="text-[10px] font-bold text-primary mt-0.5">
                             {emp.email || "No Email"}
                           </p>
                         </div>
@@ -229,10 +252,10 @@ export default function DepartmentProfile() {
                     Quick Actions
                   </h4>
                   <div className="flex gap-3">
-                    <button className="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors">
+                    <button className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20 active:scale-95">
                       Generate Report
                     </button>
-                    <button className="border border-slate-200 px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors">
+                    <button className="border border-slate-200 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all active:scale-95">
                       Manage Team
                     </button>
                   </div>
@@ -250,24 +273,24 @@ export default function DepartmentProfile() {
 
         {/* Info Sidebar */}
         <div className="lg:w-80">
-          <div className="bg-indigo-900 text-indigo-100 p-6 rounded-3xl shadow-xl shadow-indigo-200 relative overflow-hidden">
+          <div className="bg-primary p-8 rounded-[32px] shadow-xl shadow-primary/10 relative overflow-hidden text-white">
             <div className="relative z-10">
-              <h3 className="font-bold text-white mb-2">Quick Stats</h3>
-              <p className="text-xs text-indigo-300 mb-6 font-medium">
+              <h3 className="font-extrabold text-white text-lg mb-1">Quick Stats</h3>
+              <p className="text-xs text-white/60 mb-8 font-bold uppercase tracking-widest">
                 Summary of {dept.Dep_name}
               </p>
 
               <div className="space-y-4">
-                <div className="flex justify-between items-center border-b border-indigo-800 pb-3">
-                  <span className="text-xs font-bold uppercase opacity-60">
+                <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                  <span className="text-[10px] font-black uppercase opacity-40 tracking-widest">
                     ID
                   </span>
-                  <span className="font-mono text-sm">#{dept.Dep_id}</span>
+                  <span className="font-mono text-sm font-bold tracking-tight">#{dept.Dep_id}</span>
                 </div>
               </div>
             </div>
             {/* Background Decorative Circle */}
-            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-800 rounded-full opacity-50" />
+            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
           </div>
         </div>
       </div>

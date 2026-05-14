@@ -1,62 +1,131 @@
 /* 1. Header Buttons - Modern Floating Style */
+.fc .fc-button-group {
+  gap: 8px;
+  background: transparent;
+  padding: 0;
+}
+
 .fc .fc-button {
   background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  color: #475569 !important;
-  border-radius: 8px !important; /* Rounder corners */
-  padding: 6px 14px !important;
-  font-weight: 500 !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+  border: 1px solid #f1f5f9 !important;
+  color: #64748b !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
 }
 
 .fc .fc-button:hover {
-  background-color: #f8fafc !important;
-  transform: translateY(-1px); /* Gentle lift */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-  border-color: #3b82f6 !important;
+  background-color: #ffffff !important;
+  color: hsl(var(--primary-hsl)) !important;
+  box-shadow: 0 4px 12px -4px rgba(0,0,0,0.1) !important;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-  gap: 4px !important;
-  border: none !important;
-  transform: scale(0.98);
+  background: hsl(var(--primary-hsl)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px -4px hsla(var(--primary-hsl), 0.4) !important;
 }
-.fc .fc-button-group {
-  gap: 8px;
+
+.fc .fc-today-button {
+  background-color: #ffffff !important;
+  border: 1px solid #f1f5f9 !important;
+  margin-right: 8px !important;
+}
+
+.fc-toolbar-title {
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.04em !important;
+}
+
+.fc {
+  border: none !important;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border: none !important;
 }
 /* 2. Grid & Animation */
 .fc-theme-standard td, .fc-theme-standard th {
-  border: 1px solid #f1f5f9 !important;
-  transition: background-color 0.2s ease;
+  border: 1px solid transparent !important;
+}
+
+.fc-col-header-cell {
+  padding: 12px 0 !important;
+  background-color: transparent !important;
+}
+
+.fc-col-header-cell-cushion {
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: hsl(var(--primary-hsl)) !important;
+  opacity: 0.8;
+  text-decoration: none !important;
 }
 
 /* Hover effect on day cells */
 .fc-daygrid-day:hover {
-  background-color: #f8fafc !important;
+  background-color: hsla(var(--primary-hsl), 0.05) !important;
   cursor: pointer;
 }
 
 /* 3. Event Card Styling */
 .custom-event-card {
-  border-radius: 6px !important;
-  border: none !important;
-  padding: 3px 8px !important;
-  font-size: 0.8rem !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
-  transition: transform 0.2s ease, filter 0.2s ease !important;
+  background: #ffffff !important;
+  border: 1px solid #f1f5f9 !important;
+  border-left: 3px solid hsl(var(--primary-hsl)) !important;
+  border-radius: 8px !important;
+  padding: 2px !important;
+  margin: 1px 4px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+  color: #1e293b !important;
+  transition: all 0.2s ease !important;
 }
 
 .custom-event-card:hover {
-  transform: scale(1.03) !important;
-  filter: brightness(1.1);
-  z-index: 10;
+  transform: translateX(2px) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+  border-left-width: 5px !important;
+  z-index: 50;
 }
 
-/* 4. Smooth Fade-in for the whole calendar */
-.calendar-container {
-  animation: fadeIn 0.6s ease-out;
+.fc-daygrid-event-dot {
+  display: none !important; /* Hide default dot as we have custom one */
+}
+
+/* 4. Today Highlight */
+.fc-day-today {
+  background: hsla(var(--primary), 0.02) !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  background: hsl(var(--primary-hsl));
+  color: white !important;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin: 4px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px hsla(var(--primary-hsl), 0.3);
+}
+
+.fc-daygrid-day-number {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  padding: 8px !important;
+  text-decoration: none !important;
 }
 
 @keyframes fadeIn {

@@ -58,25 +58,22 @@ const StepButton: React.FC<StepButtonsProps> = ({ menus, onClick, active }) => {
           z-index: 1;
         }
 
-        .steptab-btn:hover { color: #4f46e5; }
-
+        .steptab-btn:hover { color: hsl(var(--primary-hsl)); }
         .steptab-btn.active {
-          color: #4f46e5;
+          color: hsl(var(--primary-hsl));
           font-weight: 600;
         }
-
         /* Sliding bottom indicator */
         .steptab-indicator {
           position: absolute;
           bottom: -1.5px;
           height: 2.5px;
-          background: #6366f1;
+          background: hsl(var(--primary-hsl));
           border-radius: 2px 2px 0 0;
           transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                       width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           z-index: 2;
         }
-
         /* Step number badge */
         .steptab-badge {
           display: inline-flex;
@@ -92,9 +89,8 @@ const StepButton: React.FC<StepButtonsProps> = ({ menus, onClick, active }) => {
           background: #e2e8f0;
           color: #64748b;
         }
-
         .steptab-btn.active .steptab-badge {
-          background: #6366f1;
+          background: hsl(var(--primary-hsl));
           color: #fff;
         }
       `}</style>

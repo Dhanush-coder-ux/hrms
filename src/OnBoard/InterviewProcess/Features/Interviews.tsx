@@ -20,6 +20,7 @@ const API_URL = `${Api_URL}/candidates`;
 // These should ideally come from backend Stage Master, but keeping for filter UI
 const STAGES = ["Screening", "Technical Round 1", "Technical Round 2", "HR Round", "Final Round"];
 const STAGE_STATUSES = ["Pending", "In Progress", "Completed"];
+import { pageTheme } from "../../../Themes/PageThems/pageConfig";
 
 export const Interview = () => {
   const [interviews, setInterviews] = useState<InterviewRecord[]>([]);
@@ -117,16 +118,16 @@ export const Interview = () => {
 
 
   return (
-    <div className="h-full bg-slate-50/50 p-10 font-sans custom-scrollbar">
+    <div className={pageTheme.layout.mainContainer}>
       {/* HEADER */}
-      <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
+      <div className={pageTheme.header.wrapper}>
         <div className="flex flex-col">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+          <div className={pageTheme.header.pill}>
             <Calendar size={12} />
             <span>Interview Pipeline</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Interview Hub</h1>
-          <p className="text-sm text-slate-400 font-medium">
+          <h1 className={pageTheme.header.title}>Interview Hub</h1>
+          <p className={pageTheme.header.subtitle}>
             Currently tracking {stats.total} candidates in the recruitment workflow.
           </p>
         </div>
@@ -134,7 +135,7 @@ export const Interview = () => {
         <div className="relative">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
-            className="h-[42px] w-[280px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-4 focus:ring-indigo-500/10 placeholder:text-slate-300 shadow-sm"
+            className="h-[42px] w-[280px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 placeholder:text-slate-300 shadow-sm"
             placeholder="Search by candidate name or ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -146,7 +147,7 @@ export const Interview = () => {
         {[
           { label: "Pipeline", value: stats.total, icon: Users, bg: "bg-blue-50", color: "text-blue-500", text: "text-blue-600", sub: "Total candidates" },
           { label: "Active", value: stats.active, icon: Play, bg: "bg-emerald-50", color: "text-emerald-500", text: "text-emerald-600", sub: "Scheduled rounds" },
-          { label: "Completed", value: stats.completed, icon: CheckCircle, bg: "bg-indigo-50", color: "text-indigo-500", text: "text-indigo-600", sub: "Assessment done" },
+          { label: "Completed", value: stats.completed, icon: CheckCircle, bg: "bg-primary/5", color: "text-primary", text: "text-primary", sub: "Assessment done" },
           { label: "Rejected", value: stats.rejected, icon: XCircle, bg: "bg-rose-50", color: "text-rose-500", text: "text-rose-600", sub: "Not qualified" },
         ].map((s, i) => (
           <StatCard
@@ -188,13 +189,13 @@ export const Interview = () => {
         />
       </div>
 
-      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden shadow-sm shadow-slate-100 mb-10">
-        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50 bg-slate-50/30">
-          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+      <div className={pageTheme.section.card}>
+        <div className={pageTheme.section.header}>
+          <div className={pageTheme.section.title}>
+            <span className={pageTheme.section.titleDot} />
             Interview Schedule
           </div>
-          <span className="text-[11px] font-bold text-slate-400 bg-white px-2.5 py-1 rounded-full border border-slate-100 shadow-sm">
+          <span className={pageTheme.section.countBadge}>
             {filteredInterviews.length} Round{filteredInterviews.length !== 1 ? "s" : ""}
           </span>
         </div>

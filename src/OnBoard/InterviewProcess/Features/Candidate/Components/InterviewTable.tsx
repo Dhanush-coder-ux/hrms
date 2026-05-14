@@ -25,6 +25,8 @@ const getAvatarColor = (name: string) => {
   return AVATAR_COLORS[idx];
 };
 
+import { pageTheme } from "../../../../../Themes/PageThems/pageConfig";
+
 export const InterviewTable = ({ 
   data, 
   loading, 
@@ -74,16 +76,16 @@ const configs: any = {
 
   
   return (
-    <div className="w-full max-h-[520px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100">
+    <div className={pageTheme.table.wrapper}>
       <table className="w-full border-collapse relative">
-        <thead className="sticky top-0 z-20">
-          <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
-            <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50">Candidate</th>
-            <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50">Round & Date</th>
-            <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50">Stage & Progress</th>
-            <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50">Interviewer</th>
-            <th className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50">Status</th>
-            <th className="px-6 py-4 text-right text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50">Actions</th>
+        <thead className={pageTheme.table.head}>
+          <tr className={pageTheme.table.headRow}>
+            <th className={pageTheme.table.headCell}>Candidate</th>
+            <th className={pageTheme.table.headCell}>Round & Date</th>
+            <th className={pageTheme.table.headCell}>Stage & Progress</th>
+            <th className={pageTheme.table.headCell}>Interviewer</th>
+            <th className={pageTheme.table.headCell}>Status</th>
+            <th className={`${pageTheme.table.headCell} text-right`}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -91,7 +93,7 @@ const configs: any = {
             <tr>
               <td colSpan={6} className="px-6 py-20 text-center">
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-8 h-8 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-[3px] border-primary/20 border-t-primary rounded-full animate-spin"></div>
                   <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Syncing Pipeline...</p>
                 </div>
               </td>
@@ -110,7 +112,7 @@ const configs: any = {
                 <tr 
                   key={int.id} 
                   onClick={() => onRowClick(int)}
-                  className="group border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
+                  className={pageTheme.table.row}
                 >
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
@@ -135,7 +137,7 @@ const configs: any = {
                     <div className="flex flex-col gap-1.5 w-36">
                        <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">{int.current_candidate_stage}</span>
-                          <span className="text-[10px] font-extrabold text-indigo-500">
+                          <span className="text-[10px] font-extrabold text-primary">
                             {int.total_stages_count ? Math.round(((int.completed_stages_count || 0) / int.total_stages_count) * 100) : 0}%
                           </span>
                        </div>
@@ -143,7 +145,7 @@ const configs: any = {
                           <motion.div 
                             initial={{ width: 0 }}
                             animate={{ width: `${int.total_stages_count ? ((int.completed_stages_count || 0) / int.total_stages_count) * 100 : 0}%` }}
-                            className="h-full bg-indigo-600 rounded-full"
+                            className="h-full bg-primary rounded-full"
                           />
                        </div>
                     </div>
@@ -160,7 +162,7 @@ const configs: any = {
                   <td className="px-6 py-5 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1">
                       <button 
-                        className="p-2 bg-white text-slate-400 rounded-lg hover:text-indigo-600 hover:border-indigo-200 transition-all border border-slate-100 active:scale-90"
+                        className="p-2 bg-white text-slate-400 rounded-lg hover:text-primary hover:border-primary/20 transition-all border border-slate-100 active:scale-90"
                       >
                         <ExternalLink size={14} />
                       </button>

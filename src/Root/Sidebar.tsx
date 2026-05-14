@@ -12,10 +12,10 @@ export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
- const isEmployeeModule = location.pathname.startsWith("/EmployeeManagement");
-const isOnboardModule = location.pathname.startsWith("/onboard");
-const isAdminModule = location.pathname.startsWith("/Admin");
-const isOffboardModule = location.pathname.startsWith("/offboard");
+  const isEmployeeModule = location.pathname.startsWith("/EmployeeManagement");
+  const isOnboardModule = location.pathname.startsWith("/onboard");
+  const isAdminModule = location.pathname.startsWith("/Admin");
+  const isOffboardModule = location.pathname.startsWith("/offboard");
   let currentNav;
   switch (true) {
     case isEmployeeModule:
@@ -37,26 +37,26 @@ const isOffboardModule = location.pathname.startsWith("/offboard");
 
   return (
     <aside
-      className={`h-full bg-white border-r border-gray-200 flex flex-col relative overflow-hidden
+      className={`h-full bg-white border-r border-slate-200 flex flex-col relative overflow-hidden
       transition-all duration-300 ease-in-out
       ${isCollapsed ? "w-16" : "w-56"}`}
     >
       {/* Toggle Button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-2.5 top-6 bg-white border border-gray-200 rounded-full p-1 shadow-sm hover:bg-blue-50 hover:text-blue-600 transition-all z-20"
+        className="absolute -right-2.5 top-6 bg-white border border-slate-200 rounded-full p-1 shadow-sm hover:bg-primary/5 hover:text-primary transition-all z-20"
       >
         {isCollapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </button>
 
       {/* Logo */}
       <div className="h-14 flex items-center px-4 mb-2">
-        <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
+        <div className="w-7 h-7 bg-primary rounded flex items-center justify-center text-white text-xs font-bold">
           G
         </div>
         {!isCollapsed && (
-          <span className="ml-2.5 font-semibold text-sm text-gray-800">
-            <span className="text-blue-600">HR</span>
+          <span className="ml-2.5 font-semibold text-sm text-slate-800">
+            <span className="text-primary tracking-tight">HRMS</span>
           </span>
         )}
       </div>
@@ -70,23 +70,27 @@ const isOffboardModule = location.pathname.startsWith("/offboard");
               to={item.path}
               end
               className={({ isActive }) =>
-                `flex items-center group relative h-9 rounded-lg transition-colors
-    ${
-      isActive
-        ? "bg-blue-50 text-blue-700"
-        : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-    }
+                `flex items-center group relative h-10 rounded-xl transition-all duration-200
+    ${isActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                }
     ${isCollapsed ? "justify-center" : "px-3"}`
               }
             >
               {({ isActive }) => (
                 <>
+                  {/* Active Indicator Line */}
+                  {isActive && !isCollapsed && (
+                    <div className="absolute left-0 w-1 h-5 bg-primary rounded-r-full" />
+                  )}
+
                   <item.icon
                     size={18}
                     className={
                       isActive
-                        ? "text-blue-600"
-                        : "text-gray-400 group-hover:text-gray-600"
+                        ? "text-primary"
+                        : "text-slate-400 group-hover:text-slate-600"
                     }
                   />
 
@@ -109,11 +113,11 @@ const isOffboardModule = location.pathname.startsWith("/offboard");
       </nav>
 
       {/* User */}
-      <div className="p-3 border-t border-gray-50 bg-gray-50/50">
+      <div className="p-3 border-t border-slate-50 bg-slate-50/30">
         <div
           className={`flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}
         >
-          <div className="w-6 h-6 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-[10px] text-blue-700 font-bold">
+          <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] text-primary font-bold">
             AR
           </div>
           {!isCollapsed && (

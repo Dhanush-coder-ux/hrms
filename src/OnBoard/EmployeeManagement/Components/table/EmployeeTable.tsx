@@ -1,25 +1,26 @@
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, ExternalLink } from "lucide-react";
 import { UserAvatar } from "../../../../Components/Common/UserAvatar";
 import type { Employee } from "../../../../Types/typesEmployeeManagement";
+import { empMangeTheme } from "../../../../Themes/EmpMangeTheme/empMangeConfig";
 
 interface EmployeeTableProps {
   employees: Employee[];
   onRowClick: (emp: Employee) => void;
 }
 
-const HEADERS = ["Personnel", "Department", "Designation", "Contact Info", "Status"];
+const HEADERS = ["Personnel", "Department", "Designation", "Contact Info", "Status", ""];
 
 export default function EmployeeTable({ employees, onRowClick }: EmployeeTableProps) {
   return (
-    <div className="w-full max-h-[520px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100">
+    <div className={empMangeTheme.table.wrapper + " max-h-[520px]"}>
       <table className="w-full border-collapse relative">
         {/* ── HEADER ── */}
-        <thead className="sticky top-0 z-20">
-          <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
-            {HEADERS.map((h) => (
+        <thead className={empMangeTheme.table.head}>
+          <tr className={empMangeTheme.table.headRow}>
+            {HEADERS.map((h, i) => (
               <th
-                key={h}
-                className="px-6 py-4 text-left text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50"
+                key={i}
+                className={empMangeTheme.table.headCell}
               >
                 {h}
               </th>
@@ -48,7 +49,7 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
                 <tr
                   key={emp.Emp_id ?? idx}
                   onClick={() => onRowClick(emp)}
-                  className="border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
+                  className={empMangeTheme.table.row}
                 >
                   {/* Personnel */}
                   <td className="px-6 py-4">
@@ -110,6 +111,16 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
                       />
                       {emp.Status}
                     </span>
+                  </td>
+
+                  {/* Actions */}
+                  <td className="px-6 py-4 text-right">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onRowClick(emp); }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-primary/20 bg-primary/5 text-primary text-[11px] font-bold cursor-pointer transition-all hover:bg-primary hover:text-white hover:border-primary active:scale-95"
+                    >
+                      <ExternalLink size={13} /> View
+                    </button>
                   </td>
                 </tr>
               );

@@ -9,8 +9,8 @@ export const ModuleSelect = () => {
     <div className="h-full  flex flex-col items-center justify-center">
 
       {/* Title */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-12">
-        Select Module
+      <h1 className="text-3xl font-bold text-slate-800 mb-12 tracking-tight">
+        Select <span className="text-primary">Module</span>
       </h1>
 
       {/* Cards */}
@@ -19,12 +19,12 @@ export const ModuleSelect = () => {
         {/* ONBOARD CARD */}
         <div
           onClick={() => navigate("/onboard")}
-          className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
-          hover:shadow-xl hover:-translate-y-1 transition duration-300"
+          className="w-64 cursor-pointer bg-white shadow-sm rounded-[24px] p-8 text-center group
+          hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 hover:border-primary/30"
         >
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-green-100 rounded-full">
-              <UserPlus size={36} className="text-green-600" />
+            <div className="p-4 bg-primary/10 rounded-full group-hover:scale-110 transition-transform">
+              <UserPlus size={36} className="text-primary" />
             </div>
           </div>
 
@@ -40,12 +40,12 @@ export const ModuleSelect = () => {
         {/* Employee management */}
         <div
           onClick={() => navigate("/EmployeeManagement")}
-          className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
-          hover:shadow-xl hover:-translate-y-1 transition duration-300"
+          className="w-64 cursor-pointer bg-white shadow-sm rounded-[24px] p-8 text-center group
+          hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 hover:border-primary/30"
         >
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-blue-100 rounded-full">
-              <UserCheck size={36} className="text-blue-600" />
+            <div className="p-4 bg-primary/10 rounded-full group-hover:scale-110 transition-transform">
+              <UserCheck size={36} className="text-primary" />
             </div>
           </div>
 
@@ -61,12 +61,12 @@ export const ModuleSelect = () => {
         {/* Offboard CARD */}
         <div
           onClick={() => navigate("/offboard")}
-          className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
-          hover:shadow-xl hover:-translate-y-1 transition duration-300"
+          className="w-64 cursor-pointer bg-white shadow-sm rounded-[24px] p-8 text-center group
+          hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 hover:border-primary/30"
         >
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-blue-100 rounded-full">
-              <UserMinus size={36} className="text-red-600" />
+            <div className="p-4 bg-primary/10 rounded-full group-hover:scale-110 transition-transform">
+              <UserMinus size={36} className="text-primary" />
             </div>
           </div>
 
@@ -82,12 +82,12 @@ export const ModuleSelect = () => {
         {/* Admin Login */}
         <div
           onClick={() => navigate("/Admin")}
-          className="w-64 cursor-pointer bg-white shadow-md rounded-2xl p-8 text-center 
-          hover:shadow-xl hover:-translate-y-1 transition duration-300"
+          className="w-64 cursor-pointer bg-white shadow-sm rounded-[24px] p-8 text-center group
+          hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 hover:border-primary/30"
         >
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-blue-100 rounded-full">
-              <MdOutlineAdminPanelSettings size={36} className="text-yellow-600" />
+            <div className="p-4 bg-primary/10 rounded-full group-hover:scale-110 transition-transform">
+              <MdOutlineAdminPanelSettings size={36} className="text-primary" />
             </div>
           </div>
 

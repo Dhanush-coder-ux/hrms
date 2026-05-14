@@ -18,6 +18,7 @@ import {
 import StatCard from "../../../Components/Common/StatCard";
 import SearchBar from "../../../Components/Common/Searchbar";
 import { Api_URL } from "../../../APILINK";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 const toDateString = (d: Date) => d.toISOString().split("T")[0];
 
@@ -144,21 +145,19 @@ export const Attendance = () => {
 
 
   return (
-    <div className="min-h-full bg-slate-50/50 p-10 font-sans custom-scrollbar relative">
+    <div className={empMangeTheme.layout.mainContainer + " relative"}>
       {/* HEADER */}
-      <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
+      <div className={empMangeTheme.header.wrapper}>
         <div className="flex flex-col">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+          <div className={empMangeTheme.header.pill}>
             <TrendingUp size={12} />
             <span>Attendance Hub</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Employee Logs</h1>
-          <p className="text-sm text-slate-400 font-medium">
+          <h1 className={empMangeTheme.header.title}>Employee Logs</h1>
+          <p className={empMangeTheme.header.subtitle}>
             Monitoring logs for {formatDisplayDate(selectedDate)}
           </p>
         </div>
-
-
       </div>
 
       {/* STATS GRID */}
@@ -303,15 +302,15 @@ export const Attendance = () => {
           shadow-sm
           ${isToday
                   ? `
-                bg-indigo-50
-                text-indigo-600
-                border border-indigo-100
+                bg-primary/10
+                text-primary
+                border border-primary/20
               `
                   : `
-                bg-indigo-600
+                bg-primary
                 text-white
-                shadow-lg shadow-indigo-100
-                hover:bg-indigo-700
+                shadow-lg shadow-primary/20
+                hover:opacity-90
               `
                 }
         `}
@@ -328,20 +327,20 @@ export const Attendance = () => {
       </div>
 
       {/* TABLE CARD */}
-      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden">
-        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
-          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+      <div className={empMangeTheme.section.card}>
+        <div className={empMangeTheme.section.header}>
+          <div className={empMangeTheme.section.title}>
+            <span className={empMangeTheme.section.titleDot} />
             Attendance Records
           </div>
-          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+          <span className={empMangeTheme.section.countBadge}>
             {filteredData.length} result{filteredData.length !== 1 ? "s" : ""}
           </span>
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3.5 py-20 text-slate-400 text-xs font-semibold uppercase tracking-widest">
-            <div className="w-8 h-8 border-[3px] border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-[3px] border-primary/20 border-t-primary rounded-full animate-spin" />
             <p>Syncing logs...</p>
           </div>
         ) : data.length === 0 ? (

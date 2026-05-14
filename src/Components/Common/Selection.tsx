@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { ChevronDown, Search, Check } from "lucide-react";
+import { inputTheme } from "../../Themes/ComponentsThems/InputTheme";
 
 type Option = { label: string; value: string | number };
 
@@ -59,12 +61,19 @@ export const Selection = ({
     if (!triggerRef.current || !dropdownRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
     const el = dropdownRef.current;
+    
+    // Check if it would overflow the right side
+    let left = rect.left;
+    if (left + rect.width > window.innerWidth) {
+      left = window.innerWidth - rect.width - 16;
+    }
+    
+    if (left < 0) left = 16;
+
     el.style.top = `${rect.bottom + 6}px`;
-    el.style.left = `${rect.left}px`;
+    el.style.left = `${left}px`;
     el.style.width = `${rect.width}px`;
-    if (compact) el.style.width = "auto";
-    if (compact) el.style.minWidth = "120px";
-  }, [compact]);
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -117,7 +126,7 @@ export const Selection = ({
   const dropdown = createPortal(
     <div
       ref={dropdownRef}
-      className={`sel-portal-dropdown ${open ? "is-open" : ""} ${compact ? "compact" : ""}`}
+      className={`${inputTheme.select.dropdown} ${open ? "opacity-100 scale-100" : "opacity-0 scale-95"} transition-all duration-200`}
       style={{
         position: "fixed",
         zIndex: 9999,
@@ -125,15 +134,12 @@ export const Selection = ({
         pointerEvents: open ? "auto" : "none",
       }}
     >
-      <div className="sel-search-wrap">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="sel-search-icon">
-          <circle cx="6" cy="6" r="4.5" stroke="#94a3b8" strokeWidth="1.4" />
-          <path d="M9.5 9.5L12 12" stroke="#94a3b8" strokeWidth="1.4" strokeLinecap="round" />
-        </svg>
+      <div className="flex items-center gap-2 p-2.5 border-b border-slate-50">
+        <Search size={13} className="text-slate-400" />
         <input
           ref={inputRef}
           type="text"
-          className="sel-search-input"
+          className="flex-1 bg-transparent border-none outline-none text-[13px] font-medium text-slate-900 placeholder:text-slate-300"
           placeholder="Search…"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -146,43 +152,33 @@ export const Selection = ({
         />
       </div>
 
-      <div className="sel-divider" />
-
-      <div className="sel-options">
+      <div className="max-h-[200px] overflow-y-auto p-1.5 custom-scrollbar">
         {placeholder && (
-          <div
-            className={`sel-option ${!value ? "selected" : ""}`}
-            role="option"
-            aria-selected={!value}
+          <button
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[13px] font-bold transition-all ${!value ? "bg-primary/5 text-primary" : "hover:bg-slate-50 text-slate-400"}`}
             onClick={() => handleSelect({ label: placeholder, value: "" })}
           >
-            <span className="sel-placeholder-text">{placeholder}</span>
-            <svg className="sel-option-check" width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M2 6.5L5.2 10L11 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+            {placeholder}
+            {!value && <Check size={14} />}
+          </button>
         )}
 
         {filteredOptions.length > 0 ? (
           filteredOptions.map((opt, i) => {
             const isSelected = String(opt.value) === String(value);
             return (
-              <div
+              <button
                 key={`${opt.value}-${i}`}
-                className={`sel-option ${isSelected ? "selected" : ""}`}
-                role="option"
-                aria-selected={isSelected}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[13px] font-bold transition-all ${isSelected ? "bg-primary/5 text-primary" : "hover:bg-slate-50 text-slate-600"}`}
                 onClick={() => handleSelect(opt)}
               >
                 <span>{opt.label}</span>
-                <svg className="sel-option-check" width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M2 6.5L5.2 10L11 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
+                {isSelected && <Check size={14} />}
+              </button>
             );
           })
         ) : (
-          <div className="sel-no-results">No matches found</div>
+          <div className="p-4 text-center text-xs text-slate-300 font-medium">No results found</div>
         )}
       </div>
     </div>,
@@ -190,129 +186,33 @@ export const Selection = ({
   );
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
-
-        .sel-wrapper {
-          font-family: 'DM Sans', sans-serif;
-          position: relative; width: 100%; user-select: none;
-        }
-        .sel-label {
-          display: block; font-size: 12px; font-weight: 600;
-          letter-spacing: 0.07em; text-transform: uppercase;
-          color: #475569; margin-bottom: 7px; transition: color 0.18s ease;
-        }
-        .sel-label.focused { color: #4f46e5; }
-        .sel-label.has-value { color: #334155; }
-
-        .sel-trigger {
-          width: 100%; display: flex; align-items: center; justify-content: space-between;
-          gap: 8px; padding: 11px 14px; background: #fff;
-          border: 1.5px solid #868687; border-radius: 10px;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3.5px transparent;
-          cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
-          outline: none;
-        }
-        .sel-trigger.compact {
-           padding: 4px 8px; border-radius: 8px; border-color: #cbd5e1;
-        }
-        .sel-trigger:hover { border-color: #a5b4fc; }
-        .sel-trigger.open {
-          border-color: #6366f1;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3.5px rgba(99,102,241,0.15);
-        }
-
-        .sel-display {
-          flex: 1; font-size: 14px; color: #0f172a;
-          text-align: left; overflow: hidden;
-          white-space: nowrap; text-overflow: ellipsis;
-        }
-        .sel-trigger.compact .sel-display { font-size: 13px; font-weight: 600; color: #1e293b; }
-        .sel-display.placeholder-text { color: #94a3b8; }
-
-        .sel-chevron { color: #64748b; flex-shrink: 0; transition: transform 0.22s, color 0.18s; }
-        .sel-trigger.open .sel-chevron { transform: rotate(180deg); color: #4f46e5; }
-
-        .sel-portal-dropdown {
-          background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px;
-          box-shadow: 0 8px 30px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
-          overflow: hidden;
-        }
-        .sel-portal-dropdown.is-open {
-          animation: sel-pop 0.18s cubic-bezier(0.34,1.56,0.64,1) forwards;
-          transform-origin: top center;
-        }
-        @keyframes sel-pop {
-          from { opacity: 0; transform: scaleY(0.92) translateY(-4px); }
-          to   { opacity: 1; transform: scaleY(1) translateY(0); }
-        }
-
-        .sel-search-wrap {
-          display: flex; align-items: center; gap: 8px; padding: 10px 12px;
-        }
-        .sel-search-icon { flex-shrink: 0; }
-        .sel-search-input {
-          flex: 1; border: none; outline: none;
-          font-family: inherit; font-size: 13px; color: #0f172a; background: transparent;
-        }
-        .sel-search-input::placeholder { color: #94a3b8; }
-
-        .sel-options { max-height: 200px; overflow-y: auto; padding: 6px; }
-
-        .sel-option {
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 9px 12px; border-radius: 8px;
-          font-size: 14px; cursor: pointer; transition: background 0.12s;
-        }
-        .sel-option:hover { background: #eef2ff; color: #4338ca; }
-        .sel-option.selected { background: #eef2ff; color: #4338ca; font-weight: 600; }
-        .sel-option-check { opacity: 0; color: #6366f1; flex-shrink: 0; }
-        .sel-option.selected .sel-option-check { opacity: 1; }
-
-        .sel-placeholder-text {
-          font-size: 12px; font-weight: 600; text-transform: uppercase; color: #94a3b8;
-        }
-        .sel-no-results { padding: 12px; font-size: 13px; color: #94a3b8; text-align: center; }
-        .sel-divider { height: 1px; background: #f1f5f9; margin: 0 6px; }
-      `}</style>
-
-      <div className="sel-wrapper">
-        {label && (
-          <label
-            className={`sel-label ${focused || open ? "focused" : ""} ${hasValue ? "has-value" : ""}`}
-          >
-            {label}
-          </label>
-        )}
-
-        {/* Trigger — shows selected label (e.g. "Digital Marketing"), NOT raw value (DEP-003) */}
-        <div
-          ref={triggerRef}
-          className={`sel-trigger ${open ? "open" : ""} ${compact ? "compact" : ""}`}
-          role="combobox"
-          aria-expanded={open}
-          aria-haspopup="listbox"
-          tabIndex={0}
-          onClick={() => { setOpen((o) => !o); setFocused(true); }}
-          onFocus={() => setFocused(true)}
-          onBlur={() => { if (!open) setFocused(false); }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o); }
-            if (e.key === "Escape") { setOpen(false); setFocused(false); }
-            if (e.key === "ArrowDown" && !open) setOpen(true);
-          }}
+    <div className="w-full">
+      {label && (
+        <label
+          className={`${inputTheme.label} ${focused || open ? "text-primary" : ""}`}
         >
-          <span className={`sel-display ${!hasValue ? "placeholder-text" : ""}`}>
-            {selected ? selected.label : (placeholder ?? "Select…")}
-          </span>
-          <svg className="sel-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M3 5L7 9L11 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
+          {label}
+        </label>
+      )}
 
-        {dropdown}
+      <div
+        ref={triggerRef}
+        className={`${inputTheme.select.trigger} ${open ? "border-primary ring-4 ring-primary/10 shadow-sm" : ""} ${compact ? "py-1.5 px-3 rounded-lg" : ""} transition-all cursor-pointer group`}
+        onClick={() => { setOpen((o) => !o); setFocused(true); }}
+        onFocus={() => setFocused(true)}
+        onBlur={() => { if (!open) setFocused(false); }}
+        tabIndex={0}
+      >
+        <span className={`flex-1 truncate text-sm font-bold ${!hasValue ? "text-slate-300" : "text-slate-900"}`}>
+          {selected ? selected.label : (placeholder ?? "Select…")}
+        </span>
+        <ChevronDown 
+          size={16} 
+          className={`text-slate-400 transition-transform duration-300 ${open ? 'rotate-180 text-primary' : ''}`} 
+        />
       </div>
-    </>
+
+      {dropdown}
+    </div>
   );
 };

@@ -196,9 +196,9 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
           100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
         }
         .shield-icon { animation: shieldFloat 0.65s cubic-bezier(0.22,1,0.36,1) both; }
-        .emp-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .emp-heading { font-size: 28px; font-weight: 700; color: hsl(var(--text-hsl)); }
         .emp-section-head {
-          font-size: 15px; font-weight: 600; color: #4f46e5;
+          font-size: 15px; font-weight: 600; color: hsl(var(--primary-hsl));
           margin-bottom: 12px; padding-bottom: 10px;
           border-bottom: 1.5px solid #e2e8f0;
           display: flex; align-items: center; justify-content: space-between;
@@ -209,9 +209,9 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
           background: #fff;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
-        .emp-row-card:hover { border-color: #c7d2fe; box-shadow: 0 6px 22px rgba(99,102,241,0.10); }
+        .emp-row-card:hover { border-color: hsl(var(--primary-hsl) / 0.3); box-shadow: 0 6px 22px hsl(var(--primary-hsl) / 0.1); }
         .emp-add-btn {
-          display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #6366f1;
+          display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: hsl(var(--primary-hsl));
           background: transparent; border: none; cursor: pointer; padding: 4px 10px; border-radius: 8px;
         }
         .emp-remove-btn {
@@ -220,10 +220,11 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         }
         .emp-remove-btn:hover { background: #fee2e2; color: #ef4444; }
         .emp-submit-btn {
-          background: #6366f1; color: #fff; padding: 12px 40px; border-radius: 10px;
+          background: hsl(var(--primary-hsl)); color: #fff; padding: 12px 40px; border-radius: 10px;
           font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-          box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+          box-shadow: 0 4px 14px hsl(var(--primary-hsl) / 0.35);
         }
+        .emp-submit-btn:hover { opacity: 0.9; box-shadow: 0 6px 20px hsl(var(--primary-hsl) / 0.45); }
         .not-eligible-badge {
           padding: 4px 8px; font-size: 10px; font-weight: 700;
           color: #dc2626; background: #fef2f2; border-radius: 6px; border: 1px solid #fecaca;
@@ -233,7 +234,7 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
       <div className="emp-page h-full overflow-auto">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
-            <FaShieldAlt className="shield-icon text-[26px] text-indigo-500 shrink-0" />
+            <FaShieldAlt className="shield-icon text-[26px] text-primary shrink-0" />
             <h1 className="emp-heading">Insurance & Provident Fund</h1>
           </div>
         </AnimSection>

@@ -27,12 +27,12 @@ export const MessagePopup = ({ message, type, isVisible, onClose }: PopupProps) 
           exit={{ opacity: 0, y: -20, x: "-50%" }}
           className={`fixed top-0 left-1/2 z-100 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border min-w-[320px] ${
             type === "success" 
-              ? "bg-green-50 border-green-200 text-green-800" 
+              ? "bg-primary/5 border-primary/20 text-primary" 
               : "bg-red-50 border-red-200 text-red-800"
           }`}
         >
           {type === "success" ? (
-            <CheckCircle className="text-green-500" size={20} />
+            <CheckCircle className="text-primary" size={20} />
           ) : (
             <XCircle className="text-red-500" size={20} />
           )}

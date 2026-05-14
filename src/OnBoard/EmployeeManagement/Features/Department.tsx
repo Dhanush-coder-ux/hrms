@@ -6,6 +6,7 @@ import PageLoading from "../../../Components/Common/PageLoading";
 import type { Department as IDepartment } from "../Department/types";
 import { Api_URL } from "../../../APILINK";
 import StatCard from "../../../Components/Common/StatCard";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 
 export const Department = () => {
@@ -56,16 +57,16 @@ export const Department = () => {
   if (loading) return <PageLoading />;
 
   return (
-    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar">
+    <div className={empMangeTheme.layout.mainContainer}>
       {/* HEADER */}
-      <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
+      <div className={empMangeTheme.header.wrapper}>
         <div className="flex flex-col">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+          <div className={empMangeTheme.header.pill}>
             <TrendingUp size={12} />
             <span>Organization Hub</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">Departments</h1>
-          <p className="text-sm text-slate-400 font-medium">
+          <h1 className={empMangeTheme.header.title}>Departments</h1>
+          <p className={empMangeTheme.header.subtitle}>
             Managing {departments.length} functional organizational units
           </p>
         </div>
@@ -75,7 +76,7 @@ export const Department = () => {
           <div className="relative">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             <input
-              className="h-[42px] w-[240px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-4 focus:ring-indigo-500/10 placeholder:text-slate-300"
+              className="h-[42px] w-[240px] pl-10 pr-3.5 rounded-xl border-[1.5px] border-slate-200 bg-white text-sm font-medium text-slate-900 outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 placeholder:text-slate-300"
               placeholder="Search departments..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -83,7 +84,7 @@ export const Department = () => {
           </div>
 
           <button
-            className="inline-flex items-center gap-2 h-[42px] px-[18px] bg-indigo-600 text-white border-none rounded-xl text-sm font-bold tracking-tight cursor-pointer transition-all hover:bg-indigo-700 active:scale-95 shadow-lg shadow-indigo-100"
+            className="inline-flex items-center gap-2 h-[42px] px-[18px] bg-primary text-white border-none rounded-xl text-sm font-bold tracking-tight cursor-pointer transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-primary/20"
             onClick={() => navigate("/Admin/departmentstacks")}
           >
             + Create Dept
@@ -132,13 +133,13 @@ export const Department = () => {
       </div>
 
       {/* TABLE CARD */}
-      <div className="bg-white rounded-[20px] border-[1.5px] border-slate-100 overflow-hidden">
-        <div className="flex items-center justify-between p-[18px_24px] border-b border-slate-50">
-          <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+      <div className={empMangeTheme.section.card}>
+        <div className={empMangeTheme.section.header}>
+          <div className={empMangeTheme.section.title}>
+            <span className={empMangeTheme.section.titleDot} />
             All Departments
           </div>
-          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+          <span className={empMangeTheme.section.countBadge}>
             {filtered.length} result{filtered.length !== 1 ? "s" : ""}
           </span>
         </div>

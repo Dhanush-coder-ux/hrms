@@ -4,6 +4,7 @@ import { Backbutton } from "../../../Components/Common/Backbutton";
 import { LeaveHistoryTable } from "./LeaveHistoryTable";
 import StatCard from "../../../Components/Common/StatCard";
 import { User, Briefcase, CalendarCheck, Clock, TrendingUp } from "lucide-react";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 export const EmployeeLeaveDetails = () => {
   const location = useLocation();
@@ -21,7 +22,7 @@ export const EmployeeLeaveDetails = () => {
         <p className="text-slate-500 mb-6 max-w-xs">We couldn't retrieve leave data for Employee ID: <span className="font-mono font-bold text-rose-600">{empid}</span></p>
         <button 
           onClick={() => navigate(-1)}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95"
+          className="px-8 py-3 bg-primary text-white rounded-2xl font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all active:scale-95"
         >
           Return to Dashboard
         </button>
@@ -30,22 +31,22 @@ export const EmployeeLeaveDetails = () => {
   }
 
   return (
-    <div className="h-screen overflow-y-auto bg-slate-50/50 p-10 font-sans custom-scrollbar">
+    <div className={empMangeTheme.layout.mainContainer}>
       {/* HEADER */}
-      <div className="flex items-start justify-between gap-6 mb-10 flex-wrap">
+      <div className={empMangeTheme.header.wrapper}>
         <div className="flex flex-col">
-          <div className="mb-4">
+          <div className="mb-6">
              <Backbutton />
           </div>
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-full mb-2.5 w-fit">
+          <div className={empMangeTheme.header.pill}>
             <TrendingUp size={12} />
             <span>Employee Profile</span>
           </div>
-          <h1 className="text-[2rem] font-extrabold text-slate-900 tracking-tight mb-1.5 leading-none">
+          <h1 className={empMangeTheme.header.title}>
             {employee.employee_name}
           </h1>
-          <p className="text-sm text-slate-400 font-medium">
-            Personal leave insights for ID: <span className="text-indigo-600 font-bold">#{employee.Emp_id}</span>
+          <p className={empMangeTheme.header.subtitle}>
+            Personal leave insights for ID: <span className="text-primary font-bold">#{employee.Emp_id}</span>
           </p>
         </div>
       </div>
@@ -83,9 +84,9 @@ export const EmployeeLeaveDetails = () => {
           label="Status"
           value="Active"
           icon={User}
-          iconBgClass="bg-indigo-50"
-          iconColorClass="text-indigo-500"
-          valueColorClass="text-indigo-600"
+          iconBgClass="bg-primary/5"
+          iconColorClass="text-primary"
+          valueColorClass="text-primary"
           subText="Current employment"
         />
       </div>

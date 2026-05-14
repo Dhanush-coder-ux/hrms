@@ -16,6 +16,7 @@ type PopupData = {
 };
 
 const API_URL = `${Api_URL}/employee/Register`;
+import { pageTheme } from "../../../Themes/PageThems/pageConfig";
 
 const App = () => {
   const navigate = useNavigate();
@@ -150,7 +151,18 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-full max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+    <div className={pageTheme.layout.mainContainer}>
+      <div className="max-w-6xl mx-auto space-y-8">
+      <div className={pageTheme.header.wrapper}>
+        <div className="flex flex-col">
+          <div className={pageTheme.header.pill}>
+            <span>Employee Onboarding</span>
+          </div>
+          <h1 className={pageTheme.header.title}>Register New Employee</h1>
+          <p className={pageTheme.header.subtitle}>Complete the 5-step process to add a new member to the organization.</p>
+        </div>
+      </div>
+
       <StepButton
         menus={steps}
         active={currentStep}
@@ -212,6 +224,7 @@ const App = () => {
         type={mpopup.type}
         onClose={() => setmPopup((prev) => ({ ...prev, show: false }))}
       />
+      </div>
     </div>
   );
 };

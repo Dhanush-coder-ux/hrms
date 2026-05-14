@@ -1,4 +1,5 @@
 import { Edit2 } from "lucide-react";
+import { empMangeTheme } from "../../../../Themes/EmpMangeTheme/empMangeConfig";
 
 export type Column =
   | { header: string; accessor: string; type?: string }
@@ -15,19 +16,7 @@ const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string; bor
 const getStatusStyle = (val: string) =>
   STATUS_STYLES[val?.toLowerCase()] ?? STATUS_STYLES.default;
 
-const AVATAR_COLORS = [
-  ["bg-purple-100", "text-purple-700"],
-  ["bg-blue-100", "text-blue-700"],
-  ["bg-emerald-100", "text-emerald-700"],
-  ["bg-amber-100", "text-amber-700"],
-  ["bg-rose-100", "text-rose-700"],
-  ["bg-sky-100", "text-sky-700"],
-];
-
-const getAvatarColor = (name: string) => {
-  const idx = (name?.charCodeAt(0) ?? 0) % AVATAR_COLORS.length;
-  return AVATAR_COLORS[idx];
-};
+import { UserAvatar } from "../../../../Components/Common/UserAvatar";
 
 export const Table = ({
   columns,
@@ -40,14 +29,14 @@ export const Table = ({
   onEdit: (row: any) => void;
 }) => {
   return (
-    <div className="w-full max-h-[480px] overflow-y-auto overflow-x-auto custom-scrollbar border-b border-slate-100">
+    <div className={empMangeTheme.table.wrapper + " max-h-[480px]"}>
       <table className="w-full border-collapse relative">
-        <thead className="sticky top-0 z-20">
-          <tr className="bg-slate-50 border-b border-slate-100 shadow-sm">
+        <thead className={empMangeTheme.table.head}>
+          <tr className={empMangeTheme.table.headRow}>
             {columns.map((col, i) => (
               <th
                 key={i}
-                className={`px-6 py-4 text-[11px] font-bold tracking-widest uppercase text-slate-400 whitespace-nowrap bg-slate-50 ${
+                className={`${empMangeTheme.table.headCell} ${
                   col.type === "action" ? "text-right" : "text-left"
                 }`}
               >
@@ -63,7 +52,7 @@ export const Table = ({
               <tr
                 key={row.id || ri}
                 onClick={() => onEdit(row)}
-                className="group border-b border-slate-50 cursor-pointer transition-colors hover:bg-indigo-50/30"
+                className={empMangeTheme.table.row}
               >
                 {columns.map((col, ci) => {
                   if (col.type === "action") {
@@ -71,7 +60,7 @@ export const Table = ({
                       <td key={ci} className="px-6 py-4 text-right">
                         <button
                           onClick={(e) => { e.stopPropagation(); onEdit(row); }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-100 bg-indigo-50 text-indigo-600 text-[11px] font-bold cursor-pointer transition-all hover:bg-indigo-600 hover:text-white hover:border-indigo-600 active:scale-95"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-primary/20 bg-primary/5 text-primary text-[11px] font-bold cursor-pointer transition-all hover:bg-primary hover:text-white hover:border-primary active:scale-95"
                         >
                           <Edit2 size={13} /> Edit
                         </button>
@@ -85,19 +74,10 @@ export const Table = ({
 
                   /* Employee info with Avatar */
                   if (col.accessor === "employee_name" || col.header.toLowerCase().includes("employee")) {
-                    const [bgC, fgC] = getAvatarColor(val || "E");
-                    const initials = val
-                      ?.split(" ")
-                      .slice(0, 2)
-                      .map((w: string) => w[0])
-                      .join("")
-                      .toUpperCase();
                     return (
                       <td key={ci} className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-extrabold flex-shrink-0 tracking-tighter ${bgC} ${fgC}`}>
-                            {initials || "E"}
-                          </div>
+                          <UserAvatar name={val || "E"} variant="table" />
                           <div>
                             <p className="text-[13px] font-bold text-slate-800 tracking-tight m-0 uppercase">
                               {val}

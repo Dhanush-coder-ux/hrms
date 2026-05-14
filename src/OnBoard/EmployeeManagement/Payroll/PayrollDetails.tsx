@@ -3,6 +3,7 @@ import { ExportCSVButton } from "../../../Components/Common/ExportButton";
 import { Backbutton } from "../../../Components/Common/Backbutton";
 import { useEffect, useState } from "react";
 import { Api_URL } from "../../../APILINK";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 const PayrollDetails = () => {
   const { id: emp_id } = useParams();
@@ -56,9 +57,9 @@ const PayrollDetails = () => {
   if (!data) return <div className="p-10 text-center text-red-500 font-medium">No Data Found</div>;
 
   return (
-    <div className="p-6 h-full overflow-auto bg-slate-50 text-slate-800">
+    <div className={empMangeTheme.layout.mainContainer}>
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <Backbutton />
           <ExportCSVButton
             data={[{
@@ -72,24 +73,25 @@ const PayrollDetails = () => {
         </div>
 
         {/* ✅ GLASSMORPISM HEADER */}
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-          <div className="bg-indigo-700 p-8 text-white flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
-            <div>
-              <p className="text-indigo-200 text-xs font-bold tracking-widest uppercase mb-1">Employee Statement</p>
+        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-8">
+          <div className="bg-primary p-10 text-white flex flex-col md:flex-row justify-between items-end md:items-center gap-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="relative z-10">
+              <p className="text-white/60 text-xs font-bold tracking-widest uppercase mb-2">Employee Statement</p>
               <h2 className="text-4xl font-extrabold tracking-tight">{data.employee}</h2>
-              <p className="text-indigo-100 opacity-80 flex items-center gap-2 mt-1">
-                <span className="w-2 h-2 bg-green-400 rounded-full"></span> {data.provider}
+              <p className="text-white/80 flex items-center gap-2 mt-2 font-medium">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.6)]"></span> {data.provider}
               </p>
             </div>
             
             {/* VIEW TOGGLE */}
-            <div className="flex bg-indigo-800/50 p-1 rounded-xl backdrop-blur-sm border border-indigo-500/30">
+            <div className="flex bg-white/10 p-1 rounded-2xl backdrop-blur-md border border-white/20 relative z-10">
               {(["monthly", "yearly"] as const).map((mode) => (
                 <button
                   key={mode}
                   onClick={() => setView(mode)}
-                  className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
-                    view === mode ? "bg-white text-indigo-700 shadow-lg" : "text-indigo-100 hover:text-white"
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    view === mode ? "bg-white text-primary shadow-xl scale-100" : "text-white/80 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {mode.charAt(0).toUpperCase() + mode.slice(1)}

@@ -245,7 +245,7 @@ const EmployeeRegister = ({
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
         .emp-page { font-family: 'DM Sans', sans-serif; padding: 24px; }
         .emp-section-head {
-          font-size: 15px; font-weight: 600; color: #4f46e5;
+          font-size: 15px; font-weight: 600; color: hsl(var(--primary-hsl));
           margin-bottom: 18px; padding-bottom: 10px;
           border-bottom: 1.5px solid #e2e8f0;
           display: flex; align-items: center; justify-content: space-between;
@@ -253,18 +253,18 @@ const EmployeeRegister = ({
         .emp-row-card {
           position: relative; margin-bottom: 16px; padding: 18px;
           border: 1.5px solid #e2e8f0; border-radius: 12px;
-          background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+          background: linear-gradient(135deg, rgba(var(--primary-hsl), 0.05) 0%, rgba(var(--primary-hsl), 0.02) 100%);
           transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .emp-row-card:hover { border-color: #c7d2fe; box-shadow: 0 4px 16px rgba(99,102,241,0.08); }
+        .emp-row-card:hover { border-color: hsl(var(--primary-hsl) / 0.3); box-shadow: 0 4px 16px rgba(var(--primary-hsl), 0.08); }
         .emp-add-btn {
           display: flex; align-items: center; gap: 6px;
-          font-size: 13px; font-weight: 600; color: #6366f1;
+          font-size: 13px; font-weight: 600; color: hsl(var(--primary-hsl));
           background: transparent; border: none; cursor: pointer;
           padding: 4px 10px; border-radius: 8px;
           transition: background 0.15s, color 0.15s;
         }
-        .emp-add-btn:hover { background: #eef2ff; color: #4338ca; }
+        .emp-add-btn:hover { background: hsl(var(--primary-hsl) / 0.1); color: hsl(var(--primary-hsl)); }
         .emp-remove-btn {
           display: flex; align-items: center; justify-content: center;
           width: 34px; height: 34px; border-radius: 8px;
@@ -274,21 +274,21 @@ const EmployeeRegister = ({
         }
         .emp-remove-btn:hover { background: #fee2e2; color: #ef4444; }
         .emp-submit-btn {
-          background: #6366f1; color: #fff;
+          background: hsl(var(--primary-hsl)); color: #fff;
           padding: 12px 40px; border-radius: 10px;
           font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-          box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+          box-shadow: 0 4px 14px hsl(var(--primary-hsl) / 0.35);
           transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
         }
-        .emp-submit-btn:hover { background: #4f46e5; box-shadow: 0 6px 20px rgba(99,102,241,0.45); }
+        .emp-submit-btn:hover { opacity: 0.9; box-shadow: 0 6px 20px hsl(var(--primary-hsl) / 0.45); }
         .emp-submit-btn:active { transform: scale(0.97); }
-        .emp-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .emp-heading { font-size: 28px; font-weight: 700; color: hsl(var(--text-hsl)); }
       `}</style>
 
       <div className="emp-page min-h-full">
         <AnimSection delay={0}>
           <div className="flex items-center gap-3 mb-8">
-            <FaUser className="text-[26px] text-indigo-500 shrink-0" />
+            <FaUser className="text-[26px] text-primary shrink-0" />
             <h1 className="emp-heading">Add New Employee</h1>
           </div>
         </AnimSection>

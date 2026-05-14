@@ -19,10 +19,10 @@ const MenuButtons: React.FC<MenuButtonsProps> = ({ menus, onClick, active }) => 
             <button
               key={index}
               onClick={() => onClick?.(menu.label)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-4 px-1 border-b-2 font-bold text-sm tracking-tight transition-all duration-200 ${
                 active === menu.label
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-200"
               }`}
             >
               {menu.label}

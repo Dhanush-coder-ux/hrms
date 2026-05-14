@@ -22,7 +22,7 @@ export const Popup = ({ isVisible, onClose, type, message, data }: PopupProps) =
           className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100"
         >
           {/* Header Section */}
-          <div className={`p-6 text-center ${type === 'success' ? 'bg-green-50' : 'bg-red-50'}`}>
+          <div className={`p-6 text-center ${type === 'success' ? 'bg-primary/5' : 'bg-red-50'}`}>
             <div className="flex justify-end">
               <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
@@ -30,7 +30,7 @@ export const Popup = ({ isVisible, onClose, type, message, data }: PopupProps) =
             </div>
             <div className="flex flex-col items-center gap-2">
               {type === "success" ? (
-                <CheckCircle size={48} className="text-green-500" />
+                <CheckCircle size={48} className="text-primary" />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center text-white font-bold text-xl">!</div>
               )}
@@ -46,7 +46,7 @@ export const Popup = ({ isVisible, onClose, type, message, data }: PopupProps) =
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                  <User size={18} className="text-indigo-500 mt-1" />
+                  <User size={18} className="text-primary mt-1" />
                   <div>
                     <p className="text-xs text-gray-500">Name</p>
                     <p className="text-sm font-semibold text-gray-800">{data.f_name} {data.l_name}</p>
@@ -54,7 +54,7 @@ export const Popup = ({ isVisible, onClose, type, message, data }: PopupProps) =
                 </div>
 
                 <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                  <Briefcase size={18} className="text-indigo-500 mt-1" />
+                  <Briefcase size={18} className="text-primary mt-1" />
                   <div>
                     <p className="text-xs text-gray-500">ID & Dept</p>
                     <p className="text-sm font-semibold text-gray-800">{data.Emp_id} | {data.Department}</p>
@@ -62,7 +62,7 @@ export const Popup = ({ isVisible, onClose, type, message, data }: PopupProps) =
                 </div>
 
                 <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl col-span-2">
-                  <CreditCard size={18} className="text-indigo-500 mt-1" />
+                  <CreditCard size={18} className="text-primary mt-1" />
                   <div>
                     <p className="text-xs text-gray-500">Salary Details</p>
                     <p className="text-sm font-semibold text-gray-800">
@@ -80,7 +80,7 @@ export const Popup = ({ isVisible, onClose, type, message, data }: PopupProps) =
               onClick={onClose}
               className={`w-full py-3 rounded-xl font-bold transition-all ${
                 type === "success" 
-                ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200" 
+                ? "bg-primary text-white hover:brightness-110 shadow-lg shadow-primary/20" 
                 : "bg-gray-800 text-white hover:bg-gray-900"
               }`}
             >

@@ -7,8 +7,9 @@ import {
   Calendar, 
   IndianRupee,
   Eye,
-  PenTool
+  PenTool,
 } from "lucide-react";
+import { pageTheme } from "../../../Themes/PageThems/pageConfig";
 
 export const OfferLetterPage = () => {
   // const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
@@ -24,167 +25,160 @@ export const OfferLetterPage = () => {
   });
 
   return (
-    <div className="p-8 bg-[#F8FAFC] h-full overflow-auto text-slate-900 font-sans">
-      {/* Header */}
-      <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">
-            Offer <span className="text-violet-600">Letter</span>
-          </h1>
-          <p className="text-slate-500 text-sm mt-1 font-medium">Generate and dispatch official employment contracts.</p>
+    <div className={pageTheme.layout.mainContainer}>
+      {/* HEADER */}
+      <div className={pageTheme.header.wrapper}>
+        <div className="flex flex-col">
+          <div className={pageTheme.header.pill}>
+            <Send size={12} />
+            <span>Onboarding Stage</span>
+          </div>
+          <h1 className={pageTheme.header.title}>Offer Release</h1>
+          <p className={pageTheme.header.subtitle}>
+            Finalize and send the offer letter to <strong>{offerData.candidateName}</strong>
+          </p>
         </div>
-        <div className="flex gap-3">
-          <button className="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all flex items-center gap-2">
-            <Download size={16} /> Save Draft
+
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 h-11 px-6 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+            <Download size={16} /> Export PDF
           </button>
-          <button className="px-6 py-2.5 rounded-xl bg-violet-600 text-white text-xs font-bold shadow-lg shadow-violet-200 hover:bg-violet-700 transition-all flex items-center gap-2">
+          <button className="flex items-center gap-2 h-11 px-8 bg-primary text-white rounded-xl text-sm font-bold hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-primary/20">
             <Send size={16} /> Send Offer
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Column: Form / Editor */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                <PenTool className="text-violet-500" size={20} /> Candidate Details
-            </h3>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column: Details Edit */}
+        <div className="lg:col-span-1 space-y-6">
+          <div className={pageTheme.section.card}>
+            <div className={pageTheme.section.header}>
+              <div className={pageTheme.section.title}>
+                <span className={pageTheme.section.titleDot} />
+                Offer Parameters
+              </div>
+            </div>
             
-            <div className="space-y-5">
-              <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Candidate Full Name</label>
-                <div className="mt-1 relative">
-                    <User className="absolute left-4 top-3.5 text-slate-300" size={18} />
-                    <input 
-                      type="text" 
-                      value={offerData.candidateName}
-                      className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-violet-500 outline-none transition-all font-medium"
-                    />
+            <div className="p-6 space-y-5">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Candidate Name</label>
+                <div className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl">
+                  <User size={16} className="text-slate-400" />
+                  <span className="text-[13px] font-bold text-slate-700">{offerData.candidateName}</span>
                 </div>
               </div>
 
-              <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Designation</label>
-                <div className="mt-1 relative">
-                    <Briefcase className="absolute left-4 top-3.5 text-slate-300" size={18} />
-                    <input 
-                      type="text" 
-                      value={offerData.role}
-                      className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-violet-500 outline-none transition-all font-medium"
-                    />
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Role / Designation</label>
+                <div className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl">
+                  <Briefcase size={16} className="text-slate-400" />
+                  <span className="text-[13px] font-bold text-slate-700">{offerData.role}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Joining Date</label>
-                  <div className="mt-1 relative">
-                      <Calendar className="absolute left-4 top-3.5 text-slate-300" size={18} />
-                      <input 
-                        type="date" 
-                        value={offerData.joiningDate}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold outline-none"
-                      />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Joining Date</label>
+                  <div className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl">
+                    <Calendar size={16} className="text-slate-400" />
+                    <span className="text-[13px] font-bold text-slate-700">{offerData.joiningDate}</span>
                   </div>
                 </div>
-                <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Annual CTC</label>
-                  <div className="mt-1 relative">
-                      <IndianRupee className="absolute left-4 top-3.5 text-slate-300" size={18} />
-                      <input 
-                        type="text" 
-                        value={offerData.ctc}
-                        className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none"
-                      />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Gross CTC (Yearly)</label>
+                  <div className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl">
+                    <IndianRupee size={16} className="text-slate-400" />
+                    <span className="text-[13px] font-bold text-slate-700">{offerData.ctc}</span>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="mt-8 pt-8 border-t border-slate-50">
-                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Letter Template</h4>
-                <select className="w-full p-4 bg-violet-50 border border-violet-100 rounded-2xl text-sm font-bold text-violet-700 outline-none appearance-none cursor-pointer">
-                    <option>Standard Product Team Template</option>
-                    <option>Executive Leadership Template</option>
-                    <option>Internship/Trainee Template</option>
-                </select>
-            </div>
+          <div className="bg-indigo-600 rounded-[24px] p-6 text-white shadow-xl shadow-indigo-200">
+             <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                   <PenTool size={20} />
+                </div>
+                <h3 className="text-base font-bold">Smart Templates</h3>
+             </div>
+             <p className="text-indigo-100 text-[13px] leading-relaxed mb-6">
+                All offer letters are generated using legally verified enterprise templates.
+             </p>
+             <button className="w-full h-11 bg-white text-indigo-600 rounded-xl text-sm font-bold hover:bg-indigo-50 transition-all">
+                Change Template
+             </button>
           </div>
         </div>
 
-        {/* Right Column: Live Preview */}
-        <div className="lg:col-span-7 bg-white rounded-[3rem] border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden relative">
-          {/* Preview Toolbar */}
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md px-6 py-2 rounded-full flex items-center gap-6 z-10">
-            <div className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest">
-                <Eye size={14} className="text-violet-400" /> Preview Mode
-            </div>
-            <div className="w-[1px] h-4 bg-white/20"></div>
-            <button className="text-white/60 hover:text-white transition-colors">
-                <Download size={14} />
-            </button>
-          </div>
+        {/* Right Column: Preview */}
+        <div className="lg:col-span-2">
+           <div className="bg-white rounded-[32px] border-[1.5px] border-slate-100 overflow-hidden shadow-sm h-full flex flex-col min-h-[600px]">
+              <div className="flex items-center justify-between p-6 border-b border-slate-50 bg-slate-50/20">
+                 <div className="flex items-center gap-2 font-extrabold text-[12px] tracking-wider uppercase text-slate-600">
+                    <Eye size={14} className="text-primary" />
+                    Live Preview
+                 </div>
+                 <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Draft Saved</span>
+                 </div>
+              </div>
 
-          {/* Document Content */}
-          <div className="p-16 h-full max-h-[800px] overflow-y-auto bg-[#FFFFFF] scrollbar-hide">
-            {/* Company Logo Placeholder */}
-            <div className="flex justify-between items-start mb-16">
-                <div className="w-12 h-12 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-black italic">
-                    L
-                </div>
-                <div className="text-right">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Date of Issue</p>
-                    <p className="text-sm font-bold">April 27, 2026</p>
-                </div>
-            </div>
-
-            <div className="space-y-6">
-                <h2 className="text-2xl font-black text-slate-900">Letter of Appointment</h2>
-                
-                <p className="text-sm text-slate-600 leading-relaxed">
-                    Dear <span className="font-bold text-slate-900 underline decoration-violet-300">{offerData.candidateName}</span>,
-                </p>
-
-                <p className="text-sm text-slate-600 leading-relaxed">
-                    We are thrilled to formally offer you the position of <span className="font-bold text-slate-900">{offerData.role}</span> at **Leadoptima Web**. Your skills and experience stood out to us, and we are confident you will be a valuable addition to our team.
-                </p>
-
-                <div className="py-6 border-y border-slate-100 my-8 space-y-4">
-                    <div className="flex justify-between items-center">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Annual Gross CTC</span>
-                        <span className="font-bold text-slate-900">INR {offerData.ctc}</span>
+              <div className="flex-1 p-12 overflow-y-auto custom-scrollbar bg-slate-50/30">
+                 {/* Mock Letter Paper */}
+                 <div className="w-full max-w-2xl mx-auto bg-white shadow-2xl shadow-slate-200 min-h-[800px] p-16 flex flex-col">
+                    <div className="flex justify-between items-start mb-16">
+                       <div className="flex flex-col gap-1">
+                          <h2 className="text-2xl font-black tracking-tighter text-slate-900">ANTIGRAVITY<span className="text-primary">.</span></h2>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Enterprise Systems</p>
+                       </div>
+                       <div className="text-right">
+                          <p className="text-[11px] font-bold text-slate-500">OFFER-2026-882</p>
+                          <p className="text-[11px] font-bold text-slate-400">{new Date().toLocaleDateString()}</p>
+                       </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Joining Date</span>
-                        <span className="font-bold text-slate-900">{offerData.joiningDate}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Job Location</span>
-                        <span className="font-bold text-slate-900">{offerData.location}</span>
-                    </div>
-                </div>
 
-                <p className="text-sm text-slate-600 leading-relaxed italic">
-                    Please review this offer and return a signed copy by **{offerData.validUntil}** to signify your acceptance.
-                </p>
+                    <div className="space-y-8 text-slate-700 leading-relaxed text-[14px]">
+                       <p>Dear <strong>{offerData.candidateName}</strong>,</p>
+                       
+                       <p>
+                          We are thrilled to offer you the position of <strong>{offerData.role}</strong> at Antigravity. 
+                          Your exceptional skills and experience during our evaluation process convinced us that you are 
+                          the right fit for our mission-driven team.
+                       </p>
 
-                <div className="pt-16 flex justify-between">
-                    <div>
-                        <div className="w-32 h-[1px] bg-slate-200 mb-2"></div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Authorized Signatory</p>
-                        <p className="text-xs font-bold text-slate-800">HR Director, Leadoptima</p>
+                       <div className="bg-slate-50/80 p-8 rounded-2xl border border-slate-100 space-y-4">
+                          <div className="flex justify-between border-b border-slate-100 pb-3">
+                             <span className="text-slate-400 font-medium">Position</span>
+                             <span className="font-bold text-slate-800">{offerData.role}</span>
+                          </div>
+                          <div className="flex justify-between border-b border-slate-100 pb-3">
+                             <span className="text-slate-400 font-medium">Annual Compensation</span>
+                             <span className="font-bold text-slate-800">INR {offerData.ctc}</span>
+                          </div>
+                          <div className="flex justify-between">
+                             <span className="text-slate-400 font-medium">Joining Date</span>
+                             <span className="font-bold text-slate-800">{offerData.joiningDate}</span>
+                          </div>
+                       </div>
+
+                       <p>
+                          This offer is contingent upon successful background verification and is valid until 
+                          <strong> {offerData.validUntil}</strong>. We look forward to having you join us and 
+                          contribute to our success.
+                       </p>
+
+                       <div className="mt-16 pt-16 border-t border-slate-100">
+                          <p className="font-black text-slate-900">HR Operations</p>
+                          <p className="text-slate-400 text-sm">Antigravity Technologies</p>
+                       </div>
                     </div>
-                    <div>
-                        <div className="w-32 h-[1px] bg-slate-200 mb-2"></div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Candidate Signature</p>
-                    </div>
-                </div>
-            </div>
-          </div>
+                 </div>
+              </div>
+           </div>
         </div>
-
       </div>
     </div>
   );

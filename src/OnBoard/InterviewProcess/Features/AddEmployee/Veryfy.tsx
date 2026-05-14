@@ -84,7 +84,7 @@ console.log("Employee Data:", empId);
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
         .vfy-page { font-family: 'DM Sans', sans-serif; padding: 24px; }
-        .vfy-heading { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .vfy-heading { font-size: 28px; font-weight: 700; color: hsl(var(--text-hsl)); }
         .vfy-card {
           border-radius: 16px; padding: 24px; border: 1.5px solid;
           background: #fff; transition: box-shadow 0.25s ease; height: 100%;
@@ -95,24 +95,24 @@ console.log("Employee Data:", empId);
           font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
         }
         .vfy-section-title {
-          font-size: 14px; font-weight: 700; color: #1e293b; margin: 15px 0 10px 0;
+          font-size: 14px; font-weight: 700; color: hsl(var(--primary-hsl)); margin: 15px 0 10px 0;
           display: flex; align-items: center; gap: 6px;
         }
         .vfy-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
         @media (min-width: 1024px) { .vfy-grid { grid-template-columns: 1fr 1fr; } .vfy-full { grid-column: span 2; } }
         .vfy-submit-btn {
-          background: #16a34a; color: #fff; padding: 14px 48px; border-radius: 12px;
+          background: hsl(var(--primary-hsl)); color: #fff; padding: 14px 48px; border-radius: 12px;
           font-size: 16px; font-weight: 700; border: none; cursor: pointer;
-          box-shadow: 0 4px 16px rgba(22,163,74,0.3); transition: all 0.2s;
+          box-shadow: 0 4px 16px hsl(var(--primary-hsl) / 0.3); transition: all 0.2s;
         }
-        .vfy-submit-btn:hover { background: #15803d; transform: translateY(-1px); }
+        .vfy-submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .vfy-badge { padding: 2px 8px; border-radius: 6px; background: #f1f5f9; font-size: 11px; }
       `}`</style>
 
       <div className="vfy-page h-full overflow-auto">
         <AnimCard delay={0}>
           <div className="flex items-center gap-3 mb-8">
-            <FaCheckCircle className="text-[26px] text-green-600" />
+            <FaCheckCircle className="text-[26px] text-primary" />
             <h1 className="vfy-heading">Final Review</h1>
           </div>
         </AnimCard>
@@ -121,8 +121,8 @@ console.log("Employee Data:", empId);
           
           {/* 1. PRIMARY DETAILS & ADDRESS */}
           <AnimCard delay={100}>
-            <div className="vfy-card" style={{ borderColor: "#c7d2fe", background: "#f8faff" }}>
-              <div className="vfy-card-head" style={{ color: "#4338ca" }}><FaUser /> Primary Profile</div>
+            <div className="vfy-card" style={{ borderColor: "hsl(var(--primary-hsl) / 0.2)", background: "hsl(var(--primary-hsl) / 0.02)" }}>
+              <div className="vfy-card-head" style={{ color: "hsl(var(--primary-hsl))" }}><FaUser /> Primary Profile</div>
               <InfoRow label="Full Name" value={employeeData.name} />
               <InfoRow label="Employee ID" value={empId || "Generating..."} />
               <InfoRow label="DOB" value={employeeData.dob} />
@@ -138,8 +138,8 @@ console.log("Employee Data:", empId);
 
           {/* 2. JOB & PAYROLL */}
           <AnimCard delay={200}>
-            <div className="vfy-card" style={{ borderColor: "#fcd34d", background: "#fffbeb" }}>
-              <div className="vfy-card-head" style={{ color: "#b45309" }}><FaBriefcase /> Job & Payroll</div>
+            <div className="vfy-card" style={{ borderColor: "hsl(var(--primary-hsl) / 0.2)", background: "hsl(var(--primary-hsl) / 0.05)" }}>
+              <div className="vfy-card-head" style={{ color: "hsl(var(--primary-hsl))" }}><FaBriefcase /> Job & Payroll</div>
               <InfoRow label="Department" value={employeeData.Department} />
               <InfoRow label="Designation" value={employeeData.designation} />
               <InfoRow label="Joining Date" value={employeeData.DateOfJoining} />
@@ -184,8 +184,8 @@ console.log("Employee Data:", empId);
 
           {/* 4. BANKING & STATUTORY */}
           <AnimCard delay={400}>
-            <div className="vfy-card" style={{ borderColor: "#d8b4fe", background: "#faf5ff" }}>
-              <div className="vfy-card-head" style={{ color: "#7c3aed" }}><FaPiggyBank /> Banking & Tax</div>
+            <div className="vfy-card" style={{ borderColor: "hsl(var(--primary-hsl) / 0.2)", background: "hsl(var(--primary-hsl) / 0.02)" }}>
+              <div className="vfy-card-head" style={{ color: "hsl(var(--primary-hsl))" }}><FaPiggyBank /> Banking & Tax</div>
               <InfoRow label="Bank Name" value={bankData.bankName} />
               <InfoRow label="IFSC Code" value={bankData.ifscCode} />
               <InfoRow label="Account Number" value="•••• •••• ••••" />

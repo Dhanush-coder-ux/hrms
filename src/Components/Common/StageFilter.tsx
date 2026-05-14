@@ -1,4 +1,5 @@
 import { Filter } from "lucide-react";
+import { badgeTheme } from "../../Themes/ComponentsThems/BadgeTheme";
 
 interface StageFilterProps {
   stages: string[];
@@ -19,21 +20,23 @@ const StageFilter = ({
   showClear = true,
   className = "mb-6"
 }: StageFilterProps) => {
+  const { pill } = badgeTheme;
+
   return (
     <div className={`flex items-center gap-2 flex-wrap ${className}`}>
       {/* ALL Button */}
       <button
         onClick={() => onStageChange("")}
-        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-[1.5px] text-xs font-bold transition-all cursor-pointer ${
+        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-[1.5px] text-xs font-black transition-all cursor-pointer ${
           selectedStage === ""
-            ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100"
-            : "bg-white border-slate-200 text-slate-500 hover:border-indigo-600 hover:text-indigo-600"
+            ? pill.active
+            : pill.inactive
         }`}
       >
         All
         <span
-          className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded-full ${
-            selectedStage === "" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-400"
+          className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+            selectedStage === "" ? pill.activeCount : pill.inactiveCount
           }`}
         >
           {totalCount}
@@ -45,16 +48,16 @@ const StageFilter = ({
         <button
           key={s}
           onClick={() => onStageChange(selectedStage === s ? "" : s)}
-          className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-[1.5px] text-xs font-bold transition-all cursor-pointer ${
+          className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-[1.5px] text-xs font-black transition-all cursor-pointer ${
             selectedStage === s
-              ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100"
-              : "bg-white border-slate-200 text-slate-500 hover:border-indigo-600 hover:text-indigo-600"
+              ? pill.active
+              : pill.inactive
           }`}
         >
           {s}
           <span
-            className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded-full ${
-              selectedStage === s ? "bg-white/20 text-white" : "bg-slate-100 text-slate-400"
+            className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+              selectedStage === s ? pill.activeCount : pill.inactiveCount
             }`}
           >
             {counts[s] || 0}

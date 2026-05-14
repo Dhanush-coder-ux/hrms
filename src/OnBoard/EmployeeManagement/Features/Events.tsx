@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import CalendarView from "../../../Components/Common/Calander/CalendarView";
 import { motion, AnimatePresence } from "framer-motion"; // <-- Added Framer Motion
 import type { EventFormData } from "../../../Types/typesEmployeeManagement";
+import { CustomTimePicker } from "../../../Components/Common/CustomTimePicker";
+import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
+import { TrendingUp } from "lucide-react";
 
 
 const API_URL = "http://localhost:3001/Events";
@@ -115,14 +118,14 @@ function UpcomingItem({
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
       onClick={onClick}
-      className="flex items-start gap-2.5 py-2.5 border-b border-gray-100 last:border-none cursor-pointer hover:bg-gray-50 rounded-lg px-1 transition-colors group"
+      className="flex items-start gap-2.5 py-2.5 border-b border-gray-100 last:border-none cursor-pointer hover:bg-primary/5 rounded-lg px-1 transition-colors group"
     >
       <div
         className="w-1 rounded-full self-stretch min-h-9 shrink-0 transition-colors"
         style={{ background: catColor(ev.category) }}
       />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-800 truncate group-hover:text-blue-600 transition-colors">
+        <p className="text-sm font-semibold text-gray-800 truncate group-hover:text-primary transition-colors">
           {ev.event_title}
         </p>
         <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
@@ -280,14 +283,18 @@ export const Events = () => {
 
   /* ── Render ── */
   return (
-    <div className="h-full overflow-auto p-4 md:p-6">
+    <div className={empMangeTheme.layout.mainContainer}>
       {/* Page header */}
-      <div className="max-w-7xl mx-auto mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+      <div className={empMangeTheme.header.wrapper}>
+        <div className="flex flex-col">
+          <div className={empMangeTheme.header.pill}>
+            <TrendingUp size={12} />
+            <span>Schedule Hub</span>
+          </div>
+          <h1 className={empMangeTheme.header.title}>
             Event Schedules
           </h1>
-          <p className="text-sm text-gray-400 mt-0.5">
+          <p className={empMangeTheme.header.subtitle}>
             {new Date().toLocaleDateString("en-IN", {
               weekday: "long",
               day: "numeric",
@@ -301,7 +308,7 @@ export const Events = () => {
             setShowAdd(true);
             setSelectedDate(null);
           }}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-95"
+          className="inline-flex items-center gap-2 px-5 h-[46px] bg-primary text-white text-sm font-bold rounded-2xl shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-95"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16">
             <path
@@ -315,9 +322,9 @@ export const Events = () => {
         </button>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-5">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
         {/* ══ LEFT SIDEBAR ══ */}
-        <aside className="flex flex-col gap-4">
+        <aside className="flex flex-col gap-6">
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3">
             <StatCard
@@ -328,7 +335,7 @@ export const Events = () => {
             <StatCard
               value={upcoming.length}
               label="Upcoming"
-              color="text-blue-600"
+              color="text-primary"
             />
             <StatCard
               value={past.length}
@@ -343,9 +350,9 @@ export const Events = () => {
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="bg-blue-600 rounded-2xl p-4 text-white shadow-md"
+                className="bg-primary rounded-2xl p-4 text-white shadow-lg shadow-primary/20"
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-2">
                   Today
                 </p>
                 <div className="flex flex-col gap-2">
@@ -382,7 +389,7 @@ export const Events = () => {
                   key={filteredUpcoming.length}
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="text-xs font-semibold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full"
+                  className="text-xs font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full"
                 >
                   {filteredUpcoming.length}
                 </motion.span>
@@ -424,10 +431,10 @@ export const Events = () => {
                   <button
                     key={cat}
                     onClick={() => setFilterCat(cat)}
-                    className={`text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-all ${
+                    className={`text-[10px] font-bold px-3 py-1.5 rounded-full border transition-all ${
                       filterCat === cat
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                        ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
+                        : "bg-white text-slate-500 border-slate-100 hover:border-primary/30 hover:text-primary"
                     }`}
                   >
                     {cat}
@@ -551,18 +558,12 @@ export const Events = () => {
                       className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
-                      Time
-                    </label>
-                    <input
-                      type="time"
+                    <CustomTimePicker
+                      label="Time"
                       name="time"
                       value={formData.time ?? ""}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
+                      onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
                     />
-                  </div>
                 </div>
 
                 <div>
