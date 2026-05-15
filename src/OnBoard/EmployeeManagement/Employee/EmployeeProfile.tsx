@@ -13,7 +13,13 @@ import {
   Building,
   GraduationCap,
   ArrowRightIcon,
-  Banknote
+  Banknote,
+  Calendar,
+  MapPin,
+  Globe,
+  ArrowLeft,
+  X,
+  TrendingUp
 } from "lucide-react";
 import { FaMapPin, FaRegBuilding } from "react-icons/fa";
 import { FormFiled } from "../../../Components/Common/FormFiled";
@@ -21,6 +27,8 @@ import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
 import { Api_URL } from "../../../APILINK";
 import { useListOptions } from "../../../Hooks/ListOption";
+import { pageTheme } from "../../../Themes/PageThems/pageConfig";
+import { getUserTheme } from "../../../Components/Common/UserAvatar";
 
 const BASE_URL = Api_URL;
 
@@ -186,24 +194,10 @@ export default function EmployeeProfile() {
       fetchOrEmpty(Work_GET_URL(id)),
     ])
       .then(([empData, eduData, depData, workData]) => {
-        // FIX: empData.Employee contains all employee fields (name, email, bankName, etc.)
-        // empData top-level has computed fields: monthly_salary, PF, EPF, EPS
         const empInfo = empData.Employee || {};
-
-        console.log("empData:", empData);
-        console.log("empInfo:", empInfo);
-        console.log("eduData:", eduData);
-        console.log("depData:", depData);
-
         setForm((prev) => ({
           ...prev,
-
-          // FIX: spread empInfo (Employee object) NOT empData
-          // This correctly loads: name, email, phone, bankName, accountNumber, etc.
           ...empInfo,
-
-          // Computed salary fields live at the top level of empData
-          // Dynamic payroll results from new calculation system
           base_salary:          empData.base_salary ?? 0,
           gross_salary:         empData.gross_salary ?? 0,
           total_earnings:       empData.total_earnings ?? 0,
@@ -250,8 +244,6 @@ export default function EmployeeProfile() {
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-
-    // Match "arrayName[index].fieldName" OR "arrayName[index].subArray[subIndex].fieldName"
     const deepMatch = name.match(/(\w+)\[(\d+)\]\.(\w+)\[(\d+)\]\.(\w+)/);
     const arrayMatch = name.match(/(\w+)\[(\d+)\]\.(\w+)/);
 
@@ -281,9 +273,7 @@ export default function EmployeeProfile() {
 
   const handleSave = async () => {
     setLoading(true);
-
     try {
-      // ── CREATE ──────────────────────────────────────────────────────────
       if (!id) {
         const res = await fetch(`${BASE_URL}/employee/Register`, {
           method: "POST",
@@ -296,127 +286,93 @@ export default function EmployeeProfile() {
         return;
       }
 
-      // ── UPDATE EMPLOYEE ─────────────────────────────────────────────────
-      console.log("EMP URL:", `${BASE_URL}/employee/EmployeeUpdate/${id}`);
       const empRes = await fetch(`${BASE_URL}/employee/EmployeeUpdate/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      console.log("EMP STATUS:", empRes.status);
       if (!empRes.ok) throw new Error(`Employee update failed (${empRes.status})`);
 
-      // ── UPSERT EDUCATION ────────────────────────────────────────────────
       if (form.education && form.education.length > 0) {
-        const hasData = form.education.some(
-          (e) => e.degree || e.institution || e.graduationYear
-        );
+        const hasData = form.education.some((e) => e.degree || e.institution || e.graduationYear);
         if (hasData) {
-          await upsertData(
-            Edu_UPDATE_URL(id),
-            Edu_CREATE_URL(id),
-            form.education.map((edu) => ({
-              degree:         edu.degree,
-              institution:    edu.institution,
-              graduationYear: edu.graduationYear || null,
-            }))
-          );
-          console.log("Education upserted ✅");
+          await upsertData(Edu_UPDATE_URL(id), Edu_CREATE_URL(id), form.education.map((edu) => ({
+            degree: edu.degree,
+            institution: edu.institution,
+            graduationYear: edu.graduationYear || null,
+          })));
         }
       }
 
-      // ── UPSERT WORK EXP ──────────────────────────────────────────────────
       if (form.WorkExp && form.WorkExp.length > 0) {
-        const hasData = form.WorkExp.some(
-          (w) => w.company_name || w.position
-        );
+        const hasData = form.WorkExp.some((w) => w.company_name || w.position);
         if (hasData) {
-          await upsertData(
-            Work_UPDATE_URL(id),
-            Work_CREATE_URL(id),
-            form.WorkExp.map((w) => ({
-              company_name: w.company_name,
-              position:     w.position,
-              FromDate:     w.FromDate || null,
-              ToDate:       w.ToDate || null,
-            }))
-          );
-          console.log("Work experience upserted ✅");
+          await upsertData(Work_UPDATE_URL(id), Work_CREATE_URL(id), form.WorkExp.map((w) => ({
+            company_name: w.company_name,
+            position: w.position,
+            FromDate: w.FromDate || null,
+            ToDate: w.ToDate || null,
+          })));
         }
       }
 
-      // ── UPSERT FAMILY ───────────────────────────────────────────────────
       if (form.Familys && form.Familys.length > 0) {
-        const hasData = form.Familys.some(
-          (d) => d.person_name || d.relationship_type || d.contact
-        );
+        const hasData = form.Familys.some((d) => d.person_name || d.relationship_type || d.contact);
         if (hasData) {
-          await upsertData(
-            FamilyS_UPDATE_URL(id),
-            FamilyS_CREATE_URL(id),
-            form.Familys.map((dep) => ({
-              person_name:       dep.person_name,
-              relationship_type: dep.relationship_type,
-              contact:           dep.contact,
-              person_dob:        dep.person_dob || null,
-              nominees:          dep.nominees.filter(n => n.nominee_name || n.nominee_aadhar)
-            }))
-          );
-          console.log("Family upserted ✅");
+          await upsertData(FamilyS_UPDATE_URL(id), FamilyS_CREATE_URL(id), form.Familys.map((dep) => ({
+            person_name: dep.person_name,
+            relationship_type: dep.relationship_type,
+            contact: dep.contact,
+            person_dob: dep.person_dob || null,
+            nominees: dep.nominees.filter(n => n.nominee_name || n.nominee_aadhar)
+          })));
         }
       }
 
       setIsEditing(false);
       alert("✅ Employee updated successfully!");
     } catch (error: any) {
-      console.error("🔥 Save error:", error);
+      console.error("Save error:", error);
       alert(`❌ Error: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  // ─── Loading ───────────────────────────────────────────────────────────────
+  if (fetching) return (
+    <div className="flex h-screen items-center justify-center bg-white">
+      <Loader2 className="animate-spin text-primary" size={48} />
+    </div>
+  );
 
-  if (fetching)
-    return (
-      <div className="flex h-full items-center justify-center bg-white">
-        <Loader2 className="animate-spin text-indigo-600" size={48} />
-      </div>
-    );
-
-  // ─── Render ────────────────────────────────────────────────────────────────
+  const theme = getUserTheme(form.name || "");
+  const initials = form.name?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
   return (
-    <div className="h-full overflow-y-auto custom-scrollbar pb-20">
-      {/* Top Nav */}
-      <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 hover:bg-primary/5 rounded-xl transition-colors text-primary"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
-            {!id ? "New Hire" : isEditing ? "Edit Profile" : "Employee Details"}
-          </h1>
-        </div>
+    <div className={pageTheme.layout.mainContainer}>
+      {/* Top Navigation & Actions */}
+      <div className="flex items-center justify-between mb-10">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="flex items-center gap-2 text-slate-400 hover:text-primary transition-colors text-[10px] font-black uppercase tracking-[0.2em]"
+        >
+          <ArrowLeft size={14} /> Back to Directory
+        </button>
 
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           {id && !isEditing ? (
             <button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-50 transition-all shadow-sm"
+              className="h-12 px-8 rounded-2xl border border-slate-200 bg-white text-slate-700 font-bold text-[11px] uppercase tracking-widest hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
             >
-              <Edit3 size={18} /> Edit Profile
+              <Edit3 size={16} className="inline mr-2" /> Edit Profile
             </button>
           ) : (
-            <>
+            <div className="flex items-center gap-3">
               {id && (
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="px-6 py-2.5 text-slate-600 font-medium hover:text-slate-800"
+                  className="px-6 py-2.5 text-slate-400 font-bold text-[11px] uppercase tracking-widest hover:text-slate-600 transition-colors"
                 >
                   Cancel
                 </button>
@@ -424,656 +380,317 @@ export default function EmployeeProfile() {
               <button
                 onClick={handleSave}
                 disabled={loading}
-                className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/20 transition-all disabled:opacity-70 active:scale-95"
+                className="h-12 px-8 rounded-2xl bg-primary text-white font-black text-[11px] uppercase tracking-widest hover:shadow-2xl transition-all active:scale-95 shadow-lg shadow-primary/20 flex items-center gap-2"
               >
-                {loading ? <Loader2 className="animate-spin" size={18} /> : <Check size={18} />}
+                {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />}
                 {id ? "Update Employee" : "Save Record"}
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto mt-8 px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-        {/* ── Profile Card (left column) ─────────────────────────────────── */}
-        <div className="lg:col-span-1 gap-4 space-y-6">
-          <div className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 text-center">
-            <div className="w-24 h-24 bg-primary/5 text-primary rounded-[20px] flex items-center justify-center mx-auto mb-5 border-4 border-white shadow-md">
-              <User size={40} />
+      {/* Profile Header Card */}
+      <div className="mb-10">
+        <div className="flex items-center justify-between gap-6 flex-wrap bg-white p-8 rounded-[40px] shadow-xl shadow-slate-200/40 border border-slate-100/50">
+          <div className="flex items-center gap-8">
+            <div className={`w-24 h-24 rounded-[32px] flex items-center justify-center text-2xl font-extrabold flex-shrink-0 tracking-tighter border-4 border-white shadow-lg ${theme.bg} text-white`}>
+              {initials || "E"}
             </div>
-
-            <h2 className="text-lg font-bold mt-1 mb-1 text-slate-800">
-              {form.name || "New Employee"}
-            </h2>
-
-            <p className="text-sm text-slate-500 mb-1">
-              {form.designation || "No Designation Set"}
-            </p>
-            <p className="text-sm text-slate-500 mb-3">
-              {form.emp_type || ""}
-            </p>
-
-            <div className="mb-6">
-              <span
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                  form.Status === "Active"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-500"
-                }`}
-              >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    form.Status === "Active" ? "bg-green-500" : "bg-red-400"
-                  }`}
-                />
-                {form.Status || "—"}
-              </span>
-            </div>
-
-            <div className="space-y-4 text-left">
-              {isEditing ? (
-                <>
-                  <Selection
-                    label="Employment Status"
-                    name="Status"
-                    value={form.Status}
-                    onChange={handleChange}
-                    options={[
-                      { label: "Active",   value: "Active" },
-                      { label: "Inactive", value: "Inactive" },
-                    ]}
-                  />
-                  <CustomDatePicker
-                    Lable="Joining Date"
-                    name="DateOfJoining"
-                    value={form.DateOfJoining}
-                    onChange={handleChange}
-                  />
-                  <Selection
-                    label="Payroll Provider"
-                    name="provider"
-                    value={form.provider}
-                    options={providerOptions}
-                    onChange={handleChange}
-                    placeholder="Select Provider"
-                  />
-                </>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500 font-medium">Joined</span>
-                    <span className="font-semibold text-slate-700">
-                      {form.DateOfJoining || "—"}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Leave & Attendance */}
-              <div className="flex flex-col justify-between text-sm mt-3">
-                <h1 className="text-primary font-bold mt-1 border-b border-slate-100 pb-2.5 uppercase text-[10px] tracking-widest">
-                  Leave and attendance
-                </h1>
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Leave History</span>
-                  <span className="text-primary font-bold inline-flex items-center gap-1 cursor-pointer hover:translate-x-1 transition-transform text-[12px]">
-                    See details
-                    <ArrowRightIcon size={14} />
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Attendance</span>
-                  <span className="text-primary font-bold inline-flex items-center gap-1 cursor-pointer hover:translate-x-1 transition-transform text-[12px]">
-                    See details
-                    <ArrowRightIcon size={14} />
-                  </span>
-                </div>
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-primary/10 ${form.Status === "Active" ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"}`}>
+                  {form.Status || "Status Pending"}
+                </span>
+                <span className="text-slate-300">|</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                  Emp ID: {id || "NEW"}
+                </span>
               </div>
-
-              {/* Payroll Details */}
-              <div className="flex flex-col justify-between text-sm mt-8">
-                <h1 className="text-primary font-bold mt-1 border-b border-slate-100 pb-2.5 uppercase text-[10px] tracking-widest">
-                  PayRoll Details
-                </h1>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Payroll Provider</span>
-                  <span className="font-bold text-slate-700">
-                    {providerOptions.find(p => p.value === form.provider)?.label || form.provider || "—"}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">{form.payType || "Pay Type"}</span>
-                  <span className="font-bold text-slate-700">
-                    {form.currency || "—"}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Annual Salary</span>
-                  <span className="font-bold text-slate-700">
-                    {form.annualSalary || "—"} {form.annualSalary ? (form.currency || "") : ""}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Pay Frequency</span>
-                  <span className="font-bold text-slate-700">
-                    {form.payFrequency || "—"}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Monthly Base</span>
-                  <span className="font-bold text-slate-700">
-                    {form.base_salary || "—"} {form.currency || ""}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Gross Salary</span>
-                  <span className="font-bold text-primary">
-                    {form.gross_salary || "—"} {form.currency || ""}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-slate-500 font-medium">Net Salary</span>
-                  <span className="font-black text-emerald-600 text-base">
-                    {form.net_salary || "—"} {form.currency || ""}
-                  </span>
-                </div>
+              <h1 className="text-4xl font-black text-slate-800 tracking-tight mb-1 uppercase">
+                {form.name || "New Hire"}
+              </h1>
+              <div className="flex items-center gap-4 text-slate-500 font-medium text-sm">
+                <p className="flex items-center gap-1.5"><Briefcase size={16} className="text-primary/60" /> {form.designation || "No Designation Set"}</p>
+                <span className="w-1 h-1 rounded-full bg-slate-300" />
+                <p className="flex items-center gap-1.5"><Building2 size={16} className="text-primary/60" /> {form.Department || "Unassigned"}</p>
               </div>
             </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+             <div className="text-right pr-4 border-r border-slate-100">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Monthly Net</p>
+                <p className="text-2xl font-black text-emerald-600 leading-none">
+                  {form.net_salary ? `${form.net_salary.toLocaleString()} ${form.currency || "INR"}` : "—"}
+                </p>
+             </div>
+             <div className="w-14 h-14 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all cursor-pointer">
+                <TrendingUp size={20} />
+             </div>
           </div>
         </div>
+      </div>
 
-        {/* ── Right Column ───────────────────────────────────────────────── */}
-        <div className="lg:col-span-2 space-y-6">
-
-          {/* Personal & Work Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <User size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Personal & Work Details</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* Left Column */}
+        <div className="lg:col-span-4 space-y-8">
+          <div className={pageTheme.section.card}>
+            <div className={pageTheme.section.header}>
+              <div className={pageTheme.section.title}>
+                <span className={pageTheme.section.titleDot} />
+                Employment Summary
+              </div>
             </div>
-            <div className="p-6">
+            <div className="p-8 space-y-6">
               {isEditing ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormFiled Lable="First Name"   name="f_name"      value={form.f_name}      onChange={handleChange} in_PlaceHolder="Enter first name" />
-                  <FormFiled Lable="Last Name"    name="l_name"      value={form.l_name}      onChange={handleChange} in_PlaceHolder="Enter last name" />
-                  <FormFiled Lable="Email"        name="email"       value={form.email}       onChange={handleChange} in_PlaceHolder="Enter email address" />
-                  <FormFiled Lable="Phone"        name="phone"       value={form.phone}       onChange={handleChange} in_PlaceHolder="Enter phone number" />
-                  <Selection
-                    label="Gender"
-                    name="gender"
-                    value={form.gender}
-                    onChange={handleChange}
-                    options={[
-                      { label: "Male",   value: "Male" },
-                      { label: "Female", value: "Female" },
-                      { label: "Other",  value: "Other" },
-                    ]}
-                  />
-                  <CustomDatePicker
-                    Lable="Date of Birth"
-                    name="dob"
-                    value={form.dob}
-                    onChange={handleChange}
-                  />
-                  <FormFiled Lable="Designation" name="designation" value={form.designation} onChange={handleChange} in_PlaceHolder="Enter designation" />
-                  <Selection
-                    label="Department"
-                    name="Department"
-                    value={form.Department}
-                    onChange={handleChange}
-                    options={departmentOptions}
-                  />
+                <div className="space-y-4">
+                  <Selection label="Status" name="Status" value={form.Status} onChange={handleChange} options={[{ label: "Active", value: "Active" }, { label: "Inactive", value: "Inactive" }]} />
+                  <CustomDatePicker Lable="Joining Date" name="DateOfJoining" value={form.DateOfJoining} onChange={handleChange} />
+                  <Selection label="Payroll Provider" name="provider" value={form.provider} options={providerOptions} onChange={handleChange} />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6">
-                  <DetailItem icon={<User size={16} />}      label="Full Name"   value={form.name} />
-                  <DetailItem icon={<User size={16} />}      label="Gender"      value={form.gender} />
-                  <DetailItem icon={<User size={16} />}      label="Date of Birth" value={form.dob} />
-                  <DetailItem icon={<Mail size={16} />}      label="Email"       value={form.email} />
-                  <DetailItem icon={<Phone size={16} />}     label="Phone"       value={form.phone} />
-                  <DetailItem icon={<Briefcase size={16} />} label="Designation" value={form.designation} />
-                  <DetailItem icon={<Building2 size={16} />} label="Department"  value={form.Department} />
+                <div className="space-y-6">
+                  <SummaryItem label="Joined On" value={form.DateOfJoining} icon={<Calendar size={18} />} color="blue" />
+                  <SummaryItem label="Provider" value={providerOptions.find(p => p.value === form.provider)?.label || form.provider} icon={<Globe size={18} />} color="violet" />
+                  <SummaryItem label="Emp Type" value={form.emp_type} icon={<User size={18} />} color="emerald" />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Address */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <Building size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Address Details</h3>
+          {!isEditing && (
+            <div className={pageTheme.section.card}>
+              <div className={pageTheme.section.header}>
+                <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Related Actions</div>
+              </div>
+              <div className="p-4 space-y-2">
+                <QuickAction icon={<ArrowRightIcon size={18} />} label="Leave History" color="primary" />
+                <QuickAction icon={<ArrowRightIcon size={18} />} label="Attendance Log" color="violet" />
+              </div>
             </div>
-            <div className="p-6">
+          )}
+        </div>
+
+        {/* Right Column */}
+        <div className="lg:col-span-8 space-y-8 pb-20">
+          <div className={pageTheme.section.card}>
+            <div className={pageTheme.section.header}>
+              <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Personal & Work Details</div>
+            </div>
+            <div className="p-8">
               {isEditing ? (
-                <div className="space-y-8">
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Current Address</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormFiled Lable="Street"   name="Street"   value={form.Street}   onChange={handleChange} in_PlaceHolder="" />
-                      <FormFiled Lable="City"     name="City"     value={form.City}     onChange={handleChange} in_PlaceHolder="" />
-                      <FormFiled Lable="State"    name="State"    value={form.State}    onChange={handleChange} in_PlaceHolder="" />
-                      <FormFiled Lable="Pin Code" name="Pin_Code" value={form.Pin_Code} onChange={handleChange} in_PlaceHolder="" />
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t border-slate-100">
-                    <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Permanent Address</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormFiled Lable="Street"   name="p_Street"   value={form.p_Street}   onChange={handleChange} in_PlaceHolder="" />
-                      <FormFiled Lable="City"     name="p_City"     value={form.p_City}     onChange={handleChange} in_PlaceHolder="" />
-                      <FormFiled Lable="State"    name="p_State"    value={form.p_State}    onChange={handleChange} in_PlaceHolder="" />
-                      <FormFiled Lable="Pin Code" name="p_Pin_Code" value={form.p_Pin_Code} onChange={handleChange} in_PlaceHolder="" />
-                    </div>
-                  </div>
-                </div>
-              ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase">Current</h4>
-                    <DetailItem icon={<Building size={16} />}  label="Street"   value={form.Street} />
-                    <DetailItem icon={<Building2 size={16} />} label="City"     value={form.City} />
-                    <DetailItem icon={<Building2 size={16} />} label="State"    value={form.State} />
-                    <DetailItem icon={<FaMapPin size={16} />}  label="Pin Code" value={form.Pin_Code} />
-                  </div>
-                  <div className="space-y-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase">Permanent</h4>
-                    <DetailItem icon={<Building size={16} />}  label="Street"   value={form.p_Street} />
-                    <DetailItem icon={<Building2 size={16} />} label="City"     value={form.p_City} />
-                    <DetailItem icon={<Building2 size={16} />} label="State"    value={form.p_State} />
-                    <DetailItem icon={<FaMapPin size={16} />}  label="Pin Code" value={form.p_Pin_Code} />
-                  </div>
+                  <FormFiled Lable="First Name" name="f_name" value={form.f_name} onChange={handleChange} in_PlaceHolder="Enter first name" />
+                  <FormFiled Lable="Last Name" name="l_name" value={form.l_name} onChange={handleChange} in_PlaceHolder="Enter last name" />
+                  <FormFiled Lable="Email" name="email" value={form.email} onChange={handleChange} in_PlaceHolder="Enter email address" />
+                  <FormFiled Lable="Phone" name="phone" value={form.phone} onChange={handleChange} in_PlaceHolder="Enter phone number" />
+                  <Selection label="Gender" name="gender" value={form.gender} onChange={handleChange} options={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }]} />
+                  <CustomDatePicker Lable="DOB" name="dob" value={form.dob} onChange={handleChange} />
+                  <FormFiled Lable="Designation" name="designation" value={form.designation} onChange={handleChange} in_PlaceHolder="Enter designation" />
+                  <Selection label="Department" name="Department" value={form.Department} onChange={handleChange} options={departmentOptions} />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                  <DetailItem label="Full Name" value={form.name} icon={<User size={18} />} />
+                  <DetailItem label="Email" value={form.email} icon={<Mail size={18} />} />
+                  <DetailItem label="Phone" value={form.phone} icon={<Phone size={18} />} />
+                  <DetailItem label="Designation" value={form.designation} icon={<Briefcase size={18} />} />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Education */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <GraduationCap size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Education</h3>
-            </div>
-            <div className="p-6">
-              {isEditing ? (
-                <div className="flex flex-col gap-8">
-                   {form.education.map((edu, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0">
-                      <FormFiled Lable="Degree"             name={`education[${index}].degree`}          value={edu.degree}          onChange={handleChange} in_PlaceHolder="Enter degree" />
-                      <FormFiled Lable="Institution"        name={`education[${index}].institution`}     value={edu.institution}     onChange={handleChange} in_PlaceHolder="Enter institution" />
-                      <FormFiled Lable="Year of Graduation" name={`education[${index}].graduationYear`} value={edu.graduationYear} onChange={handleChange} in_PlaceHolder="Enter year" />
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm({
-                        ...form,
-                        education: [
-                          ...form.education,
-                          { degree: "", institution: "", graduationYear: "" },
-                        ],
-                      })
-                    }
-                    className="w-fit text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
-                  >
-                    + Add Education
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-6">
-                  {form.education.map((edu, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0"
-                    >
-                      <DetailItem label="DEGREE"      value={edu.degree} />
-                      <DetailItem label="INSTITUTION" value={edu.institution} />
-                      <DetailItem label="YEAR"        value={edu.graduationYear} />
-                    </div>
-                  ))}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            <InfoCard title="Education" icon={<GraduationCap size={20} />} data={form.education} isEditing={isEditing} 
+              onAdd={() => setForm({ ...form, education: [...form.education, { degree: "", institution: "", graduationYear: "" }] })}
+              renderItem={(edu: any) => (
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-violet-50 text-violet-500 flex items-center justify-center flex-shrink-0"><GraduationCap size={20} /></div>
+                  <div><p className="text-sm font-black text-slate-800">{edu.degree}</p><p className="text-[11px] font-bold text-slate-400 uppercase">{edu.institution} • {edu.graduationYear}</p></div>
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* Work Experience */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <Briefcase size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Work Experience</h3>
-            </div>
-            <div className="p-6">
-              {isEditing ? (
-                <div className="flex flex-col gap-8">
-                  {form.WorkExp.map((work, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0">
-                      <FormFiled Lable="Company"    name={`WorkExp[${index}].company_name`} value={work.company_name} onChange={handleChange} in_PlaceHolder="Company" />
-                      <FormFiled Lable="Position"   name={`WorkExp[${index}].position`}     value={work.position}     onChange={handleChange} in_PlaceHolder="Position" />
-                      <CustomDatePicker Lable="From" name={`WorkExp[${index}].FromDate`}     value={work.FromDate}     onChange={handleChange} />
-                      <CustomDatePicker Lable="To"   name={`WorkExp[${index}].ToDate`}       value={work.ToDate}       onChange={handleChange} />
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm({
-                        ...form,
-                        WorkExp: [
-                          ...form.WorkExp,
-                          { company_name: "", position: "", FromDate: "", ToDate: "" },
-                        ],
-                      })
-                    }
-                    className="w-fit text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
-                  >
-                    + Add Experience
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-6">
-                  {form.WorkExp.map((work, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-1 md:grid-cols-4 gap-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0"
-                    >
-                      <DetailItem label="COMPANY"  value={work.company_name} />
-                      <DetailItem label="POSITION" value={work.position} />
-                      <DetailItem label="FROM"     value={work.FromDate} />
-                      <DetailItem label="TO"       value={work.ToDate} />
-                    </div>
-                  ))}
+            />
+            <InfoCard title="Experience" icon={<Briefcase size={20} />} data={form.WorkExp} isEditing={isEditing}
+              onAdd={() => setForm({ ...form, WorkExp: [...form.WorkExp, { company_name: "", position: "", FromDate: "", ToDate: "" }] })}
+              renderItem={(work: any) => (
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center flex-shrink-0"><Briefcase size={20} /></div>
+                  <div><p className="text-sm font-black text-slate-800">{work.position}</p><p className="text-[11px] font-bold text-slate-400 uppercase">{work.company_name}</p></div>
                 </div>
               )}
-            </div>
+            />
           </div>
 
-          {/* Familys */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <User size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Family Details</h3>
+          {/* Address Details */}
+          <div className={pageTheme.section.card}>
+            <div className={pageTheme.section.header}>
+              <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Address Details</div>
             </div>
-            <div className="p-6">
+            <div className="p-8">
               {isEditing ? (
-                <div className="space-y-10">
-                  {form.Familys.map((dep, index) => (
-                    <div key={index} className="p-6 bg-slate-50 rounded-xl border border-slate-100">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <FormFiled Lable="Name"         name={`Familys[${index}].person_name`}       value={dep.person_name}       onChange={handleChange} in_PlaceHolder="Name" />
-                        <FormFiled Lable="Relationship" name={`Familys[${index}].relationship_type`} value={dep.relationship_type} onChange={handleChange} in_PlaceHolder="Relationship" />
-                        <FormFiled Lable="Contact"      name={`Familys[${index}].contact`}           value={dep.contact}           onChange={handleChange} in_PlaceHolder="Contact" />
-                        <CustomDatePicker Lable="DOB"   name={`Familys[${index}].person_dob`}        value={dep.person_dob}        onChange={handleChange} />
-                      </div>
-
-                      {/* Nominees nested under each family member */}
-                      <div className="ml-4 pl-4 border-l-2 border-indigo-100">
-                        <h4 className="text-xs font-bold text-indigo-600 uppercase mb-4">Nominees for {dep.person_name || "this member"}</h4>
-                        {dep.nominees.map((nom, nIdx) => (
-                          <div key={nIdx} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 last:mb-0">
-                            <FormFiled Lable="Nominee Name"   name={`Familys[${index}].nominees[${nIdx}].nominee_name`}   value={nom.nominee_name}   onChange={handleChange} in_PlaceHolder="Nominee Name" />
-                            <FormFiled Lable="Nominee Aadhar" name={`Familys[${index}].nominees[${nIdx}].nominee_aadhar`} value={nom.nominee_aadhar} onChange={handleChange} in_PlaceHolder="Aadhar Number" />
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = [...form.Familys];
-                            updated[index].nominees.push({ nominee_name: "", nominee_aadhar: "" });
-                            setForm({ ...form, Familys: updated });
-                          }}
-                          className="text-xs font-bold text-primary hover:opacity-80 transition-opacity"
-                        >
-                          + Add Nominee
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm({
-                        ...form,
-                        Familys: [
-                          ...form.Familys,
-                          { person_name: "", relationship_type: "", contact: "", person_dob: "", nominees: [{ nominee_name: "", nominee_aadhar: "" }] },
-                        ],
-                      })
-                    }
-                    className="px-4 py-2 bg-primary/5 text-primary rounded-xl font-bold hover:bg-primary/10 transition-colors"
-                  >
-                    + Add Family Member
-                  </button>
-                </div>
-              ) : (
                 <div className="space-y-8">
-                  {form.Familys.map((dep, index) => (
-                    <div key={index} className="pb-8 border-b border-slate-100 last:border-0 last:pb-0">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <DetailItem label="NAME"          value={dep.person_name} />
-                        <DetailItem label="RELATIONSHIP"  value={dep.relationship_type} />
-                        <DetailItem label="CONTACT"       value={dep.contact} />
-                        <DetailItem label="DATE OF BIRTH" value={dep.person_dob} />
-                      </div>
-                      
-                      {dep.nominees && dep.nominees.length > 0 && dep.nominees.some(n => n.nominee_name) && (
-                        <div className="ml-6 p-4 bg-indigo-50/50 rounded-lg">
-                          <h5 className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-3">NOMINEES</h5>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {dep.nominees.map((nom, nIdx) => (
-                              nom.nominee_name && (
-                                <div key={nIdx} className="flex gap-6">
-                                  <div className="text-sm font-semibold text-slate-700">{nom.nominee_name}</div>
-                                  <div className="text-sm text-slate-500">{nom.nominee_aadhar}</div>
-                                </div>
-                              )
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <FormFiled Lable="Current Street" name="Street" value={form.Street} onChange={handleChange} in_PlaceHolder="Enter current street" />
+                    <FormFiled Lable="Current City" name="City" value={form.City} onChange={handleChange} in_PlaceHolder="Enter current city" />
+                    <FormFiled Lable="Permanent Street" name="p_Street" value={form.p_Street} onChange={handleChange} in_PlaceHolder="Enter permanent street" />
+                    <FormFiled Lable="Permanent City" name="p_City" value={form.p_City} onChange={handleChange} in_PlaceHolder="Enter permanent city" />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="space-y-4">
+                    <p className="text-[10px] font-black text-primary uppercase tracking-widest">Current Address</p>
+                    <DetailItem label="Street" value={form.Street} icon={<MapPin size={18} />} />
+                    <DetailItem label="City" value={form.City} icon={<Building size={18} />} />
+                  </div>
+                  <div className="space-y-4">
+                    <p className="text-[10px] font-black text-violet-500 uppercase tracking-widest">Permanent Address</p>
+                    <DetailItem label="Street" value={form.p_Street} icon={<MapPin size={18} />} />
+                    <DetailItem label="City" value={form.p_City} icon={<Building size={18} />} />
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
           {/* Insurance & PF */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <FaRegBuilding size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Insurance & Provident Fund</h3>
+          <div className={pageTheme.section.card}>
+            <div className={pageTheme.section.header}>
+              <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Insurance & PF</div>
             </div>
-            <div className="p-6">
+            <div className="p-8">
               {isEditing ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormFiled Lable="UAN Number"     name="uan_number"    value={form.uan_number}    onChange={handleChange} in_PlaceHolder="12-digit UAN" />
-                  <FormFiled Lable="PF Member ID"   name="pf_id"         value={form.pf_id}         onChange={handleChange} in_PlaceHolder="PF ID" />
-                  <FormFiled Lable="ESI Number"     name="esi_no"        value={form.esi_no}        onChange={handleChange} in_PlaceHolder="ESI Number" />
-                  <FormFiled Lable="Name in ESI"    name="esi_name"      value={form.esi_name}      onChange={handleChange} in_PlaceHolder="Name as per ESI" />
-                  <FormFiled Lable="Insurance No"   name="insurance_no"  value={form.insurance_no}  onChange={handleChange} in_PlaceHolder="Policy Number" />
-                  <FormFiled Lable="Aadhar Number"  name="aadhar_no"     value={form.aadhar_no}     onChange={handleChange} in_PlaceHolder="Aadhar for PF" />
-                  <Selection
-                    label="Insurance Provider"
-                    name="insurance_provider"
-                    value={form.insurance_provider}
-                    onChange={handleChange}
-                    options={[
-                      { label: "Tata",     value: "Tata" },
-                      { label: "MuthuFIN", value: "MuthuFIN" },
-                      { label: "Bajaj",    value: "Bajaj" },
-                    ]}
-                  />
-                  <FormFiled Lable="ESI Application Status" name="apply_esi" value={form.apply_esi} onChange={handleChange} in_PlaceHolder="" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <FormFiled Lable="UAN Number" name="uan_number" value={form.uan_number} onChange={handleChange} in_PlaceHolder="Enter UAN" />
+                  <FormFiled Lable="PF Member ID" name="pf_id" value={form.pf_id} onChange={handleChange} in_PlaceHolder="Enter PF Member ID" />
+                  <FormFiled Lable="ESI Number" name="esi_no" value={form.esi_no} onChange={handleChange} in_PlaceHolder="Enter ESI Number" />
+                  <FormFiled Lable="Insurance No" name="insurance_no" value={form.insurance_no} onChange={handleChange} in_PlaceHolder="Enter Insurance No" />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6">
-                  <DetailItem icon={<Check size={16} />} label="UAN Number"     value={form.uan_number} />
-                  <DetailItem icon={<Check size={16} />} label="PF Member ID"   value={form.pf_id} />
-                  <DetailItem icon={<Check size={16} />} label="ESI Number"     value={form.esi_no} />
-                  <DetailItem icon={<Check size={16} />} label="Name in ESI"    value={form.esi_name} />
-                  <DetailItem icon={<Check size={16} />} label="Policy Number"  value={form.insurance_no} />
-                  <DetailItem icon={<Check size={16} />} label="Aadhar (PF)"    value={form.aadhar_no} />
-                  <DetailItem icon={<Building size={16} />} label="Provider"       value={form.insurance_provider} />
-                  <DetailItem icon={<Check size={16} />} label="ESI Apply Status" value={form.apply_esi} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8">
+                  <DetailItem label="UAN Number" value={form.uan_number} icon={<Check size={18} />} />
+                  <DetailItem label="PF Member ID" value={form.pf_id} icon={<Check size={18} />} />
+                  <DetailItem label="ESI Number" value={form.esi_no} icon={<Check size={18} />} />
+                  <DetailItem label="Insurance No" value={form.insurance_no} icon={<Check size={18} />} />
                 </div>
               )}
             </div>
           </div>
 
           {/* Account Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center gap-2">
-              <Banknote size={18} className="text-primary" />
-              <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Account Details</h3>
+          <div className={pageTheme.section.card}>
+            <div className={pageTheme.section.header}>
+              <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Account Details</div>
             </div>
-            <div className="p-6">
+            <div className="p-8">
               {isEditing ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormFiled Lable="Bank Name"      name="bankName"      value={form.bankName}      onChange={handleChange} in_PlaceHolder="Bank Name" />
-                  <FormFiled Lable="Account Number" name="accountNumber" value={form.accountNumber} onChange={handleChange} in_PlaceHolder="Account Number" />
-                  <FormFiled Lable="IFSC Code"      name="ifscCode"      value={form.ifscCode}      onChange={handleChange} in_PlaceHolder="IFSC Code" />
-                  <FormFiled Lable="PAN Number"     name="panNumber"     value={form.panNumber}     onChange={handleChange} in_PlaceHolder="PAN Number" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <FormFiled Lable="Bank Name" name="bankName" value={form.bankName} onChange={handleChange} in_PlaceHolder="Enter bank name" />
+                  <FormFiled Lable="Account Number" name="accountNumber" value={form.accountNumber} onChange={handleChange} in_PlaceHolder="Enter account number" />
+                  <FormFiled Lable="IFSC Code" name="ifscCode" value={form.ifscCode} onChange={handleChange} in_PlaceHolder="Enter IFSC code" />
+                  <FormFiled Lable="PAN Number" name="panNumber" value={form.panNumber} onChange={handleChange} in_PlaceHolder="Enter PAN number" />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6">
-                  <DetailItem icon={<FaRegBuilding size={16} />} label="Bank Name"      value={form.bankName} />
-                  <DetailItem icon={<Banknote size={16} />}      label="Account Number" value={form.accountNumber} />
-                  <DetailItem icon={<Phone size={16} />}         label="IFSC Code"      value={form.ifscCode} />
-                  <DetailItem icon={<Briefcase size={16} />}     label="PAN Number"     value={form.panNumber} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8">
+                  <DetailItem label="Bank Name" value={form.bankName} icon={<FaRegBuilding size={18} />} />
+                  <DetailItem label="Account Number" value={form.accountNumber} icon={<Banknote size={18} />} />
+                  <DetailItem label="IFSC Code" value={form.ifscCode} icon={<Phone size={18} />} />
+                  <DetailItem label="PAN Number" value={form.panNumber} icon={<Briefcase size={18} />} />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Payroll Breakdown */}
           {!isEditing && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-              <div className="px-6 py-4 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Banknote size={18} className="text-primary" />
-                  <h3 className="font-bold text-slate-700 uppercase text-[12px] tracking-widest">Detailed Payroll Breakdown</h3>
-                </div>
-                <div className="text-[10px] font-bold text-primary/50 uppercase tracking-widest">Dynamic Components</div>
+            <div className={pageTheme.section.card}>
+              <div className={pageTheme.section.header}>
+                <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Payroll Breakdown</div>
               </div>
-              <div className="p-6 space-y-8">
-                {/* Earnings Table */}
-                <div>
-                  <h4 className="text-sm font-bold text-green-600 mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                    Earnings (Credits)
-                  </h4>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
-                      <thead className="text-xs text-slate-500 uppercase bg-slate-50">
-                        <tr>
-                          <th className="px-4 py-2 font-semibold">Component</th>
-                          <th className="px-4 py-2 font-semibold">Type</th>
-                          <th className="px-4 py-2 font-semibold">Value</th>
-                          <th className="px-4 py-2 font-semibold text-right">Calculated Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {form.earnings_breakdown.map((item: any, idx: number) => (
-                          <tr key={idx} className="hover:bg-slate-50/50">
-                            <td className="px-4 py-3 font-medium text-slate-700">{item.name}</td>
-                            <td className="px-4 py-3 text-slate-500 italic">{item.type}</td>
-                            <td className="px-4 py-3 text-slate-600">
-                              {item.type === "percentage" ? `${item.value}%` : `${item.value} ${form.currency}`}
-                            </td>
-                            <td className="px-4 py-3 text-right font-bold text-slate-800">
-                              {item.amount.toLocaleString()} {form.currency}
-                            </td>
-                          </tr>
-                        ))}
-                        {form.earnings_breakdown.length === 0 && (
-                          <tr><td colSpan={4} className="px-4 py-4 text-center text-slate-400 italic">No earnings configured</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="p-8 space-y-10">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                  <BreakdownSection title="Earnings" data={form.earnings_breakdown} color="emerald" currency={form.currency} />
+                  <BreakdownSection title="Deductions" data={form.deductions_breakdown} color="rose" currency={form.currency} isDeduction />
                 </div>
-
-                {/* Deductions Table */}
-                <div>
-                  <h4 className="text-sm font-bold text-red-500 mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                    Deductions (Debits)
-                  </h4>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
-                      <thead className="text-xs text-slate-500 uppercase bg-slate-50">
-                        <tr>
-                          <th className="px-4 py-2 font-semibold">Component</th>
-                          <th className="px-4 py-2 font-semibold">Type</th>
-                          <th className="px-4 py-2 font-semibold">Value</th>
-                          <th className="px-4 py-2 font-semibold text-right">Calculated Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {form.deductions_breakdown.map((item: any, idx: number) => (
-                          <tr key={idx} className="hover:bg-slate-50/50">
-                            <td className="px-4 py-3 font-medium text-slate-700">{item.name}</td>
-                            <td className="px-4 py-3 text-slate-500 italic">{item.type}</td>
-                            <td className="px-4 py-3 text-slate-600">
-                              {item.type === "percentage" ? `${item.value}%` : `${item.value} ${form.currency}`}
-                            </td>
-                            <td className="px-4 py-3 text-right font-bold text-red-600">
-                              - {item.amount.toLocaleString()} {form.currency}
-                            </td>
-                          </tr>
-                        ))}
-                        {form.deductions_breakdown.length === 0 && (
-                          <tr><td colSpan={4} className="px-4 py-4 text-center text-slate-400 italic">No deductions configured</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Summary Row */}
-                <div className="pt-6 border-t border-slate-100 flex flex-col items-end gap-2">
-                   <div className="flex justify-between w-full max-w-xs text-sm">
-                      <span className="text-slate-500">Total Earnings:</span>
-                      <span className="font-bold text-slate-800">{form.total_earnings.toLocaleString()} {form.currency}</span>
-                   </div>
-                   <div className="flex justify-between w-full max-w-xs text-sm">
-                      <span className="text-slate-500">Total Deductions:</span>
-                      <span className="font-bold text-red-500">- {form.total_deductions.toLocaleString()} {form.currency}</span>
-                   </div>
-                   <div className="flex justify-between w-full max-w-xs text-lg mt-2 pt-2 border-t border-slate-200">
-                      <span className="font-bold text-slate-900">Net Pay:</span>
-                      <span className="font-black text-green-600 underline decoration-green-200 underline-offset-4">
-                        {form.net_salary.toLocaleString()} {form.currency}
-                      </span>
+                <div className="pt-8 border-t border-slate-100 flex flex-col items-end gap-3">
+                   <div className="flex items-center justify-between w-72 h-16 px-6 rounded-[24px] bg-slate-900 text-white">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Net Salary</span>
+                      <span className="text-xl font-black">{form.net_salary.toLocaleString()} {form.currency}</span>
                    </div>
                 </div>
               </div>
             </div>
           )}
-
         </div>
       </div>
     </div>
   );
 }
 
-// ─── DetailItem ─────────────────────────────────────────────────────────────
+// ─── Sub-Components ─────────────────────────────────────────────────────────
 
-function DetailItem({ icon, label, value }: any) {
+function SummaryItem({ label, value, icon, color }: any) {
+  const colors: any = { blue: "bg-blue-50 text-blue-500", violet: "bg-violet-50 text-violet-500", emerald: "bg-emerald-50 text-emerald-500" };
   return (
-    <div className="flex items-start gap-3">
-      {icon && <div className="mt-1 text-slate-400">{icon}</div>}
-      <div>
-        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</p>
-        <p className="text-slate-800 font-medium">{value || "—"}</p>
+    <div className="flex items-center gap-4 group">
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm transition-all group-hover:scale-110 ${colors[color] || colors.blue}`}>{icon}</div>
+      <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{label}</p><p className="text-[14px] font-bold text-slate-700">{value || "—"}</p></div>
+    </div>
+  );
+}
+
+function DetailItem({ label, value, icon }: any) {
+  return (
+    <div className="flex items-start gap-4">
+      {icon && <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center flex-shrink-0">{icon}</div>}
+      <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">{label}</p><p className="text-sm font-bold text-slate-700">{value || "—"}</p></div>
+    </div>
+  );
+}
+
+function QuickAction({ icon, label, color }: any) {
+  const colors: any = { primary: "bg-primary/5 text-primary group-hover:bg-primary", violet: "bg-violet-50 text-violet-500 group-hover:bg-violet-500" };
+  return (
+    <button className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-all group">
+      <div className="flex items-center gap-3">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center group-hover:text-white transition-all ${colors[color]}`}>{icon}</div>
+        <span className="text-sm font-bold text-slate-700">{label}</span>
+      </div>
+      <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Details</span>
+    </button>
+  );
+}
+
+function InfoCard({ title, icon, data, isEditing, onAdd, renderItem }: any) {
+  return (
+    <div className={pageTheme.section.card}>
+      <div className={pageTheme.section.header}><div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />{title}</div></div>
+      <div className="p-8 space-y-6">
+        {isEditing ? (
+          <button onClick={onAdd} className="text-xs font-black text-primary uppercase tracking-widest hover:underline">+ Add {title}</button>
+        ) : (
+          data.map((item: any, idx: number) => <div key={idx}>{renderItem(item)}</div>)
+        )}
+      </div>
+    </div>
+  );
+}
+
+function BreakdownSection({ title, data, color, currency, isDeduction }: any) {
+  const colors: any = { emerald: "text-emerald-600 bg-emerald-500 bg-emerald-50/30 border-emerald-100/50", rose: "text-rose-600 bg-rose-500 bg-rose-50/30 border-rose-100/50" };
+  return (
+    <div className="space-y-6">
+      <h4 className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2 ${isDeduction ? "text-rose-600" : "text-emerald-600"}`}>
+        <span className={`w-1.5 h-1.5 rounded-full ${isDeduction ? "bg-rose-500" : "bg-emerald-500"}`} />{title}
+      </h4>
+      <div className="space-y-4">
+        {data.map((item: any, idx: number) => (
+          <div key={idx} className={`flex items-center justify-between p-4 rounded-2xl border ${colors[color]}`}>
+            <div><p className="text-[11px] font-black text-slate-800 uppercase">{item.name}</p><p className={`text-[9px] font-bold uppercase ${isDeduction ? "text-rose-500" : "text-emerald-500"}`}>{item.type}</p></div>
+            <span className={`text-sm font-black ${isDeduction ? "text-rose-600" : "text-slate-800"}`}>{isDeduction ? "-" : ""}{item.amount.toLocaleString()} {currency}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

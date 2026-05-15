@@ -20,7 +20,7 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
             {HEADERS.map((h, i) => (
               <th
                 key={i}
-                className={empMangeTheme.table.headCell}
+                className={`${empMangeTheme.table.headCell} ${i === HEADERS.length - 1 ? "!text-right" : ""}`}
               >
                 {h}
               </th>

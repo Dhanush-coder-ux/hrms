@@ -23,7 +23,7 @@ export const EmpLeaveTable = ({ columns, data, onRowClick }: TableProps) => {
               <th
                 key={i}
                 className={`${empMangeTheme.table.headCell} ${
-                  col.type === "action" ? "text-right" : "text-left"
+                  col.type === "action" ? "!text-right" : ""
                 }`}
               >
                 {col.header}

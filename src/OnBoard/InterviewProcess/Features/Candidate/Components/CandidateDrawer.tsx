@@ -1,9 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import {
   X, Mail, Phone, Paperclip, ExternalLink,
   CheckCircle, XCircle, Calendar} from "lucide-react";
 import type { Candidate } from "../../../../../Types/typesOnboarding";
 import { getUserTheme } from "../../../../../Components/Common/UserAvatar";
+import { DocumentViewer } from "../../../../../Components/Common/DocumentViewer";
 
 interface CandidateDrawerProps {
   candidate: Candidate | null;
@@ -31,6 +33,7 @@ export const CandidateDrawer = ({
   const theme = getUserTheme(candidate.Candidate_name || "");
   const initials = candidate.Candidate_name
     ?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  const [showResume, setShowResume] = useState(false);
 
 
   return (
@@ -103,10 +106,10 @@ export const CandidateDrawer = ({
                 </div>
                 {candidate.Resume_path && (
                   <button
-                    onClick={() => window.open(candidate.Resume_path, "_blank")}
+                    onClick={() => setShowResume(true)}
                     className="px-2.5 py-1.5 rounded-lg border border-emerald-100 bg-white cursor-pointer flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 transition-all hover:bg-emerald-600 hover:text-white hover:border-emerald-600 active:scale-95"
                   >
-                    <ExternalLink size={12} /> Open
+                    <ExternalLink size={12} /> View
                   </button>
                 )}
               </div>
@@ -208,7 +211,15 @@ export const CandidateDrawer = ({
             </button>
           </div>
         </motion.div>
+
       </div>
+      <DocumentViewer 
+        isOpen={showResume} 
+        onClose={() => setShowResume(false)} 
+        filePath={candidate.Resume_path}
+        title="Candidate Resume"
+        subTitle={candidate.Candidate_name}
+      />
     </AnimatePresence>
   );
 };

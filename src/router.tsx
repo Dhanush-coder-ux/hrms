@@ -25,6 +25,7 @@ import EmployeeProfile from "./OnBoard/EmployeeManagement/Employee/EmployeeProfi
 import PayrollDetails from "./OnBoard/EmployeeManagement/Payroll/PayrollDetails";
 import DepartmentProfile, {  } from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
+import { CandidateProfile } from "./OnBoard/InterviewProcess/Features/Candidate/CandidateProfile";
 import { Interview } from "./OnBoard/InterviewProcess/Features/Interviews";
 import { OfferLetterPage } from "./OnBoard/InterviewProcess/Features/OfferLetter";
 
@@ -82,6 +83,7 @@ export const router = createBrowserRouter([
           { path: "employeeregistration", element: <EmployeeRegister /> },
           { path: "Salary", element: <Salary /> },
           { path: "Candidates", element: <Candidates /> },
+          { path: "Candidates/:id", element: <CandidateProfile /> },
           { path: "interviews", element: <Interview /> },
           { path: "offers", element: <OfferLetterPage /> },
           { path: "requirement", element: <Requirement /> },
