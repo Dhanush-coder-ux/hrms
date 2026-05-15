@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  ChevronLeft,
   Check,
   Loader2,
   User,
@@ -18,10 +17,9 @@ import {
   MapPin,
   Globe,
   ArrowLeft,
-  X,
   TrendingUp
 } from "lucide-react";
-import { FaMapPin, FaRegBuilding } from "react-icons/fa";
+import { FaRegBuilding } from "react-icons/fa";
 import { FormFiled } from "../../../Components/Common/FormFiled";
 import { Selection } from "../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../Components/Common/CustomDatePicker";
@@ -662,7 +660,7 @@ function QuickAction({ icon, label, color }: any) {
   );
 }
 
-function InfoCard({ title, icon, data, isEditing, onAdd, renderItem }: any) {
+function InfoCard({ title, data, isEditing, onAdd, renderItem }: any) {
   return (
     <div className={pageTheme.section.card}>
       <div className={pageTheme.section.header}><div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />{title}</div></div>

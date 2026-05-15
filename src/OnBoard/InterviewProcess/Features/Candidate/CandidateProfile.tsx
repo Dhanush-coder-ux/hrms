@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { 
-  User, 
   Mail, 
   Phone, 
   ArrowLeft, 
@@ -14,8 +13,7 @@ import {
   Loader2,
   Paperclip,
   TrendingUp,
-  MapPin,
-  X
+  MapPin
 } from "lucide-react";
 import { pageTheme } from "../../../../Themes/PageThems/pageConfig";
 import { getUserTheme } from "../../../../Components/Common/UserAvatar";
