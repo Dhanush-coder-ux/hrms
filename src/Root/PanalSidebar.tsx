@@ -19,6 +19,8 @@ import {
   Users2Icon,
   Wallet,
 } from "lucide-react";
+import { MdSocialDistance } from "react-icons/md";
+
 
 export const employeeNavigation = [
   { label: "Dashboard", path: "/EmployeeManagement", icon: LayoutDashboard },
@@ -52,7 +54,7 @@ export const onboardNavigation = [
   { label: "Interviews", path: "/onboard/interviews", icon: Users },
   { label: "Requirement", path: "/onboard/requirement", icon: Paperclip },
   { label: "Offer Letters", path: "/onboard/offers", icon: FileText },
-
+  {label:"Job Postings", path:"/onboard/jobpostings",icon:MdSocialDistance},
   {
     label: "Add Employee",
     path: "/onboard/add-employee",
@@ -64,6 +66,7 @@ export const AdminPort = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
   { label: "Department", path: "admin/departmentstacks", icon: Building2 },
   { label: "Employee Updates", path: "admin/employeestacks", icon: Users2Icon },
+  {label: "Poster Stacks", path: "admin/posterstacks", icon: MdSocialDistance}
 ];
 
 export const OffboardNavigation = [

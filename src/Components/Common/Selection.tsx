@@ -13,6 +13,7 @@ type SelectionProps = {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
   compact?: boolean;
+  disabled?: boolean;
 };
 
 export const Selection = ({
@@ -23,6 +24,7 @@ export const Selection = ({
   onChange,
   placeholder,
   compact = false,
+  disabled = false,
 }: SelectionProps) => {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -197,11 +199,15 @@ export const Selection = ({
 
       <div
         ref={triggerRef}
-        className={`${inputTheme.select.trigger} ${open ? "border-primary ring-4 ring-primary/10 shadow-sm" : ""} ${compact ? "py-1.5 px-3 rounded-lg" : ""} transition-all cursor-pointer group`}
-        onClick={() => { setOpen((o) => !o); setFocused(true); }}
-        onFocus={() => setFocused(true)}
+        className={`${inputTheme.select.trigger} ${open ? "border-primary ring-4 ring-primary/10 shadow-sm" : ""} ${compact ? "py-1.5 px-3 rounded-lg" : ""} ${disabled ? "opacity-60 cursor-not-allowed bg-slate-50 border-slate-200" : "cursor-pointer"} transition-all group`}
+        onClick={() => { 
+          if (disabled) return;
+          setOpen((o) => !o); 
+          setFocused(true); 
+        }}
+        onFocus={() => { if (!disabled) setFocused(true); }}
         onBlur={() => { if (!open) setFocused(false); }}
-        tabIndex={0}
+        tabIndex={disabled ? -1 : 0}
       >
         <span className={`flex-1 truncate text-sm font-bold ${!hasValue ? "text-slate-300" : "text-slate-900"}`}>
           {selected ? selected.label : (placeholder ?? "Select…")}

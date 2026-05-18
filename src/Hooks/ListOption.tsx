@@ -22,14 +22,15 @@ export const useListOptions = (url: string) => {
 
         const formatted = list.map((item: any) => ({
           label:
+            item.label ||
             item.Dep_name ||
             item.providername ||
             item.name ||
             "Unknown",
 
-          // ✅ FIXED: value-லயும் Dep_name போகுது
-          // இப்போ formData.Department = "Digital Marketing"
+          // ✅ FIXED: value-லயும் Dep_name / label போகுது
           value:
+            item.label ||
             item.provider_id ||    // ✅ Added provider_id
             item.Dep_name ||      
             item.providername ||

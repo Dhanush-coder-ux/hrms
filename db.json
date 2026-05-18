@@ -220,5 +220,193 @@
         }
       ]
     }
-  ]
+  ],
+  "jobs": [
+    {
+      "id": "preset-1",
+      "title": "Senior AI ATS Frontend Developer",
+      "department": "Engineering",
+      "location": "Remote (India)",
+      "stack": "React, TypeScript, TailwindCSS, Vite, Framer Motion",
+      "salary": "₹18,00,000 - ₹28,00,000 / year",
+      "experience": "4+ Years",
+      "education": "Any Graduation",
+      "methods" : "Agile/Scrum",
+      "perks": "Unlimited PTO, High-end Apple Gear, Learning Allowance, Premium Health Cover",
+      "description": "Build an state-of-the-art AI-powered Applicant Tracking System (ATS). Own visual excellence, performance and responsive frontend. Persistently stored in JSON-server",
+      "applyLink": "https://careers.apex.io/jobs/sr-frontend-ats"
+    },
+    {
+      "id": "preset-2",
+      "title": "Backend AI NLP Engineer",
+      "department": "Data Science & AI",
+      "location": "Hybrid (Bangalore)",
+      "stack": "Python, FastAPI, spaCy, PyTorch, PostgreSQL, Docker",
+      "salary": "₹22,00,000 - ₹32,00,000 / year",
+      "experience": "3+ Years",
+      "methods" : "Agile/Scrum",
+      "education": "B.Tech / M.Tech / MCA or equivalent practical experience",
+      "perks": "Flexible Hybrid Hours, Home Office Budget, Wellness Programs, Strategy Retreats",
+      "description": "Architect and scale our backend semantic candidate parser. Leverage NLP matchers and embedding models to generate precise candidate keyword extractions.",
+      "applyLink": "https://careers.apex.io/jobs/nlp-backend-eng"
+    },
+    {
+      "id": "preset-3",
+      "title": "Lead UI/UX Product Designer",
+      "department": "Product & Design",
+      "location": "Hybrid (Chennai)",
+      "stack": "Figma, Adobe Creative Suite, Design Systems, Prototyping",
+      "salary": "₹14,00,000 - ₹22,00,000 / year",
+      "experience": "5+ Years",
+      "methods" : "Agile/Scrum",
+      "education": "Bachelor of Design / Fine Arts or portfolio proof",
+      "perks": "Daily Meals, Certification Cover, stock Options, Tech Upgrades",
+      "description": "Design our modern corporate suite. Craft interfaces with elegant custom details, vibrant HSL gradients, and smooth micro-animations.",
+      "applyLink": "https://careers.apex.io/jobs/lead-ui-ux-designer"
+    },
+    {
+      "id": "preset-4",
+      "title": "Technical Recruiter",
+      "department": "Human Resources",
+      "location": "Onsite (Chennai)",
+      "stack": "Technical Sourcing, ATS Platforms, Screening Systems, Negotiation",
+      "salary": "₹8,00,000 - ₹12,00,000 / year",
+      "experience": "2+ Years",
+      "methods" : "Agile/Scrum",
+      "education": "MBA in HR / Bachelor in Psy chology / Business Administration",
+      "perks": "Performance Incentives, Family Health Cover, Gym Membership, Team Trips",
+      "description": "Coordinate interview pipelines and candidates. Lead sourcing strategies and ensure high-conversion onboarding workflows.",
+      "applyLink": "https://careers.apex.io/jobs/tech-recruiter"
+    },
+    {
+      "id": "custom-1779084668738",
+      "title": "Persistent QA Automation",
+      "department": "Engineering",
+      "location": "Remote (India)",
+      "stack": "",
+      "salary": "",
+      "experience": "",
+      "education": "",
+      "perks": "",
+      "description": "",
+      "applyLink": "https://careers.apex.io/apply/qa"
+    }
+  ],
+    "education_options": [
+      {
+        "id": "1",
+        "label": "B.E / B.Tech / MCA"
+      },
+      {
+        "id": "2",
+        "label": "M.E / M.Tech / MS"
+      },
+      {
+        "id": "3",
+        "label": "B.Sc / M.Sc in Computer Science"
+      },
+      {
+        "id": "4",
+        "label": "BCA / MCA"
+      },
+      {
+        "id": "5",
+        "label": "Ph.D. in CS / AI / Math"
+      },
+      {
+        "id": "6",
+        "label": "Any Graduation"
+      },
+      {
+        "id": "7",
+        "label": "High School Diploma / Equivalent"
+      }
+    ],
+  "ai_settings": {
+    "database_synced": true,
+    "smart_ai_database_presets": [
+      {
+        "id": "mode1",
+        "template_name": "Tech Hiring",
+        "mode": "techy",
+        "requirement": [
+          "tech stack",
+          "Education",
+          "Experience",
+          "perks",
+          "description",
+          "applyLink"
+        ]
+      },
+      {
+        "id": "mode2",
+        "template_name": "Corporate Hiring",
+        "mode": "punchy",
+        "requirement": [
+          "tech stack",
+          "Education",
+          "Experience",
+          "perks",
+          "description",
+          "applyLink"
+        ]
+      },
+      {
+        "id": "mode3",
+        "template_name": "Startup Hiring",
+        "mode": "punchy",
+        "requirement": [
+          "description",
+          "perks",
+          "applyLink",
+          "emojis",
+          "hashtags"
+        ]
+      }
+    ],
+    "copy_style_tone": {
+      "selected": "punchy",
+      "options": [
+        {
+          "id": "excited",
+          "label": "Excited",
+          "icon": "🔥",
+          "active": false
+        },
+        {
+          "id": "formal",
+          "label": "Formal",
+          "icon": "📘",
+          "active": false
+        },
+        {
+          "id": "techy",
+          "label": "Techy",
+          "icon": "💻",
+          "active": false
+        },
+        {
+          "id": "casual",
+          "label": "Casual",
+          "icon": "☕",
+          "active": false
+        },
+        {
+          "id": "punchy",
+          "label": "Punchy",
+          "icon": "⚡",
+          "active": true
+        }
+      ]
+    },
+    "sections_checklist": {
+      "tech_stack": true,
+      "education_required": true,
+      "experience_level": true,
+      "salary_details": false,
+      "perks_and_benefits": true,
+      "include_emojis": false,
+      "add_hashtags": false
+    }
+  }
 }
