@@ -40,6 +40,25 @@ const getModeIconByIcon = (iconName: string) => {
     return "🤖";
 };
 
+const ICON_TONE_MAP: Record<string, string> = {
+    "Bot": "Balanced, standard, professional, structured, and recruiter-friendly tone.",
+    "Brain": "Deeply analytical, thought-provoking, precise, data-driven, and detail-oriented tone.",
+    "Sparkles": "Highly engaging, vibrant, exciting, modern, and catchy tone.",
+    "Wand2": "Creative, persuasive, storytelling, copywriter-style, and highly converting tone.",
+    "Terminal": "Developer-centric, technical, direct, code-inspired, and geeky tone.",
+    "Flame": "High-energy, passionate, bold, urgent, and motivational tone.",
+    "MessageSquare": "Conversational, approachable, friendly, collaborative, and peer-to-peer tone."
+};
+const ICON_NAME_MAP: Record<string, string> = {
+    "Bot": "Professional Assistant Bot",
+    "Brain": "Analytical Genius",
+    "Sparkles": "Vibrant Recruiter",
+    "Wand2": "Creative Wordsmith",
+    "Terminal": "Tech Advocate",
+    "Flame": "Passionate Builder",
+    "MessageSquare": "Friendly Peer"
+};
+
 export const AISettings: React.FC<AISettingsProps> = ({
     options,
     onToneChange,
@@ -112,7 +131,10 @@ export const AISettings: React.FC<AISettingsProps> = ({
             if (linkedTone) {
                 onToneChange(`${linkedTone.Mode_Type} (${linkedTone.Prompt || ""})`);
             } else {
-                onToneChange("Balanced Assistant (You are an expert HR recruiter and ATS specialist.)");
+                const icon = selectedModel.Icon || "Bot";
+                const toneDesc = ICON_TONE_MAP[icon] || ICON_TONE_MAP["Bot"];
+                const toneName = ICON_NAME_MAP[icon] || ICON_NAME_MAP["Bot"];
+                onToneChange(`${toneName} (${toneDesc})`);
             }
         }
     }, [selectedModel, dbTones]);

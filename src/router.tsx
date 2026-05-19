@@ -45,6 +45,7 @@ import { Requirement } from "./OnBoard/InterviewProcess/Features/Requirement";
 import { RequirementProfile } from "./OnBoard/InterviewProcess/Features/Requirement/requirementProfile";
 import { JobPostings } from "./OnBoard/InterviewProcess/Features/JobPostings";
 import { PosterStacks } from "./AdminPort/Features/Poster/PosterStacks";
+import { InterView } from "./AdminPort/Features/Interview/InterViewStack";
 
 
 export function GlobalErrorBoundary() {
@@ -150,7 +151,8 @@ export const router = createBrowserRouter([
           },
           { path: "departmentstacks", element: <DepartmentsStacks /> },
           { path: "employeestacks", element: <EmployeeStack /> },
-          {path:"posterstacks",element:<PosterStacks /> }
+          {path:"posterstacks",element:<PosterStacks /> },
+          {path:"interviewsStack",element:<InterView />}
         ],
       },
       {

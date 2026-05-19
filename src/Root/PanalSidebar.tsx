@@ -3,6 +3,7 @@ import {
   CalendarCheck,
   CalendarDays,
   CheckCircle2,
+  Cog,
   FileSpreadsheet,
   FileText,
   LayoutDashboard,
@@ -66,7 +67,8 @@ export const AdminPort = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
   { label: "Department", path: "admin/departmentstacks", icon: Building2 },
   { label: "Employee Updates", path: "admin/employeestacks", icon: Users2Icon },
-  {label: "Poster Stacks", path: "admin/posterstacks", icon: MdSocialDistance}
+  {label: "Poster Stacks", path: "admin/posterstacks", icon: MdSocialDistance},
+  {label: "Interview Settings", path: "admin/interviewsStack",icon:Cog}
 ];
 
 export const OffboardNavigation = [
