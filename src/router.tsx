@@ -19,7 +19,7 @@ import { EmployeeLeaveDetails } from "./OnBoard/EmployeeManagement/Leaves/Employ
 
 // ── Onboard Module ───────────────────────────────────────────────────────────
 
-import AddEmp from "./FormValidation/AddEmp";
+import AddEmployee from "./OnBoard/InterviewProcess/Features/AddEmployee";
 import EmployeeRegister from "./OnBoard/InterviewProcess/Features/AddEmployee/EmployeeRegistor";
 import { Salary } from "./OnBoard/InterviewProcess/Features/AddEmployee/Salary";
 import EmployeeProfile from "./OnBoard/EmployeeManagement/Employee/EmployeeProfile";
@@ -130,7 +130,7 @@ export const router = createBrowserRouter([
             index: true,
             element: <OnboardingDashboard />,
           },
-          { path: "add-employee", element: <AddEmp /> },
+          { path: "add-employee", element: <AddEmployee /> },
           { path: "employeeregistration", element: <EmployeeRegister /> },
           { path: "Salary", element: <Salary /> },
           { path: "Candidates", element: <Candidates /> },

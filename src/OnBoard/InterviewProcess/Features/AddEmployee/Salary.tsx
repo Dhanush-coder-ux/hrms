@@ -8,6 +8,7 @@ import { useCurrencies } from "../../../../Hooks/CurrenciesSelect";
 import { useListOptions } from "../../../../Hooks/ListOption";
 import { useOptions, Stackvalues } from "../../../../Stacks";
 import { Api_URL } from "../../../../APILINK";
+import { runStepValidation } from "../../../../FormValidation/AddEmpValidationscript";
 
 type SalaryProps = {
   empId?: string;
@@ -24,10 +25,10 @@ export const DEFAULT_SALARY: PayrollData = {
   payType: "",
   currency: "", // Will be populated by system default
   payFrequency: "",
-  annualSalary: 0,
+  annualSalary: "" as any,
   bonus_Type: "",
   bonus_CalculationMode: "percentage",
-  bonus_Value: 0,
+  bonus_Value: "" as any,
 };
 
 // --- Animation Wrapper ---
@@ -61,6 +62,7 @@ export const Salary = ({ setSalaryData, ClicktoAction, initialData }: SalaryProp
 
   // 2. Initialize state
   const [salaryData, setLocalSalaryData] = useState<PayrollData>(() => initialData ?? DEFAULT_SALARY);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
 
 
@@ -117,10 +119,16 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
   // ];
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | { target: { name: string; value: any } }
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      | { target: { name: string; value: any } }
   ) => {
     const { name, value } = e.target;
-    setLocalSalaryData((prev) => ({ ...prev, [name]: value }));
+    let parsedValue = value;
+    if (name === "annualSalary" || name === "bonus_Value") {
+      parsedValue = Number(value) || 0;
+    }
+    setLocalSalaryData((prev) => ({ ...prev, [name]: parsedValue }));
   };
 
   const calculateBonusDisplay = () => {
@@ -133,6 +141,30 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const validationPayload = {
+      ...salaryData,
+      bonusEligible: B_togg,
+      annualSalary: String(salaryData.annualSalary),
+      bonus_Value: String(salaryData.bonus_Value),
+    };
+
+    const step4Errs = runStepValidation(4, validationPayload as any);
+    const salaryErrs: Record<string, string> = {};
+    const salaryKeys = ["provider", "payType", "currency", "payFrequency", "annualSalary", "bonus_Type", "bonus_Value"];
+    
+    salaryKeys.forEach((key) => {
+      if (step4Errs[key]) {
+        salaryErrs[key] = step4Errs[key];
+      }
+    });
+
+    if (Object.keys(salaryErrs).length > 0) {
+      setErrors(salaryErrs);
+      return;
+    }
+
+    setErrors({});
     setSalaryData?.(salaryData);
     ClicktoAction?.();
   };
@@ -176,6 +208,8 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   options={ProviderList}
                   onChange={handleChange}
                   placeholder="Select Provider"
+                  error={errors.provider}
+                  required={true}
                 />
                 <Selection
                   label="Type Of Pay"
@@ -183,6 +217,8 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   value={salaryData.payType}
                   options={PayTypeList}
                   onChange={handleChange}
+                  error={errors.payType}
+                  required={true}
                 />
                 <Selection
                   label={currencyLoading ? "Loading..." : "Currency"}
@@ -190,6 +226,8 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   value={salaryData.currency}
                   options={currencyOptions}
                   onChange={handleChange}
+                  error={errors.currency}
+                  required={true}
                 />
                 <Selection
                   label="Pay Frequency"
@@ -197,6 +235,8 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   value={salaryData.payFrequency}
                   options={frequencies}
                   onChange={handleChange}
+                  error={errors.payFrequency}
+                  required={true}
                 />
                 <FormFiled
                   Lable="Annual Salary"
@@ -205,6 +245,8 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   in_PlaceHolder="0.00"
                   onChange={handleChange}
                   icon={currSymbol}
+                  error={errors.annualSalary}
+                  required={true}
                 />
               </div>
             </section>
@@ -228,9 +270,13 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   value={salaryData.bonus_Type}
                   options={bonusTypes}
                   onChange={handleChange}
+                  error={errors.bonus_Type}
+                  required={B_togg}
                 />
                 <div>
-                  <div className="sal-label">Calculation Method</div>
+                  <div className="sal-label">
+                    Calculation Method
+                  </div>
                   <div className="sal-mode-pill">
                     <button
                       type="button"
@@ -249,18 +295,26 @@ const PayTypeList = useOptions(Stackvalues, "payType", "label", "value");
                   </div>
                 </div>
                 <div>
-                  <div className="sal-label">Value</div>
+                  <div className="sal-label">
+                    Value
+                    {B_togg && <span className="text-rose-500 ml-1">*</span>}
+                  </div>
                   <div className="relative">
                     <input
                       name="bonus_Value"
                       value={salaryData.bonus_Value}
                       onChange={handleChange}
-                      className="sal-bonus-input"
+                      className={`sal-bonus-input ${errors.bonus_Value ? 'border-rose-500 ring-rose-500' : ''}`}
                     />
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">
                       {salaryData.bonus_CalculationMode === "percentage" ? "%" : currSymbol}
                     </span>
                   </div>
+                  {errors.bonus_Value && (
+                    <span className="text-[10px] font-bold text-rose-500 mt-1.5 px-1 uppercase tracking-wider block">
+                      {errors.bonus_Value}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

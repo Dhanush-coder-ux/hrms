@@ -5,6 +5,7 @@ import TailwindToggle from "../../../../Components/Common/Toggle";
 import type { InsuranceTypes } from "../../../../Types/typesOnboarding";
 import { Checkbox } from "../../../../Components/Common/CheckBox";
 import { Selection } from "../../../../Components/Common/Selection";
+import { runStepValidation } from "../../../../FormValidation/AddEmpValidationscript";
 
 type EmployeeRegisterProps = {
   empId?: string;
@@ -110,6 +111,7 @@ export const Insurance = ({
   const [hasINS, sethasINS] = useState(false);
   const [hasESI, sethasESI] = useState(false);
   const [checkESI, setcheckESI] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [ESIdis, setESIdis] = useState(false);
   const [newNomineeIndices, setNewNomineeIndices] = useState<Set<number>>(new Set());
 
@@ -132,12 +134,26 @@ export const Insurance = ({
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setINSFD((prev: any) => ({ ...prev, [name]: value }));
+    let finalValue = value;
+    if (name === "uan_number") {
+      finalValue = value.replace(/\D/g, "").slice(0, 12);
+    } else if (name === "aadhar_no") {
+      finalValue = value.replace(/\D/g, "").slice(0, 12).replace(/(\d{4})/g, "$1 ").trim();
+    } else if (name === "esi_no") {
+      finalValue = value.replace(/\D/g, "");
+    } else if (name === "esi_name") {
+      finalValue = value.replace(/[^A-Za-z\s]/g, "");
+    }
+    setINSFD((prev: any) => ({ ...prev, [name]: finalValue }));
   };
 
   const handleNomineeChange = (index: number, field: string, value: string) => {
     const updatedNominees = [...(INSFD.Nominee || [])];
-    updatedNominees[index] = { ...updatedNominees[index], [field]: value };
+    let finalValue = value;
+    if (field === "nominee_aadhar") {
+      finalValue = value.replace(/\D/g, "").slice(0, 12).replace(/(\d{4})/g, "$1 ").trim();
+    }
+    updatedNominees[index] = { ...updatedNominees[index], [field]: finalValue };
     setINSFD({ ...INSFD, Nominee: updatedNominees });
   };
 
@@ -163,7 +179,6 @@ export const Insurance = ({
 const onSubmit = (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
-  // This ensures every single field is at least an empty string, never null
   const payload = {
     uan_number: INSFD.uan_number || "",
     pf_id: INSFD.pf_id || "",
@@ -173,12 +188,51 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     esi_name: INSFD.esi_name || "",
     insurance_provider: INSFD.insurance_provider || "",
     apply_esi: checkESI ? "New registration apply" : "", // Force string
-    Nominee: INSFD.Nominee.map(n => ({
+    Nominee: (INSFD.Nominee || []).map(n => ({
         nominee_name: n.nominee_name || "",
         nominee_aadhar: n.nominee_aadhar || ""
     }))
   };
 
+  // Validate Step 4 PF/ESI/Insurance details
+  const step4Errs = runStepValidation(4, {
+    ...payload,
+    hasUAN,
+    hasESI,
+    hasINS,
+    annualSalary: String(salaryData?.annualSalary || "0")
+  } as any);
+
+  // Filter out salary/bonus errors
+  const insErrs: Record<string, string> = {};
+  const insuranceKeys = [
+    "uan_number",
+    "pf_id",
+    "aadhar_no",
+    "esi_no",
+    "esi_name",
+    "insurance_no",
+    "insurance_provider"
+  ];
+
+  insuranceKeys.forEach((key) => {
+    if (step4Errs[key]) insErrs[key] = step4Errs[key];
+  });
+
+  // Map nominee errors
+  if (payload.Nominee) {
+    payload.Nominee.forEach((_, idx) => {
+      if (step4Errs[`nom_${idx}_nominee_name`]) insErrs[`nom_${idx}_nominee_name`] = step4Errs[`nom_${idx}_nominee_name`];
+      if (step4Errs[`nom_${idx}_nominee_aadhar`]) insErrs[`nom_${idx}_nominee_aadhar`] = step4Errs[`nom_${idx}_nominee_aadhar`];
+    });
+  }
+
+  if (Object.keys(insErrs).length > 0) {
+    setErrors(insErrs);
+    return;
+  }
+
+  setErrors({});
   console.log("Payload being sent:", payload); // Check your browser console!
   setInsPFdata?.(payload);
   ClicktoAction?.();
@@ -250,11 +304,11 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
                 onToggle={(val: boolean) => setHasUAN(val)}
               />
               {hasUAN && (<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormFiled name="uan_number" value={INSFD.uan_number} Lable="UAN Number" in_PlaceHolder="Enter 12-digit UAN" onChange={onChange} />
-                  <FormFiled name="pf_id" value={INSFD.pf_id} Lable="PF Member ID" in_PlaceHolder="Enter PF Member ID" onChange={onChange} />
+                  <FormFiled name="uan_number" value={INSFD.uan_number} Lable="UAN Number" in_PlaceHolder="Enter 12-digit UAN" onChange={onChange} error={errors.uan_number} required={hasUAN} />
+                  <FormFiled name="pf_id" value={INSFD.pf_id} Lable="PF Member ID" in_PlaceHolder="Enter PF Member ID" onChange={onChange} error={errors.pf_id} required={hasUAN} />
                 </div>)||
                 (
-                <FormFiled name="aadhar_no" in_PlaceHolder="XXXX-XXXX-1234" value={INSFD.aadhar_no || ""} onChange={onChange} Lable="Aadhar Number (for new PF)" />
+                <FormFiled name="aadhar_no" in_PlaceHolder="XXXX XXXX XXXX" value={INSFD.aadhar_no || ""} onChange={onChange} Lable="Aadhar Number (for new PF)" error={errors.aadhar_no} required={!hasUAN} />
               )
               }
             </section>
@@ -277,8 +331,8 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
                     onToggle={(val: boolean) => sethasESI(val)}
                   />
                   {hasESI && (<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormFiled name="esi_no" value={INSFD.esi_no || ""} Lable="ESI Number" in_PlaceHolder="Enter ESI Number" onChange={onChange} />
-                      <FormFiled name="esi_name" value={INSFD.esi_name || ""} Lable="Name in ESI" in_PlaceHolder="Name as per ESI records" onChange={onChange} />
+                      <FormFiled name="esi_no" value={INSFD.esi_no || ""} Lable="ESI Number" in_PlaceHolder="Enter ESI Number" onChange={onChange} error={errors.esi_no} required={hasESI} />
+                      <FormFiled name="esi_name" value={INSFD.esi_name || ""} Lable="Name in ESI" in_PlaceHolder="Name as per ESI records" onChange={onChange} error={errors.esi_name} required={hasESI} />
                     </div>)||(
                   <Checkbox 
                     checked={checkESI} 
@@ -307,12 +361,12 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
                 onToggle={(val: boolean) => sethasINS(val)}
               />
               {hasINS&&( 
-                <FormFiled name="insurance_no" value={INSFD.insurance_no} Lable="Policy Number" in_PlaceHolder="Enter Policy ID" onChange={onChange} />
+                <FormFiled name="insurance_no" value={INSFD.insurance_no} Lable="Policy Number" in_PlaceHolder="Enter Policy ID" onChange={onChange} error={errors.insurance_no} required={hasINS} />
                 )||(
                     <Selection label="Select Provider" 
                     name="insurance_provider" 
                     value={INSFD.insurance_provider || ""} 
-                    options={InsuProvider} onChange={onChange} />
+                    options={InsuProvider} onChange={onChange} error={errors.insurance_provider} required={!hasINS} />
                 )}
             </section>
           </AnimSection>
@@ -334,10 +388,10 @@ const onSubmit = (e: FormEvent<HTMLFormElement>) => {
                     <div className="emp-row-card">
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                         <div className="md:col-span-5">
-                          <Selection label="Select Nominee" name="nominee" value={nominee.nominee_name} options={nomineeOptions} onChange={(e) => handleNomineeChange(index, "nominee_name", e.target.value)} />
+                          <Selection label="Select Nominee" name="nominee" value={nominee.nominee_name} options={nomineeOptions} onChange={(e) => handleNomineeChange(index, "nominee_name", e.target.value)} error={errors[`nom_${index}_nominee_name`]} required={true} />
                         </div>
                         <div className="md:col-span-5">
-                          <FormFiled Lable="Aadhar Number" in_PlaceHolder="XXXX-XXXX-XXXX" value={nominee.nominee_aadhar} name={`nominee_aadhar_${index}`} onChange={(e) => handleNomineeChange(index, "nominee_aadhar", e.target.value)} />
+                          <FormFiled Lable="Aadhar Number" in_PlaceHolder="XXXX XXXX XXXX" value={nominee.nominee_aadhar} name={`nominee_aadhar_${index}`} onChange={(e) => handleNomineeChange(index, "nominee_aadhar", e.target.value)} error={errors[`nom_${index}_nominee_aadhar`]} required={true} />
                         </div>
                         <div className="md:col-span-2 flex items-end justify-center pb-2">
                           {INSFD.Nominee.length > 1 && (

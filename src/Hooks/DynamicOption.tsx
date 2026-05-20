@@ -19,6 +19,7 @@ export const useOptions = (
         const formatted = list.map((item: any) => ({
           label: item[labelKey],
           value: valueKey ? item[valueKey] : item[labelKey],
+          symbol: item.symbol,
         }));
 
         setOptions(formatted);

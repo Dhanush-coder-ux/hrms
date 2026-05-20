@@ -1,6 +1,7 @@
 import { FaPiggyBank, FaUniversity, FaIdCard, FaHashtag, FaCode } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { FormFiled } from "../../../../Components/Common/FormFiled";
+import { runStepValidation } from "../../../../FormValidation/AddEmpValidationscript";
 
 interface BankData { bankName: string; accountNumber: string; ifscCode: string; panNumber: string; }
 
@@ -31,7 +32,7 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
   const [confirmAccountNumber, setConfirmAccountNumber] = useState(
     () => initialData?.accountNumber ?? ""
   );
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (initialData) {
@@ -42,17 +43,41 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "confirmAccount") { setConfirmAccountNumber(value); return; }
-    const finalValue = name === "panNumber" ? value.toUpperCase() : value;
+    if (name === "confirmAccount") {
+      setConfirmAccountNumber(value.replace(/\D/g, ""));
+      return;
+    }
+    let finalValue = value;
+    if (name === "bankName") {
+      finalValue = value.replace(/[^A-Za-z\s]/g, "");
+    } else if (name === "ifscCode") {
+      finalValue = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 11);
+    } else if (name === "accountNumber") {
+      finalValue = value.replace(/\D/g, "");
+    } else if (name === "panNumber") {
+      finalValue = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10);
+    }
     setLocalBankDetails((prev) => ({ ...prev, [name]: finalValue }));
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (localBankDetails.accountNumber !== confirmAccountNumber) {
-      setError("Account numbers do not match!"); return;
+
+    const payload = {
+      ...localBankDetails,
+      confirmAccount: confirmAccountNumber
+    };
+
+    const step5Errs = runStepValidation(5, payload as any);
+
+    if (Object.keys(step5Errs).length > 0) {
+      setErrors(step5Errs);
+      return;
     }
-    setError(""); setBankDetails?.(localBankDetails); ClicktoAction?.();
+
+    setErrors({});
+    setBankDetails?.(localBankDetails);
+    ClicktoAction?.();
   };
 
   const isMatch = !!confirmAccountNumber && localBankDetails.accountNumber === confirmAccountNumber;
@@ -108,16 +133,16 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
               <div className="bank-section-head">Bank Account Information</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormFiled Lable="Bank Name" name="bankName" value={localBankDetails.bankName}
-                  in_PlaceHolder="HDFC Bank" onChange={handleChange} icon={<FaUniversity size={14} />} />
+                  in_PlaceHolder="HDFC Bank" onChange={handleChange} icon={<FaUniversity size={14} />} error={errors.bankName} required={true} />
                 <FormFiled Lable="IFSC Code" name="ifscCode" value={localBankDetails.ifscCode}
-                  in_PlaceHolder="HDFC0001234" onChange={handleChange} icon={<FaCode size={14} />} />
+                  in_PlaceHolder="HDFC0001234" onChange={handleChange} icon={<FaCode size={14} />} error={errors.ifscCode} required={true} />
                 <FormFiled Lable="Account Number" name="accountNumber" value={localBankDetails.accountNumber}
                   in_PlaceHolder="Enter Account Number" onChange={handleChange}
-                  icon={<FaHashtag size={14} />} PrivacyInput={true} />
+                  icon={<FaHashtag size={14} />} PrivacyInput={true} error={errors.accountNumber} required={true} />
                 <div>
                   <FormFiled Lable="Verify Account Number" name="confirmAccount" value={confirmAccountNumber}
                     in_PlaceHolder="Re-enter Account Number" onChange={handleChange}
-                    icon={<FaHashtag size={14} />} PrivacyInput={true} />
+                    icon={<FaHashtag size={14} />} PrivacyInput={true} error={errors.confirmAccount} required={true} />
                   {confirmAccountNumber && (
                     <p className={`bank-match-msg ${isMatch ? "match" : "mismatch"}`}>
                       {isMatch ? "✓ Account numbers match" : "✗ Numbers do not match"}
@@ -134,14 +159,14 @@ export const BankDetails = ({ setBankDetails, ClicktoAction, initialData }: Bank
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormFiled Lable="PAN Card Number" name="panNumber" value={localBankDetails.panNumber}
                   in_PlaceHolder="ABCDE1234F" onChange={handleChange}
-                  icon={<FaIdCard size={14} />} PrivacyInput={true} />
+                  icon={<FaIdCard size={14} />} PrivacyInput={true} error={errors.panNumber} required={true} />
               </div>
             </section>
           </AnimSection>
 
           <AnimSection delay={180}>
             <div className="flex flex-col gap-3">
-              {error && <div className="bank-error">{error}</div>}
+              {errors.summary && <div className="bank-error">{errors.summary}</div>}
               <button type="submit" className="bank-submit-btn" style={{ width: "fit-content" }}>Next</button>
             </div>
           </AnimSection>

@@ -4,11 +4,12 @@ import { Selection } from "../../../../Components/Common/Selection";
 import { CustomDatePicker } from "../../../../Components/Common/CustomDatePicker";
 import { FaUser, FaTrash, FaPlus } from "react-icons/fa";
 import { Checkbox } from "../../../../Components/Common/CheckBox";
-import type { Employee, Education } from "../../../../Types/typesOnboarding";
+import type { Employee, Education, Family } from "../../../../Types/typesOnboarding";
 // import { departmentOptions,genderOptions,useEmpTypeOptions, useRelationshipOptions } from "../../../../Stacks";
 
 import { useOptions, Stackvalues, DepAPI_Url } from "../../../../Stacks";
 import { useListOptions } from "../../../../Hooks/ListOption";
+import { runStepValidation } from "../../../../FormValidation/AddEmpValidationscript";
 
 const DEFAULT_FORM: Employee = {
 
@@ -28,11 +29,11 @@ const DEFAULT_FORM: Employee = {
   Street: "",
   City: "",
   State: "",
-  Pin_Code: 0,
+  Pin_Code: "" as any,
   p_Street: "",
   p_City: "",
   p_State: "",
-  p_Pin_Code: 0,
+  p_Pin_Code: "" as any,
   Familys: [
     { person_name: "", relationship_type: "", contact: "", person_dob: "" },
   ],
@@ -103,6 +104,7 @@ const EmployeeRegister = ({
   const [formData, setFormData] = useState<Employee>(
     () => initialData ?? DEFAULT_FORM,
   );
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const departmentOptions = useListOptions(DepAPI_Url);
 
@@ -134,7 +136,16 @@ const EmployeeRegister = ({
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => {
-      const s = { ...prev, [name]: value };
+      let parsedValue: any = value;
+      if (name === "f_name" || name === "l_name") {
+        parsedValue = value.replace(/[^A-Za-z]/g, "");
+      } else if (name === "phone") {
+        parsedValue = value.replace(/\D/g, "").slice(0, 10);
+      } else if (name === "Pin_Code" || name === "p_Pin_Code") {
+        const digits = value.replace(/\D/g, "").slice(0, 6);
+        parsedValue = digits ? Number(digits) : "";
+      }
+      const s = { ...prev, [name]: parsedValue };
       if (name === "f_name" || name === "l_name")
         s.name = `${s.f_name} ${s.l_name}`.trim();
       return s;
@@ -147,8 +158,42 @@ const EmployeeRegister = ({
     value: string,
   ) => {
     const u = [...formData.education];
-    u[index] = { ...u[index], [field]: value };
+    let finalValue = value;
+    if (field === "degree" || field === "institution") {
+      finalValue = value.replace(/[^A-Za-z\s.]/g, "");
+    }
+    u[index] = { ...u[index], [field]: finalValue };
     setFormData({ ...formData, education: u });
+  };
+
+  const handleWorkExpChange = (
+    index: number,
+    field: keyof typeof formData.WorkExp[0],
+    value: string,
+  ) => {
+    const u = [...formData.WorkExp];
+    let finalValue = value;
+    if (field === "company_name" || field === "position") {
+      finalValue = value.replace(/[^A-Za-z\s.]/g, "");
+    }
+    u[index] = { ...u[index], [field]: finalValue } as any;
+    setFormData({ ...formData, WorkExp: u });
+  };
+
+  const handleFamilyChange = (
+    index: number,
+    field: keyof Family,
+    value: string,
+  ) => {
+    const u = [...formData.Familys];
+    let finalValue = value;
+    if (field === "person_name") {
+      finalValue = value.replace(/[^A-Za-z\s]/g, "");
+    } else if (field === "contact") {
+      finalValue = value.replace(/\D/g, "").slice(0, 10);
+    }
+    u[index] = { ...u[index], [field]: finalValue };
+    setFormData({ ...formData, Familys: u });
   };
 
   const addEducationSection = (e?: any) => {
@@ -219,7 +264,7 @@ const EmployeeRegister = ({
       p_Street: checked ? prev.Street : "",
       p_City: checked ? prev.City : "",
       p_State: checked ? prev.State : "",
-      p_Pin_Code: checked ? prev.Pin_Code : 0,
+      p_Pin_Code: checked ? prev.Pin_Code : "" as any,
     }));
   };
 
@@ -227,13 +272,29 @@ const EmployeeRegister = ({
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Run validations for Steps 1, 2, and 3
+    const step1Errs = runStepValidation(1, formData as any);
+    const step2Errs = runStepValidation(2, formData as any);
+    const step3Errs = runStepValidation(3, formData as any);
+
+    const allErrors = { ...step1Errs, ...step2Errs, ...step3Errs };
+
+    if (Object.keys(allErrors).length > 0) {
+      setErrors(allErrors);
+      // Scroll to the first invalid element
+      const firstErrorKey = Object.keys(allErrors)[0];
+      const element = document.getElementById(firstErrorKey);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
+
+    setErrors({});
     try {
-
       const updatedData = { ...formData };
-
       setEmployeeData?.(updatedData);
       ClicktoAction?.();
-
     } catch (error) {
       console.error("Error", error);
     }
@@ -305,6 +366,8 @@ const EmployeeRegister = ({
                   Lable="First Name"
                   in_PlaceHolder="John"
                   onChange={onChange}
+                  error={errors.f_name}
+                  required={true}
                 />
                 <FormFiled
                   name="l_name"
@@ -312,6 +375,8 @@ const EmployeeRegister = ({
                   Lable="Last Name"
                   in_PlaceHolder="Doe"
                   onChange={onChange}
+                  error={errors.l_name}
+                  required={true}
                 />
                 <FormFiled
                   name="name"
@@ -319,6 +384,8 @@ const EmployeeRegister = ({
                   Lable="Full Name (Auto)"
                   in_PlaceHolder="John Doe"
                   onChange={onChange}
+                  error={errors.name}
+                  required={true}
                 />
                 <Selection
                   label="Gender"
@@ -326,12 +393,16 @@ const EmployeeRegister = ({
                   options={genderOptions}
                   value={formData.gender || ""}
                   onChange={onChange}
+                  error={errors.gender}
+                  required={true}
                 />
                 <CustomDatePicker
                   name="dob"
                   value={formData.dob || ""}
                   Lable="Date of Birth"
                   onChange={onChange}
+                  error={errors.dob}
+                  required={true}
                 />
                 <FormFiled
                   name="phone"
@@ -339,6 +410,8 @@ const EmployeeRegister = ({
                   Lable="Phone"
                   in_PlaceHolder="+91 9876543210"
                   onChange={onChange}
+                  error={errors.phone}
+                  required={true}
                 />
                 <FormFiled
                   name="email"
@@ -346,6 +419,8 @@ const EmployeeRegister = ({
                   Lable="Email"
                   in_PlaceHolder="employee@company.com"
                   onChange={onChange}
+                  error={errors.email}
+                  required={true}
                 />
               </div>
             </section>
@@ -362,6 +437,8 @@ const EmployeeRegister = ({
                   options={departmentOptions}
                   value={formData.Department || ""}
                   onChange={onChange}
+                  error={errors.Department}
+                  required={true}
                 />
                 <FormFiled
                   name="designation"
@@ -369,12 +446,16 @@ const EmployeeRegister = ({
                   Lable="Designation"
                   in_PlaceHolder="Software Engineer"
                   onChange={onChange}
+                  error={errors.designation}
+                  required={true}
                 />
                 <CustomDatePicker
                   name="DateOfJoining"
                   value={formData.DateOfJoining || ""}
                   Lable="Date of Joining"
                   onChange={onChange}
+                  error={errors.DateOfJoining}
+                  required={true}
                 />
                 <Selection
                   label="Employment Type"
@@ -382,6 +463,8 @@ const EmployeeRegister = ({
                   options={employeeTypeOptions}
                   value={formData.emp_type || ""}
                   onChange={onChange}
+                  error={errors.emp_type}
+                  required={true}
                 />
               </div>
             </section>
@@ -413,6 +496,8 @@ const EmployeeRegister = ({
                           onChange={(e) =>
                             handleEduChange(index, "degree", e.target.value)
                           }
+                          error={errors[`edu_${index}_degree`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-4">
@@ -428,6 +513,8 @@ const EmployeeRegister = ({
                               e.target.value,
                             )
                           }
+                          error={errors[`edu_${index}_institution`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-3">
@@ -442,6 +529,8 @@ const EmployeeRegister = ({
                                 : val.target?.value || "";
                             handleEduChange(index, "graduationYear", v);
                           }}
+                          error={errors[`edu_${index}_graduationYear`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-1 flex items-end justify-center">
@@ -487,15 +576,10 @@ const EmployeeRegister = ({
                           Lable="Company Name"
                           in_PlaceHolder="Company Name"
                           value={work.company_name}
-                          onChange={(e) => {
-                            const u = [...formData.WorkExp];
-                            u[index] = {
-                              ...u[index],
-                              company_name: e.target.value,
-                            };
-                            setFormData({ ...formData, WorkExp: u });
-                          }}
+                          onChange={(e) => handleWorkExpChange(index, "company_name", e.target.value)}
                           name={""}
+                          error={errors[`exp_${index}_company_name`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-3">
@@ -503,15 +587,10 @@ const EmployeeRegister = ({
                           Lable="Position"
                           in_PlaceHolder="Software Engineer"
                           value={work.position}
-                          onChange={(e) => {
-                            const u = [...formData.WorkExp];
-                            u[index] = {
-                              ...u[index],
-                              position: e.target.value,
-                            };
-                            setFormData({ ...formData, WorkExp: u });
-                          }}
+                          onChange={(e) => handleWorkExpChange(index, "position", e.target.value)}
                           name={""}
+                          error={errors[`exp_${index}_position`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-2">
@@ -523,11 +602,11 @@ const EmployeeRegister = ({
                               typeof val === "string"
                                 ? val
                                 : val.target?.value || "";
-                            const u = [...formData.WorkExp];
-                            u[index] = { ...u[index], FromDate: v };
-                            setFormData({ ...formData, WorkExp: u });
+                            handleWorkExpChange(index, "FromDate", v);
                           }}
                           name={""}
+                          error={errors[`exp_${index}_FromDate`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-2">
@@ -539,11 +618,11 @@ const EmployeeRegister = ({
                               typeof val === "string"
                                 ? val
                                 : val.target?.value || "";
-                            const u = [...formData.WorkExp];
-                            u[index] = { ...u[index], ToDate: v };
-                            setFormData({ ...formData, WorkExp: u });
+                            handleWorkExpChange(index, "ToDate", v);
                           }}
                           name={""}
+                          error={errors[`exp_${index}_ToDate`]}
+                          required={!work.ToDate && !work.FromDate ? false : true}
                         />
                       </div>
                       <div className="md:col-span-2 flex items-end justify-center">
@@ -587,14 +666,9 @@ const EmployeeRegister = ({
                           value={Depen.person_name}
                           Lable="Name"
                           in_PlaceHolder="Family Name"
-                          onChange={(e) => {
-                            const u = [...formData.Familys];
-                            u[index] = {
-                              ...u[index],
-                              person_name: e.target.value,
-                            };
-                            setFormData({ ...formData, Familys: u });
-                          }}
+                          onChange={(e) => handleFamilyChange(index, "person_name", e.target.value)}
+                          error={errors[`fam_${index}_person_name`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-3">
@@ -603,14 +677,9 @@ const EmployeeRegister = ({
                           name="relationship"
                           options={relationOptions}
                           value={Depen.relationship_type}
-                          onChange={(e) => {
-                            const u = [...formData.Familys];
-                            u[index] = {
-                              ...u[index],
-                              relationship_type: e.target.value,
-                            };
-                            setFormData({ ...formData, Familys: u });
-                          }}
+                          onChange={(e) => handleFamilyChange(index, "relationship_type", e.target.value)}
+                          error={errors[`fam_${index}_relationship_type`]}
+                          required={true}
                         />
                       </div>
                       <div className="md:col-span-3">
@@ -619,11 +688,8 @@ const EmployeeRegister = ({
                           value={Depen.contact}
                           Lable="Contact"
                           in_PlaceHolder="+91 9876543210"
-                          onChange={(e) => {
-                            const u = [...formData.Familys];
-                            u[index] = { ...u[index], contact: e.target.value };
-                            setFormData({ ...formData, Familys: u });
-                          }}
+                          onChange={(e) => handleFamilyChange(index, "contact", e.target.value)}
+                          error={errors[`fam_${index}_contact`]}
                         />
                       </div>
                       <div className="md:col-span-2">
@@ -636,10 +702,9 @@ const EmployeeRegister = ({
                               typeof val === "string"
                                 ? val
                                 : val.target?.value || "";
-                            const u = [...formData.Familys];
-                            u[index] = { ...u[index], person_dob: v };
-                            setFormData({ ...formData, Familys: u });
+                            handleFamilyChange(index, "person_dob", v);
                           }}
+                          error={errors[`fam_${index}_person_dob`]}
                         />
                       </div>
                       <div className="md:col-span-1 flex items-end justify-center">
@@ -674,6 +739,8 @@ const EmployeeRegister = ({
                   Lable="Street Address"
                   in_PlaceHolder="Street Address"
                   onChange={onChange}
+                  error={errors.Street}
+                  required={true}
                 />
                 <FormFiled
                   name="City"
@@ -681,6 +748,8 @@ const EmployeeRegister = ({
                   Lable="City"
                   in_PlaceHolder="City"
                   onChange={onChange}
+                  error={errors.City}
+                  required={true}
                 />
                 <FormFiled
                   name="State"
@@ -688,6 +757,8 @@ const EmployeeRegister = ({
                   Lable="State"
                   in_PlaceHolder="State"
                   onChange={onChange}
+                  error={errors.State}
+                  required={true}
                 />
                 <FormFiled
                   name="Pin_Code"
@@ -695,6 +766,8 @@ const EmployeeRegister = ({
                   Lable="Pin Code"
                   in_PlaceHolder="Pin Code"
                   onChange={onChange}
+                  error={errors.Pin_Code}
+                  required={true}
                 />
               </div>
             </section>
@@ -726,6 +799,8 @@ const EmployeeRegister = ({
                   Lable="Street Address"
                   in_PlaceHolder="Street Address"
                   onChange={onChange}
+                  error={errors.p_Street}
+                  required={!isChecked}
                 />
                 <FormFiled
                   name="p_City"
@@ -733,6 +808,8 @@ const EmployeeRegister = ({
                   Lable="City"
                   in_PlaceHolder="City"
                   onChange={onChange}
+                  error={errors.p_City}
+                  required={!isChecked}
                 />
                 <FormFiled
                   name="p_State"
@@ -740,6 +817,8 @@ const EmployeeRegister = ({
                   Lable="State"
                   in_PlaceHolder="State"
                   onChange={onChange}
+                  error={errors.p_State}
+                  required={!isChecked}
                 />
                 <FormFiled
                   name="p_Pin_Code"
@@ -747,6 +826,8 @@ const EmployeeRegister = ({
                   Lable="Pin Code"
                   in_PlaceHolder="Pin Code"
                   onChange={onChange}
+                  error={errors.p_Pin_Code}
+                  required={!isChecked}
                 />
               </div>
             </section>

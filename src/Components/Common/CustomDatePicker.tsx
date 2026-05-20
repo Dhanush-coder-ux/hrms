@@ -197,6 +197,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
                     name="month"
                     value={getMonth(date)}
                     compact={true}
+                    usePortal={false}
                     options={MONTHS.map((m, i) => ({ label: m, value: i }))}
                     onChange={(e) => changeMonth(Number(e.target.value))}
                   />
@@ -206,6 +207,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
                     name="year"
                     value={getYear(date)}
                     compact={true}
+                    usePortal={false}
                     options={years.map((y) => ({ label: String(y), value: y }))}
                     onChange={(e) => changeYear(Number(e.target.value))}
                   />
