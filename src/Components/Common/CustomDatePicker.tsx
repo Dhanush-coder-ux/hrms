@@ -17,6 +17,8 @@ interface CustomDatePickerProps {
   border?: boolean;
   iconOnly?: boolean;
   required?: boolean;
+  error?: string;
+  disabled?: boolean;
 }
 
 function ensurePortalRoot() {
@@ -33,7 +35,9 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   Lable, 
   onChange, 
   iconOnly = false,
-  required = false
+  required = false,
+  error,
+  disabled = false
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const hasValue = !!value;
@@ -122,7 +126,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       `}</style>
 
       {!iconOnly && Lable && (
-        <label className={`${inputTheme.label} ${isFocused ? 'text-primary' : ''}`}>
+        <label className={`${inputTheme.label} ${isFocused ? 'text-primary' : ''} ${error ? 'text-rose-500' : ''}`}>
           {Lable}
           {required && <span className="text-rose-500 ml-1">*</span>}
         </label>
@@ -132,7 +136,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         {!iconOnly && (
           <CalendarIcon 
             size={16} 
-            className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-200 z-10 ${isFocused ? 'text-primary' : 'text-slate-400'}`} 
+            className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-200 z-10 ${isFocused ? 'text-primary' : 'text-slate-400'} ${error ? 'text-rose-500' : ''}`} 
           />
         )}
 
@@ -146,7 +150,8 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
           popperClassName="cdp-portal"
           popperPlacement={iconOnly ? "bottom-end" : "bottom-start"}
           autoComplete="off"
-          className={`${iconOnly ? 'w-10 h-10 p-0 text-transparent bg-primary/5 hover:bg-primary/10 border-primary/20' : `${inputTheme.base} pl-11`} transition-all cursor-pointer`}
+          disabled={disabled}
+          className={`${iconOnly ? 'w-10 h-10 p-0 text-transparent bg-primary/5 hover:bg-primary/10 border-primary/20' : `${inputTheme.base} pl-11`} ${error ? inputTheme.error : ''} ${disabled ? 'opacity-40 cursor-not-allowed bg-slate-50 border-slate-200' : ''} transition-all cursor-pointer`}
           onChange={(date: Date | null) => {
             if (!date) return onChange({ target: { name, value: "" } });
             const y = date.getFullYear();
@@ -216,7 +221,7 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
           </div>
         )}
 
-        {hasValue && !iconOnly && (
+        {hasValue && !iconOnly && !disabled && (
           <button 
             type="button" 
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-slate-300 hover:text-rose-500 hover:bg-rose-50 transition-all z-10"
@@ -226,6 +231,12 @@ export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
           </button>
         )}
       </div>
+
+      {error && !iconOnly && (
+        <span className="text-[10px] font-bold text-rose-500 mt-1.5 px-1 uppercase tracking-wider block">
+          {error}
+        </span>
+      )}
     </div>
   );
 };

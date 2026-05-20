@@ -14,6 +14,7 @@ type FormProps = {
   type?: string;
   error?: string;
   required?: boolean;
+  onBlur?: () => void;
 };
 
 export const FormFiled = ({
@@ -28,6 +29,7 @@ export const FormFiled = ({
   type = "text",
   error,
   required,
+  onBlur,
 }: FormProps) => {
   const [showValue, setShowValue] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -61,7 +63,10 @@ export const FormFiled = ({
           placeholder={in_PlaceHolder}
           disabled={disabled}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={() => {
+            setIsFocused(false);
+            if (onBlur) onBlur();
+          }}
           className={`${inputTheme.base} ${icon ? 'pl-10' : ''} ${PrivacyInput ? 'pr-10' : ''} ${error ? inputTheme.error : ''}`}
         />
 

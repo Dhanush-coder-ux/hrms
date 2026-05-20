@@ -14,6 +14,8 @@ type SelectionProps = {
   placeholder?: string;
   compact?: boolean;
   disabled?: boolean;
+  error?: string;
+  required?: boolean;
 };
 
 export const Selection = ({
@@ -25,6 +27,8 @@ export const Selection = ({
   placeholder,
   compact = false,
   disabled = false,
+  error,
+  required,
 }: SelectionProps) => {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -191,15 +195,16 @@ export const Selection = ({
     <div className="w-full">
       {label && (
         <label
-          className={`${inputTheme.label} ${focused || open ? "text-primary" : ""}`}
+          className={`${inputTheme.label} ${focused || open ? "text-primary" : ""} ${error ? "text-rose-500" : ""}`}
         >
           {label}
+          {required && <span className="text-rose-500 ml-1">*</span>}
         </label>
       )}
 
       <div
         ref={triggerRef}
-        className={`${inputTheme.select.trigger} ${open ? "border-primary ring-4 ring-primary/10 shadow-sm" : ""} ${compact ? "py-1.5 px-3 rounded-lg" : ""} ${disabled ? "opacity-60 cursor-not-allowed bg-slate-50 border-slate-200" : "cursor-pointer"} transition-all group`}
+        className={`${inputTheme.select.trigger} ${open ? "border-primary ring-4 ring-primary/10 shadow-sm" : ""} ${compact ? "py-1.5 px-3 rounded-lg" : ""} ${disabled ? "opacity-60 cursor-not-allowed bg-slate-50 border-slate-200" : "cursor-pointer"} ${error ? inputTheme.error : ""} transition-all group`}
         onClick={() => { 
           if (disabled) return;
           setOpen((o) => !o); 
@@ -214,11 +219,17 @@ export const Selection = ({
         </span>
         <ChevronDown 
           size={16} 
-          className={`text-slate-400 transition-transform duration-300 ${open ? 'rotate-180 text-primary' : ''}`} 
+          className={`text-slate-400 transition-transform duration-300 ${open ? 'rotate-180 text-primary' : ''} ${error ? 'text-rose-500' : ''}`} 
         />
       </div>
 
       {dropdown}
+
+      {error && (
+        <span className="text-[10px] font-bold text-rose-500 mt-1.5 px-1 uppercase tracking-wider block">
+          {error}
+        </span>
+      )}
     </div>
   );
 };

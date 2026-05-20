@@ -224,20 +224,20 @@ const EmployeeRegister = ({
   };
 
 
- const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  try {
+    try {
 
-    const updatedData = { ...formData };
+      const updatedData = { ...formData };
 
-    setEmployeeData?.(updatedData);
-    ClicktoAction?.();
+      setEmployeeData?.(updatedData);
+      ClicktoAction?.();
 
-  } catch (error) {
-    console.error("Error", error);
-  }
-};
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
 
   return (
     <>
