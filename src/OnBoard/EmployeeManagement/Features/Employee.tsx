@@ -16,11 +16,30 @@ const DEPARTMENT_API = `${BASE_URL}/departments/`;
 
 export default function EmployeeComponent() {
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [activeEmployees, setActiveEmployees] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterDept, setFilterDept] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+
+  useEffect(() => {
+    const fetchActiveSessions = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/employee-session/active-list`);
+        if (res.ok) {
+          const data = await res.json();
+          setActiveEmployees(data.active_employees || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch active sessions:", err);
+      }
+    };
+
+    fetchActiveSessions();
+    const interval = setInterval(fetchActiveSessions, 20000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -199,7 +218,7 @@ export default function EmployeeComponent() {
           </span>
         </div>
 
-        <EmployeeTable employees={filtered} onRowClick={handleRowClick} />
+        <EmployeeTable employees={filtered} onRowClick={handleRowClick} activeEmployees={activeEmployees} />
       </div>
 
 

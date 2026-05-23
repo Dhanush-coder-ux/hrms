@@ -4,6 +4,7 @@ import { AttendanceChart } from "../Dashboard/Charts/AttendanceChart";
 import { DepartmentChart } from "../Dashboard/Charts/DepartmentChart";
 import { RecentActivity } from "../Dashboard/RecentActivity";
 import { WorkforceSummary } from "../Dashboard/WorkforceSummary";
+import { DashboardLeaveRequests } from "../Dashboard/DashboardLeaveRequests";
 
 import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
@@ -21,7 +22,14 @@ export const Dashboard = () => {
           <DepartmentChart />
         </div>
 
-        <RecentActivity />
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <DashboardLeaveRequests />
+          </div>
+          <div className="lg:col-span-1">
+            <RecentActivity />
+          </div>
+        </div>
 
         <WorkforceSummary />
 
@@ -29,3 +37,4 @@ export const Dashboard = () => {
     </section>
   );
 };
+

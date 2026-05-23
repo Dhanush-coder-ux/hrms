@@ -8,6 +8,8 @@ import {
   FileText,
   LayoutDashboard,
 
+  LockKeyhole,
+
   PackageCheck,
   Paperclip,
   PersonStanding,
@@ -61,6 +63,8 @@ export const onboardNavigation = [
     path: "/onboard/add-employee",
     icon: PersonStanding,
   },
+  {label:"Portal Access", path:"/onboard/potal-access",icon:LockKeyhole}
+
 ];
 
 export const AdminPort = [

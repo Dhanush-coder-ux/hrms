@@ -6,11 +6,12 @@ import { empMangeTheme } from "../../../../Themes/EmpMangeTheme/empMangeConfig";
 interface EmployeeTableProps {
   employees: Employee[];
   onRowClick: (emp: Employee) => void;
+  activeEmployees?: string[];
 }
 
 const HEADERS = ["Personnel", "Department", "Designation", "Contact Info", "Status", ""];
 
-export default function EmployeeTable({ employees, onRowClick }: EmployeeTableProps) {
+export default function EmployeeTable({ employees, onRowClick, activeEmployees = [] }: EmployeeTableProps) {
   return (
     <div className={empMangeTheme.table.wrapper + " max-h-[520px]"}>
       <table className="w-full border-collapse relative">
@@ -44,6 +45,7 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
               const deptBg = emp.departmentData?.bg_color ?? "#f1f5f9";
               const deptText = emp.departmentData?.icon_color ?? "#64748b";
               const isActive = emp.Status?.toLowerCase() === "active";
+              const isOnline = activeEmployees.includes(emp.Emp_id);
 
               return (
                 <tr
@@ -54,7 +56,10 @@ export default function EmployeeTable({ employees, onRowClick }: EmployeeTablePr
                   {/* Personnel */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <UserAvatar name={emp.name || "E"} variant="table" />
+                      <div className="relative">
+                        <UserAvatar name={emp.name || "E"} variant="table" />
+                        <span className={`w-3 h-3 rounded-full absolute -bottom-0.5 -right-0.5 border border-white shadow-sm transition-all duration-300 ${isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                      </div>
                       <div>
                         <p className="m-0 text-[13px] font-bold text-slate-800 tracking-tight uppercase">
                           {emp.name}

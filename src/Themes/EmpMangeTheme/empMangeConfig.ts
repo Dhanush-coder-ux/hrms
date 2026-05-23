@@ -1,6 +1,6 @@
 export const empMangeTheme = {
   layout: {
-    mainContainer: "h-full p-10 font-sans custom-scrollbar",
+    mainContainer: "min-h-full p-10 pb-16 font-sans custom-scrollbar",
   },
   header: {
     wrapper: "flex items-start justify-between gap-6 mb-10 flex-wrap",

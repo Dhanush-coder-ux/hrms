@@ -46,6 +46,7 @@ import { RequirementProfile } from "./OnBoard/InterviewProcess/Features/Requirem
 import { JobPostings } from "./OnBoard/InterviewProcess/Features/JobPostings";
 import { PosterStacks } from "./AdminPort/Features/Poster/PosterStacks";
 import { InterView } from "./AdminPort/Features/Interview/InterViewStack";
+import { PortAccess } from "./OnBoard/InterviewProcess/Features/PortAccsess";
 
 
 export function GlobalErrorBoundary() {
@@ -139,7 +140,8 @@ export const router = createBrowserRouter([
           { path: "offers", element: <OfferLetterPage /> },
           { path: "requirement", element: <Requirement /> },
           { path: "requirement/:id", element: <RequirementProfile /> },
-          { path: "jobpostings", element: <JobPostings /> }
+          { path: "jobpostings", element: <JobPostings /> },
+          { path: "potal-access", element: <PortAccess /> }
         ],
       },
       {
