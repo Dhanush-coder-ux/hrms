@@ -1,5 +1,6 @@
 import { Loader2, AlertCircle, Trash2, Key } from "lucide-react";
 import { pageTheme } from "../../../../Themes/PageThems/pageConfig";
+import { getUserTheme } from "../../../../Components/Common/UserAvatar";
 
 export interface EmployeePortalStatus {
   Emp_id: string;
@@ -52,8 +53,7 @@ export const PortAccsesTable = ({
       <table className="w-full border-collapse">
         <thead className={pageTheme.table.head}>
           <tr className={pageTheme.table.headRow}>
-            <th className={pageTheme.table.headCell}>Employee ID</th>
-            <th className={pageTheme.table.headCell}>Name</th>
+            <th className={pageTheme.table.headCell}>Employee</th>
             <th className={pageTheme.table.headCell}>Department</th>
             <th className={pageTheme.table.headCell}>Designation</th>
             <th className={pageTheme.table.headCell}>Portal Login Email</th>
@@ -62,15 +62,34 @@ export const PortAccsesTable = ({
           </tr>
         </thead>
         <tbody>
-          {employees.map((emp) => (
-            <tr key={emp.Emp_id} className={pageTheme.table.row}>
-              <td className={pageTheme.table.cell + " font-black text-slate-700 text-xs"}>{emp.Emp_id}</td>
-              <td className={pageTheme.table.cell + " font-bold text-slate-800 text-xs flex items-center gap-2"}>
-                <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-500 border border-slate-200">
-                  {emp.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)}
-                </div>
-                {emp.name}
-              </td>
+          {employees.map((emp) => {
+            const theme = getUserTheme(emp.name);
+            const initials = emp.name
+              ?.split(" ")
+              .slice(0, 2)
+              .map((w: string) => w[0])
+              .join("")
+              .toUpperCase();
+
+            return (
+              <tr key={emp.Emp_id} className={pageTheme.table.row}>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center text-[12px] font-extrabold flex-shrink-0 tracking-tighter ${theme.tableBg} ${theme.tableText}`}
+                    >
+                      {initials}
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-bold text-slate-800 tracking-tight m-0">
+                        {emp.name}
+                      </p>
+                      <p className="text-[10px] font-bold text-slate-400 tracking-wider m-0 mt-0.5">
+                        #{emp.Emp_id}
+                      </p>
+                    </div>
+                  </div>
+                </td>
               <td className={pageTheme.table.cell + " font-bold text-slate-500 text-xs"}>{emp.Department || "—"}</td>
               <td className={pageTheme.table.cell + " font-semibold text-slate-400 text-xs"}>{emp.designation || "—"}</td>
               <td className={pageTheme.table.cell + " text-xs font-semibold text-slate-600"}>
@@ -118,7 +137,8 @@ export const PortAccsesTable = ({
                 )}
               </td>
             </tr>
-          ))}
+          );
+        })}
         </tbody>
       </table>
     </div>
