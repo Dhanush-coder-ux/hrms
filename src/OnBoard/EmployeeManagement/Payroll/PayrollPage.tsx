@@ -10,7 +10,7 @@ import { Api_URL } from "../../../APILINK";
 import PageLoading from "../../../Components/Common/PageLoading";
 import { MdPayment } from "react-icons/md";
 
-const API_URL = `${Api_URL}/payroll`;
+const API_URL = `${Api_URL}/payroll/`;
 
 const PayrollComponents = () => {
   const [payrollData, setPayrollData] = useState<PayrollData[]>([]);

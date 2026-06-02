@@ -47,6 +47,7 @@ import { JobPostings } from "./OnBoard/InterviewProcess/Features/JobPostings";
 import { PosterStacks } from "./AdminPort/Features/Poster/PosterStacks";
 import { InterView } from "./AdminPort/Features/Interview/InterViewStack";
 import { PortAccess } from "./OnBoard/InterviewProcess/Features/PortAccsess";
+import { AttendanceHistory } from "./OnBoard/EmployeeManagement/Attendance/AttendanceHistory";
 
 
 export function GlobalErrorBoundary() {
@@ -120,6 +121,7 @@ export const router = createBrowserRouter([
           { path: "employeeleave", element: <EMPleaves /> },
           { path: "events", element: <Events /> },
           { path: "employee-leave/*", element: <EmployeeLeaveDetails /> },
+          { path: "attendancehistory/*", element: <AttendanceHistory /> },
         ],
       },
 

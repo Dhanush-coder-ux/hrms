@@ -129,4 +129,4 @@ export const Table = ({
       </table>
     </div>
   );
-};
+};

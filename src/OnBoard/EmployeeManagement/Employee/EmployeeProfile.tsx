@@ -30,16 +30,16 @@ import { getUserTheme } from "../../../Components/Common/UserAvatar";
 
 const BASE_URL = Api_URL;
 
-const Edu_GET_URL        = (id: string) => `${BASE_URL}/employee/EmployeeEducation/${id}`;
-const Edu_UPDATE_URL     = (id: string) => `${BASE_URL}/employee/EmployeeEducationUpdate/${id}`;
-const Edu_CREATE_URL     = (id: string) => `${BASE_URL}/employee/EmployeeEducationCreate/${id}`;
-const FamilyS_GET_URL    = (id: string) => `${BASE_URL}/employee/EmployeeFamilys/${id}`;
+const Edu_GET_URL = (id: string) => `${BASE_URL}/employee/EmployeeEducation/${id}`;
+const Edu_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeEducationUpdate/${id}`;
+const Edu_CREATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeEducationCreate/${id}`;
+const FamilyS_GET_URL = (id: string) => `${BASE_URL}/employee/EmployeeFamilys/${id}`;
 const FamilyS_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeFamilysUpdate/${id}`;
 const FamilyS_CREATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeFamilysCreate/${id}`;
 
-const Work_GET_URL        = (id: string) => `${BASE_URL}/employee/EmployeeWorkExp/${id}`;
-const Work_UPDATE_URL     = (id: string) => `${BASE_URL}/employee/EmployeeWorkExpUpdate/${id}`;
-const Work_CREATE_URL     = (id: string) => `${BASE_URL}/employee/EmployeeWorkExpCreate/${id}`;
+const Work_GET_URL = (id: string) => `${BASE_URL}/employee/EmployeeWorkExp/${id}`;
+const Work_UPDATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeWorkExpUpdate/${id}`;
+const Work_CREATE_URL = (id: string) => `${BASE_URL}/employee/EmployeeWorkExpCreate/${id}`;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -97,8 +97,8 @@ export default function EmployeeProfile() {
   const departmentOptions = useListOptions(`${Api_URL}/departments/`);
 
   const [isEditing, setIsEditing] = useState(!id);
-  const [loading, setLoading]     = useState(false);
-  const [fetching, setFetching]   = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -158,21 +158,16 @@ export default function EmployeeProfile() {
     panNumber: "",
     payFrequency: "",
 
-    education: [
-      { degree: "", institution: "", graduationYear: "" },
-    ],
-
-    WorkExp: [
-      { company_name: "", position: "", FromDate: "", ToDate: "" },
-    ],
+    education: [] as any[],
+    WorkExp: [] as any[],
 
     Familys: [
-      { 
-        person_name: "", 
-        relationship_type: "", 
-        contact: "", 
+      {
+        person_name: "",
+        relationship_type: "",
+        contact: "",
         person_dob: "",
-        nominees: [{ nominee_name: "", nominee_aadhar: "" }] 
+        nominees: [{ nominee_name: "", nominee_aadhar: "" }]
       },
     ],
   });
@@ -197,41 +192,41 @@ export default function EmployeeProfile() {
         setForm((prev) => ({
           ...prev,
           ...empInfo,
-          base_salary:          empData.base_salary ?? 0,
-          gross_salary:         empData.gross_salary ?? 0,
-          total_earnings:       empData.total_earnings ?? 0,
-          total_deductions:     empData.total_deductions ?? 0,
-          net_salary:           empData.net_salary ?? 0,
-          earnings_breakdown:   empData.earnings_breakdown ?? [],
+          base_salary: empData.base_salary ?? 0,
+          gross_salary: empData.gross_salary ?? 0,
+          total_earnings: empData.total_earnings ?? 0,
+          total_deductions: empData.total_deductions ?? 0,
+          net_salary: empData.net_salary ?? 0,
+          earnings_breakdown: empData.earnings_breakdown ?? [],
           deductions_breakdown: empData.deductions_breakdown ?? [],
 
           education: eduData.length
             ? eduData.map((edu: any) => ({
-                degree:          edu.degree,
-                institution:     edu.institution,
-                graduationYear:  edu.graduationYear,
-              }))
-            : [{ degree: "", institution: "", graduationYear: "" }],
+              degree: edu.degree,
+              institution: edu.institution,
+              graduationYear: edu.graduationYear,
+            }))
+            : [],
 
           WorkExp: workData.length
             ? workData.map((w: any) => ({
-                company_name: w.company_name,
-                position:     w.position,
-                FromDate:     w.FromDate,
-                ToDate:       w.ToDate,
-              }))
-            : [{ company_name: "", position: "", FromDate: "", ToDate: "" }],
+              company_name: w.company_name,
+              position: w.position,
+              FromDate: w.FromDate,
+              ToDate: w.ToDate,
+            }))
+            : [],
 
           Familys: depData.length
             ? depData.map((dep: any) => ({
-                person_name:       dep.person_name,
-                relationship_type: dep.relationship_type,
-                contact:           dep.contact,
-                person_dob:        dep.person_dob,
-                nominees:          dep.nominees && dep.nominees.length 
-                  ? dep.nominees.map((n: any) => ({ nominee_name: n.nominee_name, nominee_aadhar: n.nominee_aadhar }))
-                  : [{ nominee_name: "", nominee_aadhar: "" }]
-              }))
+              person_name: dep.person_name,
+              relationship_type: dep.relationship_type,
+              contact: dep.contact,
+              person_dob: dep.person_dob,
+              nominees: dep.nominees && dep.nominees.length
+                ? dep.nominees.map((n: any) => ({ nominee_name: n.nominee_name, nominee_aadhar: n.nominee_aadhar }))
+                : [{ nominee_name: "", nominee_aadhar: "" }]
+            }))
             : [{ person_name: "", relationship_type: "", contact: "", person_dob: "", nominees: [{ nominee_name: "", nominee_aadhar: "" }] }],
         }));
       })
@@ -270,6 +265,14 @@ export default function EmployeeProfile() {
     }
   };
 
+  const handleDeleteArrayItem = (arrayName: string, index: number) => {
+    setForm((prev: any) => {
+      const updatedArray = [...prev[arrayName]];
+      updatedArray.splice(index, 1);
+      return { ...prev, [arrayName]: updatedArray };
+    });
+  };
+
   const handleSave = async () => {
     setLoading(true);
     try {
@@ -292,40 +295,52 @@ export default function EmployeeProfile() {
       });
       if (!empRes.ok) throw new Error(`Employee update failed (${empRes.status})`);
 
-      if (form.education && form.education.length > 0) {
-        const hasData = form.education.some((e) => e.degree || e.institution || e.graduationYear);
-        if (hasData) {
-          await upsertData(Edu_UPDATE_URL(id), Edu_CREATE_URL(id), form.education.map((edu) => ({
-            degree: edu.degree,
-            institution: edu.institution,
-            graduationYear: edu.graduationYear || null,
-          })));
+      try {
+        if (form.education && form.education.length > 0) {
+          const hasData = form.education.some((e) => e.degree || e.institution || e.graduationYear);
+          if (hasData) {
+            await upsertData(Edu_UPDATE_URL(id), Edu_CREATE_URL(id), form.education.map((edu) => ({
+              degree: edu.degree,
+              institution: edu.institution,
+              graduationYear: edu.graduationYear || null,
+            })));
+          }
         }
+      } catch (err) {
+        console.error("Education update failed:", err);
       }
 
-      if (form.WorkExp && form.WorkExp.length > 0) {
-        const hasData = form.WorkExp.some((w) => w.company_name || w.position);
-        if (hasData) {
-          await upsertData(Work_UPDATE_URL(id), Work_CREATE_URL(id), form.WorkExp.map((w) => ({
-            company_name: w.company_name,
-            position: w.position,
-            FromDate: w.FromDate || null,
-            ToDate: w.ToDate || null,
-          })));
+      try {
+        if (form.WorkExp && form.WorkExp.length > 0) {
+          const hasData = form.WorkExp.some((w) => w.company_name || w.position);
+          if (hasData) {
+            await upsertData(Work_UPDATE_URL(id), Work_CREATE_URL(id), form.WorkExp.map((w) => ({
+              company_name: w.company_name,
+              position: w.position,
+              FromDate: w.FromDate || null,
+              ToDate: w.ToDate || null,
+            })));
+          }
         }
+      } catch (err) {
+        console.error("Work experience update failed:", err);
       }
 
-      if (form.Familys && form.Familys.length > 0) {
-        const hasData = form.Familys.some((d) => d.person_name || d.relationship_type || d.contact);
-        if (hasData) {
-          await upsertData(FamilyS_UPDATE_URL(id), FamilyS_CREATE_URL(id), form.Familys.map((dep) => ({
-            person_name: dep.person_name,
-            relationship_type: dep.relationship_type,
-            contact: dep.contact,
-            person_dob: dep.person_dob || null,
-            nominees: dep.nominees.filter(n => n.nominee_name || n.nominee_aadhar)
-          })));
+      try {
+        if (form.Familys && form.Familys.length > 0) {
+          const hasData = form.Familys.some((d) => d.person_name || d.relationship_type || d.contact);
+          if (hasData) {
+            await upsertData(FamilyS_UPDATE_URL(id), FamilyS_CREATE_URL(id), form.Familys.map((dep) => ({
+              person_name: dep.person_name,
+              relationship_type: dep.relationship_type,
+              contact: dep.contact,
+              person_dob: dep.person_dob || null,
+              nominees: dep.nominees.filter(n => n.nominee_name || n.nominee_aadhar)
+            })));
+          }
         }
+      } catch (err) {
+        console.error("Family update failed:", err);
       }
 
       setIsEditing(false);
@@ -351,8 +366,8 @@ export default function EmployeeProfile() {
     <div className={pageTheme.layout.mainContainer}>
       {/* Top Navigation & Actions */}
       <div className="flex items-center justify-between mb-10">
-        <button 
-          onClick={() => navigate(-1)} 
+        <button
+          onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-slate-400 hover:text-primary transition-colors text-[10px] font-black uppercase tracking-[0.2em]"
         >
           <ArrowLeft size={14} /> Back to Directory
@@ -416,23 +431,23 @@ export default function EmployeeProfile() {
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
-             <div className="text-right pr-4 border-r border-slate-100">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Monthly Net</p>
-                <p className="text-2xl font-black text-emerald-600 leading-none">
-                  {form.net_salary ? `${form.net_salary.toLocaleString()} ${form.currency || "INR"}` : "—"}
-                </p>
-             </div>
-             <div className="w-14 h-14 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all cursor-pointer">
-                <TrendingUp size={20} />
-             </div>
+            <div className="text-right pr-4 border-r border-slate-100">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Monthly Net</p>
+              <p className="text-2xl font-black text-emerald-600 leading-none">
+                {form.net_salary ? `${form.net_salary.toLocaleString()} ${form.currency || "INR"}` : "—"}
+              </p>
+            </div>
+            <div className="w-14 h-14 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all cursor-pointer">
+              <TrendingUp size={20} />
+            </div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
+
         {/* Left Column */}
         <div className="lg:col-span-4 space-y-8">
           <div className={pageTheme.section.card}>
@@ -502,12 +517,22 @@ export default function EmployeeProfile() {
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            <InfoCard title="Education" icon={<GraduationCap size={20} />} data={form.education} isEditing={isEditing} 
+            <InfoCard title="Education" icon={<GraduationCap size={20} />} data={form.education} isEditing={isEditing}
               onAdd={() => setForm({ ...form, education: [...form.education, { degree: "", institution: "", graduationYear: "" }] })}
               renderItem={(edu: any) => (
                 <div className="flex gap-4">
                   <div className="w-10 h-10 rounded-xl bg-violet-50 text-violet-500 flex items-center justify-center flex-shrink-0"><GraduationCap size={20} /></div>
                   <div><p className="text-sm font-black text-slate-800">{edu.degree}</p><p className="text-[11px] font-bold text-slate-400 uppercase">{edu.institution} • {edu.graduationYear}</p></div>
+                </div>
+              )}
+              renderEditItem={(edu: any, idx: number) => (
+                <div className="space-y-4 mb-4 p-4 border border-slate-100 rounded-xl bg-slate-50/50 relative">
+                  <button type="button" onClick={() => handleDeleteArrayItem('education', idx)} className="absolute top-2 right-2 text-rose-500 hover:bg-rose-100 font-bold text-[10px] uppercase tracking-widest bg-rose-50 px-2 py-1 rounded">Delete</button>
+                  <div className="pt-2">
+                    <FormFiled Lable="Degree" name={`education[${idx}].degree`} value={edu.degree} onChange={handleChange} in_PlaceHolder="e.g. B.Tech" />
+                  </div>
+                  <FormFiled Lable="Institution" name={`education[${idx}].institution`} value={edu.institution} onChange={handleChange} in_PlaceHolder="e.g. MIT" />
+                  <FormFiled Lable="Graduation Year" name={`education[${idx}].graduationYear`} value={edu.graduationYear} onChange={handleChange} in_PlaceHolder="e.g. 2023" />
                 </div>
               )}
             />
@@ -517,6 +542,17 @@ export default function EmployeeProfile() {
                 <div className="flex gap-4">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center flex-shrink-0"><Briefcase size={20} /></div>
                   <div><p className="text-sm font-black text-slate-800">{work.position}</p><p className="text-[11px] font-bold text-slate-400 uppercase">{work.company_name}</p></div>
+                </div>
+              )}
+              renderEditItem={(work: any, idx: number) => (
+                <div className="space-y-4 mb-4 p-4 border border-slate-100 rounded-xl bg-slate-50/50 relative">
+                  <button type="button" onClick={() => handleDeleteArrayItem('WorkExp', idx)} className="absolute top-2 right-2 text-rose-500 hover:bg-rose-100 font-bold text-[10px] uppercase tracking-widest bg-rose-50 px-2 py-1 rounded">Delete</button>
+                  <div className="pt-2">
+                    <FormFiled Lable="Company Name" name={`WorkExp[${idx}].company_name`} value={work.company_name} onChange={handleChange} in_PlaceHolder="e.g. Google" />
+                  </div>
+                  <FormFiled Lable="Position" name={`WorkExp[${idx}].position`} value={work.position} onChange={handleChange} in_PlaceHolder="e.g. Software Engineer" />
+                  <CustomDatePicker Lable="From Date" name={`WorkExp[${idx}].FromDate`} value={work.FromDate} onChange={handleChange} />
+                  <CustomDatePicker Lable="To Date" name={`WorkExp[${idx}].ToDate`} value={work.ToDate} onChange={handleChange} />
                 </div>
               )}
             />
@@ -613,10 +649,10 @@ export default function EmployeeProfile() {
                   <BreakdownSection title="Deductions" data={form.deductions_breakdown} color="rose" currency={form.currency} isDeduction />
                 </div>
                 <div className="pt-8 border-t border-slate-100 flex flex-col items-end gap-3">
-                   <div className="flex items-center justify-between w-72 h-16 px-6 rounded-[24px] bg-slate-900 text-white">
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Net Salary</span>
-                      <span className="text-xl font-black">{form.net_salary.toLocaleString()} {form.currency}</span>
-                   </div>
+                  <div className="flex items-center justify-between w-72 h-16 px-6 rounded-[24px] bg-slate-900 text-white">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Net Salary</span>
+                    <span className="text-xl font-black">{form.net_salary.toLocaleString()} {form.currency}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -661,13 +697,16 @@ function QuickAction({ icon, label, color }: any) {
   );
 }
 
-function InfoCard({ title, data, isEditing, onAdd, renderItem }: any) {
+function InfoCard({ title, data, isEditing, onAdd, renderItem, renderEditItem }: any) {
   return (
     <div className={pageTheme.section.card}>
       <div className={pageTheme.section.header}><div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />{title}</div></div>
       <div className="p-8 space-y-6">
         {isEditing ? (
-          <button onClick={onAdd} className="text-xs font-black text-primary uppercase tracking-widest hover:underline">+ Add {title}</button>
+          <div className="space-y-6">
+            {data.map((item: any, idx: number) => <div key={idx}>{renderEditItem ? renderEditItem(item, idx) : null}</div>)}
+            <button type="button" onClick={onAdd} className="text-xs font-black text-primary uppercase tracking-widest hover:underline">+ Add {title}</button>
+          </div>
         ) : (
           data.map((item: any, idx: number) => <div key={idx}>{renderItem(item)}</div>)
         )}
