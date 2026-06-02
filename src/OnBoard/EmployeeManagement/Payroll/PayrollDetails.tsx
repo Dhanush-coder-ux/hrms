@@ -6,7 +6,8 @@ import { Api_URL } from "../../../APILINK";
 import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 const PayrollDetails = () => {
-  const { id: emp_id } = useParams();
+  const params = useParams();
+  const emp_id = params["*"];
   const [data, setData] = useState<any>(null);
   const [view, setView] = useState<"monthly" | "yearly">("monthly");
   const [loading, setLoading] = useState(true);

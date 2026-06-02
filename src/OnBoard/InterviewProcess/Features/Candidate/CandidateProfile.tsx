@@ -34,7 +34,8 @@ const STATUS_CONFIG: Record<string, { label: string; dot: string; badge: string;
 };
 
 export const CandidateProfile = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params["*"];
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);

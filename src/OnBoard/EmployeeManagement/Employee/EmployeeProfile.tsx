@@ -89,7 +89,8 @@ async function upsertData(
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export default function EmployeeProfile() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params["*"];
   const navigate = useNavigate();
 
   const providerOptions = useListOptions(`${Api_URL}/payroll/providers`);

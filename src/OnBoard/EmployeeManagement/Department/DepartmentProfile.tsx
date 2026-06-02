@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Api_URL } from "../../../APILINK";
 import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
@@ -46,7 +46,9 @@ type DepartmentAPI = {
 
 export default function DepartmentProfile() {
 
-  const { id } = useParams();
+  const params = useParams();
+  const id = params["*"];
+  const navigate = useNavigate();
   const [dept, setDept] = useState<DepartmentAPI | null>(null);
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,11 +57,8 @@ export default function DepartmentProfile() {
   useEffect(() => {
     if (!id) return;
 
-    // Encode the ID to handle slashes correctly
-    const encodedId = encodeURIComponent(id);
-
     // Fetch Department Info
-    fetch(`${Api_URL}/departments/${encodedId}`)
+    fetch(`${Api_URL}/departments/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setDept(data);
@@ -71,7 +70,7 @@ export default function DepartmentProfile() {
       });
 
     // Fetch Department Employees
-    fetch(`${Api_URL}/departments/${encodedId}/employees`)
+    fetch(`${Api_URL}/departments/${id}/employees`)
       .then((res) => res.json())
       .then((data) => {
         console.log("EMP DATA:", data);
@@ -204,6 +203,7 @@ export default function DepartmentProfile() {
                       <div
                         key={emp.Emp_id || index}
                         className="flex items-center justify-between p-4 rounded-2xl border border-slate-50 hover:bg-primary/5 hover:shadow-md transition-all group cursor-pointer"
+                        onClick={() => navigate(`/EmployeeManagement/employee/${emp.Emp_id}`)}
                       >
                         <div className="flex items-center gap-4">
                           <UserAvatar 
@@ -255,7 +255,10 @@ export default function DepartmentProfile() {
                     <button className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20 active:scale-95">
                       Generate Report
                     </button>
-                    <button className="border border-slate-200 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all active:scale-95">
+                    <button 
+                      className="border border-slate-200 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all active:scale-95"
+                      onClick={() => setTab("team")}
+                    >
                       Manage Team
                     </button>
                   </div>

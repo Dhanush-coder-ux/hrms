@@ -9,7 +9,8 @@ import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 export const EmployeeLeaveDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { empid } = useParams();
+  const params = useParams();
+  const empid = params["*"];
   const employee = location.state as Empleaves;
 
   if (!employee) {

@@ -55,7 +55,8 @@ interface RequirementDetail {
 }
 
 export const RequirementProfile = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params["*"];
   const navigate = useNavigate();
   const [data, setData] = useState<RequirementDetail | null>(null);
   const [loading, setLoading] = useState(true);
