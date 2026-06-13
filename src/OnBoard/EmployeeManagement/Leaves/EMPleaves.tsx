@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { EmpLeaveTable, type Column } from "../../EmployeeManagement/Components/table/EmpLeaveTable";
+import { EmpLeaveTable, type Column } from "../Components/table/EmpLeaveTable";
 import { useNavigate } from "react-router-dom";
 import StatCard from "../../../Components/Common/StatCard";
 import { UserCheck, UserMinus, Users, TrendingUp, Download, Check, X, Calendar, Filter, ClipboardList } from "lucide-react";

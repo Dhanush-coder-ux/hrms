@@ -480,8 +480,8 @@ export default function EmployeeProfile() {
                 <div className={pageTheme.section.title}><span className={pageTheme.section.titleDot} />Related Actions</div>
               </div>
               <div className="p-4 space-y-2">
-                <QuickAction icon={<ArrowRightIcon size={18} />} label="Leave History" color="primary" />
-                <QuickAction icon={<ArrowRightIcon size={18} />} label="Attendance Log" color="violet" />
+                <QuickAction icon={<ArrowRightIcon size={18} />} label="Leave History" color="primary" onClick={() => navigate(`/EmployeeManagement/employee-leave/${id}`)} />
+                <QuickAction icon={<ArrowRightIcon size={18} />} label="Attendance Log" color="violet" onClick={() => navigate(`/EmployeeManagement/attendancehistory/${id}`)} />
               </div>
             </div>
           )}
@@ -684,10 +684,10 @@ function DetailItem({ label, value, icon }: any) {
   );
 }
 
-function QuickAction({ icon, label, color }: any) {
+function QuickAction({ icon, label, color , onClick}: any) {
   const colors: any = { primary: "bg-primary/5 text-primary group-hover:bg-primary", violet: "bg-violet-50 text-violet-500 group-hover:bg-violet-500" };
   return (
-    <button className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-all group">
+    <button className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-all group" onClick={onClick}>
       <div className="flex items-center gap-3">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center group-hover:text-white transition-all ${colors[color]}`}>{icon}</div>
         <span className="text-sm font-bold text-slate-700">{label}</span>

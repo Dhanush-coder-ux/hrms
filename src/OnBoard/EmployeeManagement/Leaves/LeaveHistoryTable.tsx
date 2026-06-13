@@ -1,4 +1,4 @@
-import { Calendar, Info, History } from "lucide-react";
+import { Calendar, Info, History, CalendarCheck } from "lucide-react";
 import type { Empleaves } from "../../../Types/typesEmployeeManagement";
 import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
@@ -42,6 +42,7 @@ export const LeaveHistoryTable = ({ history }: HistoryTableProps) => {
               <th className={empMangeTheme.table.headCell + " px-8 text-center"}>Days</th>
               <th className={empMangeTheme.table.headCell + " px-8"}>Status</th>
               <th className={empMangeTheme.table.headCell + " px-8"}>Reason</th>
+              <th className={empMangeTheme.table.headCell + " px-8"}>Leave Type</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
@@ -54,7 +55,7 @@ export const LeaveHistoryTable = ({ history }: HistoryTableProps) => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="px-8 py-20 text-center">
+                <td colSpan={6} className="px-8 py-20 text-center">
                    <div className="flex flex-col items-center gap-2 opacity-30">
                       <History size={40} />
                       <p className="text-[11px] font-bold uppercase tracking-widest">No history records</p>
@@ -112,6 +113,15 @@ const LeaveHistoryRow = ({ leave }: { leave: any }) => {
           </p>
         </div>
       </td>
+      
+      <td className="px-8 py-5">
+        <div className="flex items-start gap-2.5">
+          <CalendarCheck size={14} className="text-slate-300 mt-0.5 shrink-0" />
+          <p className="text-[12px] font-medium text-slate-500 leading-relaxed max-w-[250px]">
+            {leave.leave_type || "No reason provided"}
+          </p>
+        </div>
+      </td>
     </tr>
   );
-};
+};

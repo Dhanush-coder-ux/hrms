@@ -1,19 +1,54 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import type { Empleaves } from "../../../Types/typesEmployeeManagement";
+import {useNavigate, useParams } from "react-router-dom";
+
 import { Backbutton } from "../../../Components/Common/Backbutton";
 import { LeaveHistoryTable } from "./LeaveHistoryTable";
 import StatCard from "../../../Components/Common/StatCard";
 import { User, Briefcase, CalendarCheck, Clock, TrendingUp } from "lucide-react";
 import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
+import { Api_URL } from "../../../APILINK";
+import { useEffect, useState } from "react";
+import type { EmployeeLeaveHistory } from "../../../Types/EmployeeLeaveHistory";
+
+
+
 
 export const EmployeeLeaveDetails = () => {
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
   const empid = params["*"];
-  const employee = location.state as Empleaves;
+  // const employee = location.state as Empleaves;
+const [EmployeeLeavees, setEmployeeLeavees] =
+  useState<EmployeeLeaveHistory | null>(null);
 
-  if (!employee) {
+
+
+    useEffect(() => {
+      const fetchData = async () => {
+  try {
+    const res = await fetch(`${Api_URL}/leave/history/${empid}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      
+      console.log(data);
+      setEmployeeLeavees(data);
+    }
+  } catch (err) {
+          console.error("Fetch Error:", err);
+        } finally {
+          console.log(EmployeeLeavees);
+        }
+      };
+      fetchData();
+    }, []);
+
+  if (!EmployeeLeavees){
     return (
       <div className="flex flex-col items-center justify-center h-full p-10 text-center bg-slate-50/50">
         <div className="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-4">
@@ -44,10 +79,10 @@ export const EmployeeLeaveDetails = () => {
             <span>Employee Profile</span>
           </div>
           <h1 className={empMangeTheme.header.title}>
-            {employee.employee_name}
+            {EmployeeLeavees.employee_name}
           </h1>
           <p className={empMangeTheme.header.subtitle}>
-            Personal leave insights for ID: <span className="text-primary font-bold">#{employee.Emp_id}</span>
+            Personal leave insights for ID: <span className="text-primary font-bold">#{EmployeeLeavees.empid}</span>
           </p>
         </div>
       </div>
@@ -56,7 +91,7 @@ export const EmployeeLeaveDetails = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         <StatCard
           label="Total Quota"
-          value={employee.total_leave}
+          value={EmployeeLeavees.total_leave}
           icon={Briefcase}
           iconBgClass="bg-blue-50"
           iconColorClass="text-blue-500"
@@ -65,7 +100,7 @@ export const EmployeeLeaveDetails = () => {
         />
         <StatCard
           label="Leave Used"
-          value={employee.Used}
+          value={EmployeeLeavees.Used}
           icon={CalendarCheck}
           iconBgClass="bg-amber-50"
           iconColorClass="text-amber-500"
@@ -74,7 +109,7 @@ export const EmployeeLeaveDetails = () => {
         />
         <StatCard
           label="Available"
-          value={employee.available_leaves}
+          value={EmployeeLeavees.available_leaves}
           icon={Clock}
           iconBgClass="bg-emerald-50"
           iconColorClass="text-emerald-500"
@@ -93,11 +128,9 @@ export const EmployeeLeaveDetails = () => {
       </div>
 
       {/* HISTORY TABLE */}
-      <div className="max-w-6xl">
-        <LeaveHistoryTable 
-          history={employee.leave_history} 
-        />
-      </div>
+<LeaveHistoryTable
+  history={EmployeeLeavees?.leave_history || []}
+/>
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -108,4 +141,5 @@ export const EmployeeLeaveDetails = () => {
     </div>
   );
 };
+
 

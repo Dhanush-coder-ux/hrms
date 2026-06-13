@@ -54,6 +54,7 @@ export interface LeaveHistory {
 }
 
 export interface Empleaves {
+  LeaveDays: never[];
   Emp_id: string; 
   name: string;
   employee_name: string;
