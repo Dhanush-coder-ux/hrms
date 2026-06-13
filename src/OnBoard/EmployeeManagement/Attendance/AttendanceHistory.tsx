@@ -2,7 +2,7 @@ import { useEffect, useState,  } from "react";
 import { useParams } from "react-router-dom";
 
 import { Api_URL } from "../../../APILINK";
-import { Columns, TrendingUp } from "lucide-react";
+import {  TrendingUp } from "lucide-react";
 import { empMangeTheme } from "../../../Themes/EmpMangeTheme/empMangeConfig";
 
 import { AH_Table, type Column } from "./AH_Table";
@@ -11,7 +11,7 @@ import { AH_Table, type Column } from "./AH_Table";
 export const AttendanceHistory = () => {
     const { id } = useParams<{ id: string }>();
     const [data, setData] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [ ,setLoading] = useState(false);
 
       const columns: Column[] = [
         { header: "Date", accessor: "date" },
