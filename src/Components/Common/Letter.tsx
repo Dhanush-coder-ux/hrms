@@ -9,9 +9,9 @@ import {
   Eye,
   PenTool,
 } from "lucide-react";
-import { pageTheme } from "../../../Themes/PageThems/pageConfig";
+import { pageTheme } from "../../Themes/PageThems/pageConfig";
 
-export const OfferLetterPage = () => {
+export const LetterPage = () => {
   // const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
 
   // Mock Offer Data

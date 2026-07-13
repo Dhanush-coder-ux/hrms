@@ -28,7 +28,7 @@ import DepartmentProfile, { } from "./OnBoard/EmployeeManagement/Department/Depa
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
 import { CandidateProfile } from "./OnBoard/InterviewProcess/Features/Candidate/CandidateProfile";
 import { Interview } from "./OnBoard/InterviewProcess/Features/Interviews";
-import { OfferLetterPage } from "./OnBoard/InterviewProcess/Features/OfferLetter";
+
 
 import { DepartmentsStacks } from "./AdminPort/Features/Department/DepartmentStacks";
 import { EmployeeStack } from "./AdminPort/Features/Employee/EmployeeStack";
@@ -48,6 +48,7 @@ import { PosterStacks } from "./AdminPort/Features/Poster/PosterStacks";
 import { InterView } from "./AdminPort/Features/Interview/InterViewStack";
 import { PortAccess } from "./OnBoard/InterviewProcess/Features/PortAccsess";
 import { AttendanceHistory } from "./OnBoard/EmployeeManagement/Attendance/AttendanceHistory";
+import { MailSender } from "./OnBoard/InterviewProcess/MailSender";
 
 
 export function GlobalErrorBoundary() {
@@ -139,7 +140,7 @@ export const router = createBrowserRouter([
           { path: "Candidates", element: <Candidates /> },
           { path: "Candidates/*", element: <CandidateProfile /> },
           { path: "interviews", element: <Interview /> },
-          { path: "offers", element: <OfferLetterPage /> },
+          { path: "offers", element: <MailSender/>},
           { path: "requirement", element: <Requirement /> },
           { path: "requirement/*", element: <RequirementProfile /> },
           { path: "jobpostings", element: <JobPostings /> },
