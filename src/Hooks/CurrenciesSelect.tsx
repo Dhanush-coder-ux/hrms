@@ -11,19 +11,22 @@ export const useCurrencies = () => {
       setLoading(true);
       setError(false);
       try {
-        const response = await fetch("https://restcountries.com/v3.1/all?fields=currencies");
+        const response = await fetch("http://127.0.0.1:8000/api/currency");
         if (!response.ok) throw new Error("Network error");
-        const data = await response.json();
+
+        const json = await response.json();
+        const countries = json.data.objects; // actual array of country objects
 
         const uniqueCurrencies: Record<string, { name: string; symbol: string }> = {};
         const symbolMap: Record<string, string> = {};
 
-        data.forEach((country: any) => {
-          if (country.currencies) {
-            Object.entries(country.currencies).forEach(([code, details]: [string, any]) => {
+        countries.forEach((country: any) => {
+          if (Array.isArray(country.currencies)) {
+            country.currencies.forEach((currency: any) => {
+              const code = currency.code;
               if (code && !uniqueCurrencies[code]) {
-                const symbol = details.symbol ?? code;
-                uniqueCurrencies[code] = { name: details.name ?? code, symbol };
+                const symbol = currency.symbol ?? code;
+                uniqueCurrencies[code] = { name: currency.name ?? code, symbol };
                 symbolMap[code] = symbol;
               }
             });

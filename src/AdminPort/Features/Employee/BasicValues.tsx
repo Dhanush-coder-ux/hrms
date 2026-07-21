@@ -36,7 +36,7 @@ const FIELD_CONFIGS: FieldConfig[] = [
   { key: "employeeType", label: "Employee Type" },
   { key: "payType", label: "Pay Type" },
   { key: "payFrequency", label: "Pay Frequency" },
-  { key: "relationship", label: "Relationship" }, // Fixed capitalization
+  { key: "relationship", label: "Relationship" }, 
 ];
 
 const TAG_COLORS: Record<string, any> = {
@@ -233,15 +233,12 @@ export const BasicValues = () => {
 
   return (
     <main className="flex-1 h-full bg-slate-50 p-6 lg:p-10 overflow-hidden flex flex-col">
-       
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto w-full flex flex-col h-full"
       >
-       
         <header className="mb-8 flex items-start justify-between flex-shrink-0">
-          
           <div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               Basic Settings
@@ -326,7 +323,6 @@ export const BasicValues = () => {
                   const colors = TAG_COLORS[config.key] || TAG_COLORS["gender"];
                   const fieldItems = data[config.key] || [];
 
-                  // Logic to handle border bottom for the grid items properly
                   const isLastTwo =
                     idx >= FIELD_CONFIGS.filter((f) => !f.isDefault).length - 2;
 

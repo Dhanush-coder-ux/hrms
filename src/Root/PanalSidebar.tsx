@@ -22,7 +22,8 @@ import {
   Users2Icon,
   Wallet,
 } from "lucide-react";
-import { MdSocialDistance } from "react-icons/md";
+import { MdOutlineAdminPanelSettings, MdSocialDistance } from "react-icons/md";
+
 
 
 export const employeeNavigation = [
@@ -92,3 +93,10 @@ export const OffboardNavigation = [
 
   { label: "Documents", path: "/offboard/documents", icon: FileText },
 ];
+
+export const DashboardNavigation = [
+  {label:"ProfilePage",path:"mainprofile",icon: Users},
+  {lable:"Onboard",path:"/Mainonboard",icons:UserPlus},
+  {lable:"Offboard",path:"/Mainoffboard",icon:UserMinus},
+  {lable:"Admin",path:"/Mainadmin",icon:MdOutlineAdminPanelSettings},
+]
