@@ -1,14 +1,13 @@
-import { createBrowserRouter, useRouteError, Link } from "react-router-dom";
+import { createBrowserRouter, useRouteError, Link, Navigate } from "react-router-dom";
 import { AlertCircle, Home, RefreshCw } from "lucide-react";
 
 import { RootLayout } from "./Root/RootLayout";
 import { ModuleSelect } from "./Root/ModuleSelect";
+import { Login } from "./auth/Login";
+import { ProtectedRoute } from "./auth/ProtectedRoute";
 
-// ── Employee Management (was "OnBoard") ─────────────────────────────────────
-
-import { Dashboard as EmpDashboard } from "./OnBoard/EmployeeManagement/Features/Dashboard";
+// ── Employee Management ─────────────────────────────────────
 import { Attendance } from "./OnBoard/EmployeeManagement/Features/Attendance";
-
 import Leaves from "./OnBoard/EmployeeManagement/Features/Leaves";
 import { Department } from "./OnBoard/EmployeeManagement/Features/Department";
 import Payroll from "./OnBoard/EmployeeManagement/Features/Payroll";
@@ -17,18 +16,16 @@ import { EMPleaves } from "./OnBoard/EmployeeManagement/Leaves/EMPleaves";
 import { Events } from "./OnBoard/EmployeeManagement/Features/Events";
 import { EmployeeLeaveDetails } from "./OnBoard/EmployeeManagement/Leaves/EmployeeLeaveDetails";
 
-// ── Onboard Module ───────────────────────────────────────────────────────────
-
+// ── Onboard Module ───────────────────────────────────────────
 import AddEmployee from "./OnBoard/InterviewProcess/Features/AddEmployee";
 import EmployeeRegister from "./OnBoard/InterviewProcess/Features/AddEmployee/EmployeeRegistor";
 import { Salary } from "./OnBoard/InterviewProcess/Features/AddEmployee/Salary";
 import EmployeeProfile from "./OnBoard/EmployeeManagement/Employee/EmployeeProfile";
 import PayrollDetails from "./OnBoard/EmployeeManagement/Payroll/PayrollDetails";
-import DepartmentProfile, { } from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
+import DepartmentProfile from "./OnBoard/EmployeeManagement/Department/DepartmentProfile";
 import { Candidates } from "./OnBoard/InterviewProcess/Features/Candidates";
 import { CandidateProfile } from "./OnBoard/InterviewProcess/Features/Candidate/CandidateProfile";
 import { Interview } from "./OnBoard/InterviewProcess/Features/Interviews";
-
 
 import { DepartmentsStacks } from "./AdminPort/Features/Department/DepartmentStacks";
 import { EmployeeStack } from "./AdminPort/Features/Employee/EmployeeStack";
@@ -39,8 +36,6 @@ import { KnowledgeTransfer } from "./OffBoard/Features/KnowledgeTransfer";
 import { Clearance } from "./OffBoard/Features/Clearance";
 import { FinalSettlement } from "./OffBoard/Features/FinalSetilment";
 import { Documents } from "./OffBoard/Features/Documents";
-import { OffboardingDashboard } from "./OffBoard/Features/Dashboard";
-import { OnboardingDashboard } from "./OnBoard/InterviewProcess/Features/OnDashboard";
 import { Requirement } from "./OnBoard/InterviewProcess/Features/Requirement";
 import { RequirementProfile } from "./OnBoard/InterviewProcess/Features/Requirement/requirementProfile";
 import { JobPostings } from "./OnBoard/InterviewProcess/Features/JobPostings";
@@ -48,8 +43,6 @@ import { PosterStacks } from "./AdminPort/Features/Poster/PosterStacks";
 import { InterView } from "./AdminPort/Features/Interview/InterViewStack";
 import { PortAccess } from "./OnBoard/InterviewProcess/Features/PortAccsess";
 import { AttendanceHistory } from "./OnBoard/EmployeeManagement/Attendance/AttendanceHistory";
-import { MailSender } from "./OnBoard/InterviewProcess/MailSender";
-
 
 export function GlobalErrorBoundary() {
   const error: any = useRouteError();
@@ -99,82 +92,308 @@ export function GlobalErrorBoundary() {
 
 export const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
     path: "/",
-    element: <RootLayout />,
+    element: (
+      <ProtectedRoute>
+        <RootLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <GlobalErrorBoundary />,
     children: [
-      // MODULE SELECT
+      // SINGLE MAIN DASHBOARD (MODULE OVERVIEW)
       { index: true, element: <ModuleSelect /> },
 
-      // OnBOARD MODULE (Employee Management)
+      // EMPLOYEE MANAGEMENT MODULE (Direct to /employee)
       {
         path: "EmployeeManagement",
-        children: [
-          { index: true, element: <EmpDashboard /> },
-          { path: "attendance", element: <Attendance /> },
-          { path: "leaves", element: <Leaves /> },
-          { path: "department", element: <Department /> },
-          { path: "departmentProfile/*", element: <DepartmentProfile /> },
-          { path: "payroll", element: <Payroll /> },
-          { path: "payrollDetails/*", element: <PayrollDetails /> },
-          { path: "employee", element: <Employee /> },
-          { path: "employee/*", element: <EmployeeProfile /> },
-          { path: "employeeleave", element: <EMPleaves /> },
-          { path: "events", element: <Events /> },
-          { path: "employee-leave/*", element: <EmployeeLeaveDetails /> },
-          { path: "attendancehistory/*", element: <AttendanceHistory /> },
-        ],
+        element: <Navigate to="/EmployeeManagement/employee" replace />,
+      },
+      {
+        path: "EmployeeManagement/attendance",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <Attendance />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/leaves",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <Leaves />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/department",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <Department />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/departmentProfile/*",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <DepartmentProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/payroll",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <Payroll />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/payrollDetails/*",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <PayrollDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/employee",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <Employee />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/employee/*",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <EmployeeProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/employeeleave",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <EMPleaves />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/events",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <Events />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/employee-leave/*",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <EmployeeLeaveDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "EmployeeManagement/attendancehistory/*",
+        element: (
+          <ProtectedRoute moduleKey="EmployeeManagement">
+            <AttendanceHistory />
+          </ProtectedRoute>
+        ),
       },
 
+      // ONBOARD MODULE (Direct to /Candidates)
       {
         path: "onboard",
-
-        children: [
-          {
-            index: true,
-            element: <OnboardingDashboard />,
-          },
-          { path: "add-employee", element: <AddEmployee /> },
-          { path: "employeeregistration", element: <EmployeeRegister /> },
-          { path: "Salary", element: <Salary /> },
-          { path: "Candidates", element: <Candidates /> },
-          { path: "Candidates/*", element: <CandidateProfile /> },
-          { path: "interviews", element: <Interview /> },
-          { path: "offers", element: <MailSender/>},
-          { path: "requirement", element: <Requirement /> },
-          { path: "requirement/*", element: <RequirementProfile /> },
-          { path: "jobpostings", element: <JobPostings /> },
-          { path: "potal-access", element: <PortAccess /> }
-        ],
+        element: <Navigate to="/onboard/Candidates" replace />,
       },
+      {
+        path: "onboard/add-employee",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <AddEmployee />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/employeeregistration",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <EmployeeRegister />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/Salary",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <Salary />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/Candidates",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <Candidates />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/Candidates/*",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <CandidateProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/interviews",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <Interview />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/requirement",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <Requirement />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/requirement/*",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <RequirementProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/jobpostings",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <JobPostings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "onboard/potal-access",
+        element: (
+          <ProtectedRoute moduleKey="onboard">
+            <PortAccess />
+          </ProtectedRoute>
+        ),
+      },
+
+      // ADMIN MODULE (Direct to /departmentstacks)
       {
         path: "Admin",
-        children: [
-          {
-            index: true,
-            element: <h1>Admin DashBoard</h1>,
-          },
-          { path: "departmentstacks", element: <DepartmentsStacks /> },
-          { path: "employeestacks", element: <EmployeeStack /> },
-          { path: "posterstacks", element: <PosterStacks /> },
-          { path: "interviewsStack", element: <InterView /> }
-        ],
+        element: <Navigate to="/Admin/departmentstacks" replace />,
       },
       {
-        path: "offboard",
-        children: [
-          { index: true, element: <OffboardingDashboard /> },
+        path: "Admin/departmentstacks",
+        element: (
+          <ProtectedRoute moduleKey="Admin">
+            <DepartmentsStacks />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "Admin/employeestacks",
+        element: (
+          <ProtectedRoute moduleKey="Admin">
+            <EmployeeStack />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "Admin/posterstacks",
+        element: (
+          <ProtectedRoute moduleKey="Admin">
+            <PosterStacks />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "Admin/interviewsStack",
+        element: (
+          <ProtectedRoute moduleKey="Admin">
+            <InterView />
+          </ProtectedRoute>
+        ),
+      },
 
-          { path: "requests", element: <ExitRequests /> },
-          { path: "assets", element: <AssetReturn /> },
-          { path: "access", element: <AccessDeactivation /> },
-          { path: "kt", element: <KnowledgeTransfer /> },
-          { path: "clearance", element: <Clearance /> },
-          { path: "settlement", element: <FinalSettlement /> },
-          { path: "documents", element: <Documents /> },
-        ],
+      // OFFBOARD MODULE (Direct to /requests)
+      {
+        path: "offboard",
+        element: <Navigate to="/offboard/requests" replace />,
+      },
+      {
+        path: "offboard/requests",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <ExitRequests />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "offboard/assets",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <AssetReturn />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "offboard/access",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <AccessDeactivation />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "offboard/kt",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <KnowledgeTransfer />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "offboard/clearance",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <Clearance />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "offboard/settlement",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <FinalSettlement />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "offboard/documents",
+        element: (
+          <ProtectedRoute moduleKey="offboard">
+            <Documents />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
-],
-);
+]);

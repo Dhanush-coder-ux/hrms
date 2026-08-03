@@ -1,27 +1,29 @@
+import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 
 export const RootLayout = () => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
-  const hideSidebarRoutes = ["/"];
-  const isSelectionPage = hideSidebarRoutes.includes(location.pathname);
 
   return (
-    // 1. Change to flex-col so Navbar stays at the top
-    <div className="h-screen w-full flex flex-col overflow-hidden">
+    <div className="h-screen w-full flex flex-col overflow-hidden bg-slate-50 relative">
+      {/* Top Navbar */}
+      <Navbar onToggleMobile={() => setIsMobileOpen(!isMobileOpen)} />
 
-      <Navbar />
+      {/* Main Container: Sidebar + Content */}
+      <div className="flex flex-1 overflow-hidden relative">
+        <Sidebar
+          isMobileOpen={isMobileOpen}
+          onCloseMobile={() => setIsMobileOpen(false)}
+        />
 
-      {/* 2. This container holds the Sidebar and Main content side-by-side */}
-      <div className="flex flex-1 overflow-hidden">
-
-        {!isSelectionPage && <Sidebar />}
-
-        <main className="flex-1 h-full overflow-y-auto">
-          <Outlet />
+        <main className="flex-1 h-full overflow-y-auto w-full custom-scrollbar">
+          <div key={location.pathname} className="animate-fade-in min-h-full">
+            <Outlet />
+          </div>
         </main>
-
       </div>
     </div>
   );

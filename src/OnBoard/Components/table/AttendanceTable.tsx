@@ -371,5 +371,6 @@ const StatCard = ({
     </div>
   );
 };
-export { Table, Column };
+export { Table };
+export type { Column };
 
